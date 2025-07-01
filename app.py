@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, send_from_directory
+from flask_cors import CORS
 import stripe
 from dotenv import load_dotenv
 import os
@@ -6,6 +7,7 @@ import os
 load_dotenv()
 
 app = Flask(__name__, static_folder='.')
+CORS(app, origins=['https://lelabubu.ca', 'http://localhost:5000'])
 
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 # Determine domain based on environment

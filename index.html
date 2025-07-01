@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeLabubu.ca - Premium Labubu Dolls & Collectibles</title>
+    <meta name="title-key" content="site_title">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+            <div class="container">
+                <a class="navbar-brand" href="/"><span class="title-le">Le</span><span class="title-labubu">Labubu</span>.ca</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/" data-translate="nav_home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="shop.html" data-translate="nav_shop">Shop</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="about.html" data-translate="nav_about">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="contact.html" data-translate="nav_contact">Contact</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center mt-3 mt-lg-0">
+                        <form class="d-flex me-lg-2 mb-2 mb-lg-0 w-100" id="searchForm">
+                            <input class="form-control me-2" type="search" name="search" data-translate-placeholder="search_placeholder" placeholder="Search products..." aria-label="Search">
+                            <button class="btn btn-outline-primary" type="submit" data-translate-title="search_button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
+                        <div class="d-flex align-items-center">
+                            <a href="cart.html" class="btn btn-outline-primary position-relative me-2" id="cartButton">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span class="cart-count position-absolute d-none">0</span>
+                            </a>
+                            <a href="#" id="languageToggle" class="btn btn-outline-secondary" onclick="return toggleLanguage();">Français</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Price Advantage Banner -->
+    <div class="bg-primary text-white py-3">
+        <div class="container">
+            <div class="d-flex justify-content-center align-items-center">
+                <i class="fas fa-tags me-2"></i>
+                <span data-translate="price_advantage_banner">Free shipping across montreal</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 hero-content">
+                    <h1 data-translate="welcome_to">Welcome to <span class="hero-title-le">Le</span><span class="hero-title-labubu">Labubu</span>.ca</h1>
+                    <p class="lead mb-4" data-translate="hero_description">Discover the enchanting world of Labubu dolls with free shipping across montreal - the perfect blend of cute and creepy that has captivated collectors worldwide.</p>
+                    <div class="d-flex">
+                        <a href="shop.html" class="btn btn-primary me-3" data-translate="hero_button">Shop Now</a>
+                        <a href="about.html" class="btn btn-outline-primary" data-translate="learn_more">Learn More</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 hero-image mt-5 mt-lg-0">
+                    <img src="images/labubu-logo.png" alt="LeLabubu Logo" class="img-fluid rounded">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured-products py-5">
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-12 text-center">
+                    <h2 class="mb-3" data-translate="featured_products">Featured Products</h2>
+                    <p class="text-muted" data-translate="featured_products_desc">Our most popular Labubu dolls and collectibles</p>
+                </div>
+            </div>
+            <div class="row">
+                <!-- Product cards will be dynamically inserted here by JavaScript -->
+            </div>
+            <div class="row mt-4">
+                <div class="col-12 text-center">
+                    <a href="shop.html" class="btn btn-outline-primary" data-translate="view_all_products">View All Products</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- New Arrivals -->
+    <section class="new-arrivals py-5">
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-12 text-center">
+                    <h2 class="mb-3" data-translate="new_arrivals">New Arrivals</h2>
+                    <p class="text-muted" data-translate="new_arrivals_desc">The latest additions to our Labubu collection</p>
+                </div>
+            </div>
+            <div class="row">
+                <!-- Product cards will be dynamically inserted here by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Best Sellers -->
+    <section class="best-sellers py-5 bg-light">
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-12 text-center">
+                    <h2 class="mb-3" data-translate="best_sellers">Best Sellers</h2>
+                    <p class="text-muted" data-translate="best_sellers_desc">Our most popular Labubu dolls loved by collectors</p>
+                </div>
+            </div>
+            <div class="row">
+                <!-- Product cards will be dynamically inserted here by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials py-5">
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-12 text-center">
+                    <h2 class="mb-3" data-translate="testimonials_title">What Our Customers Say</h2>
+                    <p class="text-muted" data-translate="testimonials_desc">Read reviews from our happy customers in Montreal</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card testimonial-card">
+                        <div class="card-body text-center">
+                            <img src="images/team/person-placeholder.jpg" alt="Sarah Johnson" class="testimonial-image">
+                            <h5 class="testimonial-name">Sarah Johnson</h5>
+                            <p class="testimonial-location">Montreal, Canada</p>
+                            <div class="rating mb-3">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">I've been collecting Labubu dolls for years, and LeLabubu.ca has the best selection I've found in Montreal. Their free shipping service is incredibly fast and the customer service is excellent!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card testimonial-card">
+                        <div class="card-body text-center">
+                            <img src="images/team/person-placeholder.jpg" alt="Michael Chen" class="testimonial-image">
+                            <h5 class="testimonial-name">Michael Chen</h5>
+                            <p class="testimonial-location">Montreal, Canada</p>
+                            <div class="rating mb-3">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <p class="testimonial-text">The limited edition Glow Labubu is even more impressive in person than in photos. The free shipping across montreal was super convenient, and I'm very happy with my purchase!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card testimonial-card">
+                        <div class="card-body text-center">
+                            <img src="images/team/person-placeholder.jpg" alt="Emma Wilson" class="testimonial-image">
+                            <h5 class="testimonial-name">Emma Wilson</h5>
+                            <p class="testimonial-location">Montreal, Canada</p>
+                            <div class="rating mb-3">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">I bought the Mini Labubu collection as a gift for my daughter, and she absolutely loves them! The free shipping right to our door in Montreal was so convenient, and the quality is outstanding!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter py-5 bg-primary text-white">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center">
+                    <h3 class="mb-3" data-translate="newsletter_title">Subscribe to Our Newsletter</h3>
+                    <p class="mb-4" data-translate="newsletter_desc">Stay updated on new releases, restocks, and exclusive offers!</p>
+                    <form class="row g-3">
+                        <div class="col-12 col-md-8 mb-2 mb-md-0">
+                            <input type="email" class="form-control" data-translate-placeholder="email_placeholder" placeholder="Your email address" required>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <button type="submit" class="btn btn-light w-100" data-translate="subscribe_button">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+                    <h5>LeLabubu.ca</h5>
+                    <p data-translate="footer_description">Your local Montreal destination for authentic Labubu dolls with free shipping across montreal.</p>
+                    <div class="social-icons">
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+                    <h5 data-translate="footer_shop">Shop</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="shop.html" data-translate="all_products">All Products</a></li>
+                        <li><a href="#" data-translate="new_arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-translate="best_sellers">Best Sellers</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+                    <h5 data-translate="footer_information">Information</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="about.html" data-translate="about_us">About Us</a></li>
+                        <li><a href="#" data-translate="shipping_policy">Shipping Policy</a></li>
+                        <li><a href="#" data-translate="return_policy">Return Policy</a></li>
+                        <li><a href="#" data-translate="privacy_policy">Privacy Policy</a></li>
+                        <li><a href="#" data-translate="terms_conditions">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+                    <h5 data-translate="contact_us">Contact Us</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 Doll Street, Montreal, QC H2Y 1C6</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2"></i> (514) 555-1234</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@lelabubu.ca</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <p class="mb-0" data-translate="copyright">&copy; 2025 LeLabubu.ca. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <p class="mb-0">
+                        <img src="images/payment-methods.png" alt="Payment Methods" style="height: 24px; max-width: 100%;">
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="js/products.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/stripe.js"></script>
+</body>
+</html>

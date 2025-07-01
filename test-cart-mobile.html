@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Mobile Test - LeLabubu.ca</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        /* Force mobile view for testing */
+        .container {
+            max-width: 576px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Cart Mobile Test</h1>
+        
+        <div class="cart-items">
+            <!-- Test cart item 1 -->
+            <div class="cart-item">
+                <div class="row align-items-center">
+                    <div class="col-4">
+                        <img src="images/products/labubu-image-3.webp" alt="Exciting Macaron" class="img-fluid cart-item-image">
+                    </div>
+                    <div class="col-8">
+                        <h5 class="cart-item-title">Exciting Macaron</h5>
+                        <p class="mb-0 text-muted small">
+                            Color: Red
+                            Size: Medium
+                        </p>
+                    </div>
+                    <div class="col-5 mt-3">
+                        <span class="cart-item-price d-block mb-2 mb-md-0">$83.00</span>
+                    </div>
+                    <div class="col-7 mt-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="quantity-controls">
+                                <button class="btn update-quantity" data-index="0" data-action="decrease">−</button>
+                                <span class="quantity-value">1</span>
+                                <button class="btn update-quantity" data-index="0" data-action="increase">+</button>
+                            </div>
+                            <button class="cart-item-remove ms-2" data-index="0">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-12 mt-3 text-start">
+                        <span class="cart-item-total">$83.00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Test cart item 2 with longer price -->
+            <div class="cart-item">
+                <div class="row align-items-center">
+                    <div class="col-4">
+                        <img src="images/products/full-sized-wind.jpg" alt="Full-size 'Fall in Wild' Series" class="img-fluid cart-item-image">
+                    </div>
+                    <div class="col-8">
+                        <h5 class="cart-item-title">Full-size 'Fall in Wild' Series</h5>
+                        <p class="mb-0 text-muted small">
+                            Color: Multi-color
+                            Size: Large
+                        </p>
+                    </div>
+                    <div class="col-5 mt-3">
+                        <span class="cart-item-price d-block mb-2 mb-md-0">$405.00</span>
+                    </div>
+                    <div class="col-7 mt-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="quantity-controls">
+                                <button class="btn update-quantity" data-index="1" data-action="decrease">−</button>
+                                <span class="quantity-value">2</span>
+                                <button class="btn update-quantity" data-index="1" data-action="increase">+</button>
+                            </div>
+                            <button class="cart-item-remove ms-2" data-index="1">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-12 mt-3 text-start">
+                        <span class="cart-item-total">$810.00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Test cart item 3 with very long price -->
+            <div class="cart-item">
+                <div class="row align-items-center">
+                    <div class="col-4">
+                        <img src="images/products/wind-pendant.webp" alt="Pendant keychain 'Fall in Wild' Series" class="img-fluid cart-item-image">
+                    </div>
+                    <div class="col-8">
+                        <h5 class="cart-item-title">Pendant keychain 'Fall in Wild' Series</h5>
+                        <p class="mb-0 text-muted small">
+                            Color: Multi-color
+                            Size: One-size
+                        </p>
+                    </div>
+                    <div class="col-5 mt-3">
+                        <span class="cart-item-price d-block mb-2 mb-md-0">$1,119.50</span>
+                    </div>
+                    <div class="col-7 mt-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="quantity-controls">
+                                <button class="btn update-quantity" data-index="2" data-action="decrease">−</button>
+                                <span class="quantity-value">1</span>
+                                <button class="btn update-quantity" data-index="2" data-action="increase">+</button>
+                            </div>
+                            <button class="cart-item-remove ms-2" data-index="2">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-12 mt-3 text-start">
+                        <span class="cart-item-total">$1,119.50</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

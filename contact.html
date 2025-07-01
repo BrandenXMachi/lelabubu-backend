@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - LeLabubu.ca</title>
+    <meta name="title-key" content="contact_us">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+            <div class="container">
+                <a class="navbar-brand" href="/">LeLabubu.ca</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/" data-translate="nav_home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="shop.html" data-translate="nav_shop">Shop</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="about.html" data-translate="nav_about">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="contact.html" data-translate="nav_contact">Contact</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center mt-3 mt-lg-0">
+                        <form id="searchForm" class="d-flex me-lg-2 mb-2 mb-lg-0 w-100">
+                            <input class="form-control me-2" type="search" name="search" data-translate-placeholder="search_placeholder" placeholder="Search products..." aria-label="Search">
+                            <button class="btn btn-outline-primary" type="submit" data-translate-title="search_button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
+                        <div class="d-flex align-items-center">
+                            <a href="cart.html" class="btn btn-outline-primary position-relative me-2">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span class="cart-count position-absolute d-none">0</span>
+                            </a>
+                            <a href="#" id="languageToggle" class="btn btn-outline-secondary" onclick="return toggleLanguage();">Français</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Contact Header -->
+        <section class="contact-header py-5 bg-light">
+            <div class="container text-center">
+                <h1 class="mb-3" data-translate="contact_us">Contact Us</h1>
+                <p class="lead mb-0" data-translate="contact_message">We'd love to hear from you! Reach out with any questions, comments, or inquiries.</p>
+            </div>
+        </section>
+
+        <!-- Contact Information -->
+        <section class="contact-info py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 mb-4 mb-md-0">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="contact-icon mb-3">
+                                    <i class="fas fa-map-marker-alt text-primary" style="font-size: 3rem;"></i>
+                                </div>
+                                <h4 class="card-title" data-translate="our_location">Our Location</h4>
+                                <p class="card-text">123 Doll Street<br>Montreal, QC H2Y 1C6<br>Canada</p>
+                                <a href="https://maps.google.com" target="_blank" class="btn btn-outline-primary mt-2" data-translate="get_directions">Get Directions</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4 mb-md-0">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="contact-icon mb-3">
+                                    <i class="fas fa-phone text-primary" style="font-size: 3rem;"></i>
+                                </div>
+                                <h4 class="card-title" data-translate="phone">Phone</h4>
+                                <p class="card-text">Customer Service:<br>(514) 555-1234</p>
+                                <p class="card-text">Order Inquiries:<br>(514) 555-5678</p>
+                                <p class="card-text small text-muted" data-translate="customer_service_hours">Monday-Friday: 9am-5pm EST</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="contact-icon mb-3">
+                                    <i class="fas fa-envelope text-primary" style="font-size: 3rem;"></i>
+                                </div>
+                                <h4 class="card-title" data-translate="email">Email</h4>
+                                <p class="card-text"><span data-translate="general_inquiries">General Inquiries:</span><br><a href="mailto:info@lelabubu.ca">info@lelabubu.ca</a></p>
+                                <p class="card-text"><span data-translate="customer_support">Customer Support:</span><br><a href="mailto:support@lelabubu.ca">support@lelabubu.ca</a></p>
+                                <p class="card-text"><span data-translate="wholesale_inquiries">Wholesale Inquiries:</span><br><a href="mailto:wholesale@lelabubu.ca">wholesale@lelabubu.ca</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Form -->
+        <section class="contact-form py-5 bg-light">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card border-0 shadow">
+                            <div class="card-body p-4 p-md-5">
+                                <h2 class="text-center mb-4" data-translate="send_message">Send Us a Message</h2>
+                                <form id="contactForm">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="name" class="form-label" data-translate="your_name">Your Name</label>
+                                            <input type="text" class="form-control" id="name" required>
+                                            <div class="invalid-feedback">
+                                                Please provide your name.
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="email" class="form-label" data-translate="your_email">Your Email</label>
+                                            <input type="email" class="form-control" id="email" required>
+                                            <div class="invalid-feedback">
+                                                Please provide a valid email address.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="subject" class="form-label" data-translate="subject">Subject</label>
+                                        <input type="text" class="form-control" id="subject" required>
+                                        <div class="invalid-feedback">
+                                            Please provide a subject.
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="message" class="form-label" data-translate="message">Message</label>
+                                        <textarea class="form-control" id="message" rows="5" required></textarea>
+                                        <div class="invalid-feedback">
+                                            Please provide a message.
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" class="form-check-input" id="newsletter">
+                                        <label class="form-check-label" for="newsletter" data-translate="subscribe_newsletter">Subscribe to our newsletter for updates on new releases and promotions</label>
+                                    </div>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary btn-lg" data-translate="send">Send Message</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Map -->
+        <section class="map-section">
+            <div class="container-fluid p-0">
+                <div class="map-container">
+                    <!-- In a real implementation, you would include a Google Maps or other map service embed here -->
+                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 400px;">
+                        <div class="text-center">
+                            <h3 class="mb-3" data-translate="our_location">Our Location</h3>
+                            <p class="mb-0">123 Doll Street, Montreal, QC H2Y 1C6</p>
+                            <p class="small" data-translate="map_placeholder">(Map would be displayed here in a real implementation)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="contact-faq py-5">
+            <div class="container">
+                <h2 class="text-center mb-5" data-translate="faq">Frequently Asked Questions</h2>
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="accordion" id="contactFaqAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingOne">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" data-translate="faq_q1">
+                                        What are your business hours?
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#contactFaqAccordion">
+                                    <div class="accordion-body">
+                                        <p data-translate="faq_a1">Our customer service team is available Monday through Friday from 9:00 AM to 5:00 PM Eastern Time. While our online store is open 24/7, customer service inquiries received outside of business hours will be addressed on the next business day.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingTwo">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" data-translate="faq_q2">
+                                        How quickly will I receive a response to my inquiry?
+                                    </button>
+                                </h2>
+                                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#contactFaqAccordion">
+                                    <div class="accordion-body">
+                                        <p data-translate="faq_a2">We strive to respond to all inquiries within 24 business hours. During peak periods or for complex inquiries, it may take up to 48 business hours to receive a comprehensive response. Rest assured, we're working diligently to address your questions as quickly as possible.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingThree">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" data-translate="faq_q3">
+                                        Do you have a physical store I can visit?
+                                    </button>
+                                </h2>
+                                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#contactFaqAccordion">
+                                        <div class="accordion-body">
+                                            <p data-translate="faq_a3">Currently, LeLabubu.ca operates exclusively as an online retailer with free shipping across montreal. While we don't have a physical storefront open to the public, we occasionally participate in pop-up events and collectible toy conventions in the Montreal area. Follow us on social media or subscribe to our newsletter to stay informed about upcoming local events where you can see our products in person.</p>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingFour">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" data-translate="faq_q4">
+                                        How can I track my order?
+                                    </button>
+                                </h2>
+                                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#contactFaqAccordion">
+                                    <div class="accordion-body">
+                                        <p data-translate="faq_a4">Once your order ships, you'll receive a confirmation email with tracking information. You can also log into your account on our website to view your order status and tracking details. If you have any issues tracking your order, please contact our customer service team at support@lelabubu.ca with your order number.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingFive">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive" data-translate="faq_q5">
+                                        Do you offer wholesale opportunities?
+                                    </button>
+                                </h2>
+                                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#contactFaqAccordion">
+                                    <div class="accordion-body">
+                                        <p data-translate="faq_a5">Yes, we do offer wholesale opportunities for qualified retailers. If you're interested in carrying Labubu dolls in your store, please contact us at wholesale@lelabubu.ca with information about your business. Our wholesale team will review your inquiry and provide you with our wholesale catalog and terms.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Connect -->
+        <section class="connect py-5 bg-primary text-white">
+            <div class="container text-center">
+                <h2 class="mb-4" data-translate="connect_with_us">Connect With Us</h2>
+                <p class="lead mb-4" data-translate="follow_social_media">Follow us on social media for the latest updates, new releases, and community events.</p>
+                <div class="social-icons">
+                    <ul class="list-inline">
+                        <li class="list-inline-item mx-2">
+                            <a href="#" class="text-white" style="font-size: 2rem;">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item mx-2">
+                            <a href="#" class="text-white" style="font-size: 2rem;">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item mx-2">
+                            <a href="#" class="text-white" style="font-size: 2rem;">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item mx-2">
+                            <a href="#" class="text-white" style="font-size: 2rem;">
+                                <i class="fab fa-pinterest"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item mx-2">
+                            <a href="#" class="text-white" style="font-size: 2rem;">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+                    <h5>LeLabubu.ca</h5>
+                    <p data-translate="footer_description">Your local Montreal destination for authentic Labubu dolls with free shipping across montreal.</p>
+                    <div class="social-icons">
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+                    <h5 data-translate="footer_shop">Shop</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="shop.html" data-translate="all_products">All Products</a></li>
+                        <li><a href="#" data-translate="new_arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-translate="best_sellers">Best Sellers</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+                    <h5 data-translate="footer_information">Information</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="about.html" data-translate="about_us">About Us</a></li>
+                        <li><a href="#" data-translate="shipping_policy">Shipping Policy</a></li>
+                        <li><a href="#" data-translate="return_policy">Return Policy</a></li>
+                        <li><a href="#" data-translate="privacy_policy">Privacy Policy</a></li>
+                        <li><a href="#" data-translate="terms_conditions">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+                    <h5 data-translate="contact_us">Contact Us</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 Doll Street, Montreal, QC H2Y 1C6</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2"></i> (514) 555-1234</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@lelabubu.ca</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <p class="mb-0" data-translate="copyright">&copy; 2025 LeLabubu.ca. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <p class="mb-0">
+                        <img src="images/payment-methods.png" alt="Payment Methods" style="height: 24px; max-width: 100%;">
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="js/products.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/stripe.js"></script>
+</body>
+</html>

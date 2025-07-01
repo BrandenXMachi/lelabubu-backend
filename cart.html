@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - LeLabubu.ca</title>
+    <meta name="title-key" content="cart_title">
+    
+    <!-- Stripe JS -->
+    <script src="https://js.stripe.com/v3/"></script>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+            <div class="container">
+                <a class="navbar-brand" href="/">LeLabubu.ca</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/" data-translate="nav_home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="shop.html" data-translate="nav_shop">Shop</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="about.html" data-translate="nav_about">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="contact.html" data-translate="nav_contact">Contact</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center mt-3 mt-lg-0">
+                        <form id="searchForm" class="d-flex me-lg-2 mb-2 mb-lg-0 w-100">
+                            <input class="form-control me-2" type="search" name="search" data-translate-placeholder="search_placeholder" placeholder="Search products..." aria-label="Search">
+                            <button class="btn btn-outline-primary" type="submit" data-translate-title="search_button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
+                        <div class="d-flex align-items-center">
+                            <a href="cart.html" class="btn btn-outline-primary position-relative me-2" id="cartButton">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span class="cart-count position-absolute d-none">0</span>
+                            </a>
+                            <a href="#" id="languageToggle" class="btn btn-outline-secondary" onclick="return toggleLanguage();">Français</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Cart Header -->
+        <section class="cart-header py-5 bg-light">
+            <div class="container text-center">
+                <h1 class="mb-3" data-translate="your_cart">Your Shopping Cart</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="/" data-translate="nav_home">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page" data-translate="cart">Cart</li>
+                    </ol>
+                </nav>
+                <div class="alert alert-primary mt-3" role="alert">
+                    <i class="fas fa-truck me-2"></i> <span data-translate="free_delivery">Free shipping across montreal</span>
+                </div>
+            </div>
+        </section>
+
+    <!-- Cart Content -->
+    <section class="cart-content py-5">
+        <div class="container cart-container">
+            <div class="row">
+                <!-- Cart Items -->
+                <div class="col-lg-8 mb-4 mb-lg-0">
+                    <div class="cart-items">
+                        <!-- Cart items will be dynamically inserted here by JavaScript -->
+                        <div class="text-center py-5">
+                            <h3 data-translate="cart_empty">Your cart is empty</h3>
+                            <p data-translate="cart_empty_message">Looks like you haven't added any products to your cart yet.</p>
+                            <a href="shop.html" class="btn btn-primary mt-3" data-translate="continue_shopping">Continue Shopping</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cart Summary -->
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm cart-summary d-none">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4" data-translate="order_summary">Order Summary</h4>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span data-translate="subtotal">Subtotal:</span>
+                                <span class="cart-subtotal">$0.00</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span data-translate="shipping">Shipping:</span>
+                                <span class="cart-shipping">$0.00</span>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between mb-4">
+                                <strong data-translate="total">Total:</strong>
+                                <strong class="cart-total">$0.00</strong>
+                            </div>
+                            
+                            <!-- Promo Code -->
+                            <div class="mb-4">
+                                <label for="promoCode" class="form-label" data-translate="promo_code">Promo Code</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="promoCode" data-translate-placeholder="enter_code" placeholder="Enter code">
+                                    <button class="btn btn-primary" type="button" id="applyPromo" data-translate="apply">Apply</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Checkout Button -->
+                            <button class="btn btn-primary w-100 checkout-btn" id="checkoutBtn" data-translate="proceed_to_checkout">Proceed to Checkout</button>
+                            
+                            <!-- Continue Shopping -->
+                            <div class="text-center mt-3">
+                                <a href="shop.html" class="text-decoration-none" data-translate="continue_shopping">Continue Shopping</a>
+                            </div>
+                        </div>
+                    </div>
+                        
+                        <!-- Shipping Policy -->
+                        <div class="card border-0 shadow-sm mt-4">
+                            <div class="card-body">
+                                <h5 class="card-title" data-translate="shipping_policy">Shipping Policy</h5>
+                                <ul class="list-unstyled mb-0">
+                                    <li class="mb-2"><i class="fas fa-truck me-2 text-primary"></i> <span data-translate="free_delivery">Free shipping across montreal</span></li>
+                                    <li class="mb-2"><i class="fas fa-box me-2 text-primary"></i> <span data-translate="secure_packaging">Secure packaging for safe delivery</span></li>
+                                    <li class="mb-2"><i class="fas fa-undo me-2 text-primary"></i> <span data-translate="return_policy">30-day return policy</span></li>
+                                    <li><i class="fas fa-shield-alt me-2 text-primary"></i> <span data-translate="authenticity_guaranteed">Authenticity guaranteed</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Need Help -->
+                        <div class="card border-0 shadow-sm mt-4">
+                            <div class="card-body">
+                                <h5 class="card-title" data-translate="need_help">Need Help?</h5>
+                                <p class="card-text" data-translate="customer_service_message">Our customer service team is here to assist you with any questions about your order.</p>
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-phone me-2 text-primary"></i>
+                                    <span>(514) 555-1234</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-envelope me-2 text-primary"></i>
+                                    <a href="mailto:support@lelabubu.ca">support@lelabubu.ca</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- You May Also Like -->
+        <section class="related-products py-5 bg-light">
+            <div class="container">
+                <h2 class="text-center mb-4" data-translate="you_may_also_like">You May Also Like</h2>
+                <div class="row g-3">
+                    <!-- Product cards will be dynamically inserted here by JavaScript -->
+                    <div class="col-6 col-md-3 mb-4">
+                        <div class="card product-card h-100">
+                            <a href="product.html?id=1">
+                                <img src="images/products/product-placeholder.jpg" class="card-img-top" alt="Classic Labubu - Blue">
+                            </a>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">
+                                    <a href="product.html?id=1">Classic Labubu - Blue</a>
+                                </h5>
+                                <div class="rating mb-2">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <small class="text-muted ml-2">(124)</small>
+                                </div>
+                                <p class="price mb-2">$89.99</p>
+                                <button class="btn btn-primary btn-sm add-to-cart mt-auto" data-product-id="1" data-translate="add_to_cart">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-4">
+                        <div class="card product-card h-100">
+                            <a href="product.html?id=5">
+                                <img src="images/products/product-placeholder.jpg" class="card-img-top" alt="Mini Labubu - Blue">
+                            </a>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">
+                                    <a href="product.html?id=5">Mini Labubu - Blue</a>
+                                </h5>
+                                <div class="rating mb-2">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <small class="text-muted ml-2">(78)</small>
+                                </div>
+                                <p class="price mb-2">$49.99</p>
+                                <button class="btn btn-primary btn-sm add-to-cart mt-auto" data-product-id="5" data-translate="add_to_cart">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-4">
+                        <div class="card product-card h-100">
+                            <a href="product.html?id=7">
+                                <img src="images/products/product-placeholder.jpg" class="card-img-top" alt="Limited Edition Glow Labubu">
+                            </a>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">
+                                    <a href="product.html?id=7">Limited Edition Glow Labubu</a>
+                                </h5>
+                                <div class="rating mb-2">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <small class="text-muted ml-2">(42)</small>
+                                </div>
+                                <p class="price mb-2">$129.99</p>
+                                <button class="btn btn-primary btn-sm add-to-cart mt-auto" data-product-id="7" data-translate="add_to_cart">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-4">
+                        <div class="card product-card h-100">
+                            <a href="product.html?id=9">
+                                <img src="images/products/product-placeholder.jpg" class="card-img-top" alt="Labubu Keychain">
+                            </a>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">
+                                    <a href="product.html?id=9">Labubu Keychain</a>
+                                </h5>
+                                <div class="rating mb-2">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <small class="text-muted ml-2">(112)</small>
+                                </div>
+                                <p class="price mb-2">$19.99</p>
+                                <button class="btn btn-primary btn-sm add-to-cart mt-auto" data-product-id="9" data-translate="add_to_cart">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter -->
+        <section class="newsletter py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 text-center">
+                        <h3 class="mb-3" data-translate="newsletter_title">Subscribe to Our Newsletter</h3>
+                        <p class="mb-4" data-translate="newsletter_desc">Stay updated on new releases, restocks, and exclusive offers.</p>
+                        <form class="row g-3 justify-content-center">
+                            <div class="col-12 col-md-8 mb-2 mb-md-0">
+                                <input type="email" class="form-control" data-translate-placeholder="email_placeholder" placeholder="Your email address" required>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <button type="submit" class="btn btn-primary w-100" data-translate="subscribe_button">Subscribe</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+                    <h5>LeLabubu.ca</h5>
+                    <p data-translate="footer_description">Your local Montreal destination for authentic Labubu dolls with free shipping across montreal.</p>
+                    <div class="social-icons">
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+                    <h5 data-translate="footer_shop">Shop</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="shop.html" data-translate="all_products">All Products</a></li>
+                        <li><a href="#" data-translate="new_arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-translate="best_sellers">Best Sellers</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+                    <h5 data-translate="footer_information">Information</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="about.html" data-translate="about_us">About Us</a></li>
+                        <li><a href="#" data-translate="shipping_policy">Shipping Policy</a></li>
+                        <li><a href="#" data-translate="return_policy">Return Policy</a></li>
+                        <li><a href="#" data-translate="privacy_policy">Privacy Policy</a></li>
+                        <li><a href="#" data-translate="terms_conditions">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+                    <h5 data-translate="contact_us">Contact Us</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 Doll Street, Montreal, QC H2Y 1C6</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2"></i> (514) 555-1234</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@lelabubu.ca</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <p class="mb-0" data-translate="copyright">&copy; 2025 LeLabubu.ca. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <p class="mb-0">
+                        <img src="images/payment-methods.png" alt="Payment Methods" style="height: 24px; max-width: 100%;">
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="js/products.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/stripe.js"></script>
+    
+    <script>
+        // Initialize promo code button
+        document.getElementById('applyPromo').addEventListener('click', function() {
+            const promoInput = document.getElementById('promoCode');
+            const promoCode = promoInput.value.trim();
+            
+            if (promoCode) {
+                // In a real application, you would validate the promo code with a server
+                // For this demo, we'll just show a success message for any code
+                alert('Promo code "' + promoCode + '" applied successfully!');
+                promoInput.value = '';
+            } else {
+                alert('Please enter a promo code');
+            }
+        });
+        
+        // Initialize translations
+        if (window.translations) {
+            // Translations are loaded from translations.js
+        }
+    </script>
+</body>
+</html>

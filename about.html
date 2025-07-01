@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - LeLabubu.ca</title>
+    <meta name="title-key" content="about_us">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+            <div class="container">
+                <a class="navbar-brand" href="/">LeLabubu.ca</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/" data-translate="nav_home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="shop.html" data-translate="nav_shop">Shop</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="about.html" data-translate="nav_about">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="contact.html" data-translate="nav_contact">Contact</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center mt-3 mt-lg-0">
+                        <form id="searchForm" class="d-flex me-lg-2 mb-2 mb-lg-0 w-100">
+                            <input class="form-control me-2" type="search" name="search" data-translate-placeholder="search_placeholder" placeholder="Search products..." aria-label="Search">
+                            <button class="btn btn-outline-primary" type="submit" data-translate-title="search_button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
+                        <div class="d-flex align-items-center">
+                            <a href="cart.html" class="btn btn-outline-primary position-relative me-2">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span class="cart-count position-absolute d-none">0</span>
+                            </a>
+                            <a href="#" id="languageToggle" class="btn btn-outline-secondary" onclick="return toggleLanguage();">Français</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- About Header -->
+        <section class="about-header py-5 bg-light">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6 order-md-1 order-2">
+                        <h1 class="mb-3 mt-4 mt-md-0" data-translate="about_us">About LeLabubu.ca</h1>
+                        <p class="lead mb-4" data-translate="about_intro_1">We are a growing company proudly based in Montreal, Canada, specializing in delivering quality products directly to our local community. Our dedicated in-house team of carriers ensures fast, reliable, and secure delivery across Montreal — with guaranteed free shipping on every order.</p>
+                        <p data-translate="about_intro_2">At Lelabubu, we're committed to providing exceptional service while supporting our city. Shop with confidence knowing your order will be handled with care and delivered right to your doorstep, at no extra cost. We rely solely on the growing trend of Labubu products.</p>
+                        <p data-translate="about_intro_3">Our hardworking carriers take pride in delivering your orders across Montreal with care and reliability. They deeply appreciate the kindness and support from our customers, which motivates them to go the extra mile every day. When you choose us, you're supporting a passionate local team committed to serving the community.</p>
+                    </div>
+                    <div class="col-md-6 order-md-2 order-1">
+                        <img src="images/products/product-placeholder.jpg" alt="About LeLabubu.ca" class="img-fluid rounded">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Story -->
+        <section class="our-story py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 mx-auto text-center">
+                        <h2 class="mb-4" data-translate="our_story">Our Story</h2>
+                        <p data-translate="story_para_1">LeLabubu.ca was born out of a passion for art toys and collectibles. Our founder, a long-time collector of Labubu dolls, noticed a gap in the Montreal market for authentic, high-quality Labubu products. What started as a small local store has grown into a thriving business serving collectors throughout the city.</p>
+                        <p data-translate="story_para_2">We work directly with authorized distributors to ensure that every Labubu doll we sell is authentic and meets the highest standards of quality. Our team is made up of fellow collectors and dedicated local carriers who understand the passion and care that goes into both building a collection and delivering products safely.</p>
+                        <p data-translate="story_para_3">At LeLabubu.ca, we're not just selling products – we're creating a Montreal-based community of collectors and enthusiasts while providing exceptional local delivery service.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Labubu -->
+        <section class="about-labubu py-5 bg-light">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6 order-md-2">
+                        <h2 class="mb-4" data-translate="about_section_title">About Labubu Dolls</h2>
+                        <p data-translate="about_labubu_1">Labubu dolls are the creation of renowned artist Kasing Lung. These distinctive characters feature a mischievous expression and unique design that has captured the hearts of collectors worldwide.</p>
+                        <p data-translate="about_labubu_2">Each Labubu doll is crafted with meticulous attention to detail, showcasing Kasing Lung's artistic vision and storytelling. The character's playful yet slightly mysterious appearance has made it an icon in the art toy community.</p>
+                        <p data-translate="about_labubu_3">What began as a limited edition art piece has evolved into a global phenomenon, with collectors eagerly anticipating new releases and special editions. Labubu dolls are more than just toys – they're collectible art pieces that bring joy and whimsy to any space.</p>
+                    </div>
+                    <div class="col-md-6 order-md-1">
+                        <img src="images/products/product-placeholder.jpg" alt="About Labubu Dolls" class="img-fluid rounded">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Values -->
+        <section class="our-values py-5">
+            <div class="container">
+                <h2 class="text-center mb-5" data-translate="our_values">Our Values</h2>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="value-icon mb-3">
+                                    <i class="fas fa-check-circle text-primary" style="font-size: 3rem;"></i>
+                                </div>
+                                <h4 class="card-title" data-translate="value_authenticity">Authenticity</h4>
+                                <p class="card-text" data-translate="value_authenticity_desc">We guarantee that every Labubu doll we sell is 100% authentic. We work only with authorized distributors to ensure the highest quality products for our customers.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="value-icon mb-3">
+                                    <i class="fas fa-heart text-primary" style="font-size: 3rem;"></i>
+                                </div>
+                                <h4 class="card-title" data-translate="value_passion">Passion</h4>
+                                <p class="card-text" data-translate="value_passion_desc">We're collectors ourselves, and we bring our passion for Labubu dolls to everything we do. We love sharing our knowledge and enthusiasm with fellow collectors.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="value-icon mb-3">
+                                    <i class="fas fa-users text-primary" style="font-size: 3rem;"></i>
+                                </div>
+                                <h4 class="card-title" data-translate="value_community">Community</h4>
+                                <p class="card-text" data-translate="value_community_desc">We're building more than a business – we're creating a local Montreal community of collectors and enthusiasts who share our love for these unique art toys while supporting our city's economy.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- FAQ -->
+        <section class="faq py-5">
+            <div class="container">
+                <h2 class="text-center mb-5" data-translate="faq">Frequently Asked Questions</h2>
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="accordion" id="faqAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingOne">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" data-translate="faq_q1">
+                                        Are your Labubu dolls authentic?
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <p data-translate="faq_a1">Yes, all of our Labubu dolls are 100% authentic. We work directly with authorized distributors to ensure that every product we sell is genuine. Each doll comes with its original packaging and authentication certificate.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingTwo">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" data-translate="faq_q2">
+                                        How do I care for my Labubu doll?
+                                    </button>
+                                </h2>
+                                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <p data-translate="faq_a2_intro">To keep your Labubu doll in pristine condition, we recommend the following:</p>
+                                        <ul>
+                                            <li data-translate="faq_a2_1">Keep your doll away from direct sunlight to prevent color fading</li>
+                                            <li data-translate="faq_a2_2">Dust regularly with a soft, dry cloth</li>
+                                            <li data-translate="faq_a2_3">Avoid using cleaning chemicals or water on the doll</li>
+                                            <li data-translate="faq_a2_4">Store in a cool, dry place when not on display</li>
+                                            <li data-translate="faq_a2_5">Handle with clean hands to prevent dirt or oil transfer</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingThree">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" data-translate="faq_q3">
+                                        Do you ship internationally?
+                                    </button>
+                                </h2>
+                                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <p data-translate="faq_a3">Currently, we only ship within Montreal, Quebec. Our dedicated in-house team of carriers ensures fast, reliable delivery across the Montreal area with free shipping across montreal. We're focused on providing exceptional service to our local community before expanding to other regions.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingFour">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" data-translate="faq_q4">
+                                        How often do you get new Labubu releases?
+                                    </button>
+                                </h2>
+                                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <p data-translate="faq_a4">We receive new Labubu releases as soon as they become available from our distributors. The frequency of new releases varies, but we typically see new designs or colorways every few months. Limited editions may be released less frequently. We announce all new arrivals through our newsletter and social media channels, so be sure to follow us to stay updated.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingFive">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive" data-translate="faq_q5">
+                                        What is your return policy?
+                                    </button>
+                                </h2>
+                                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        <p data-translate="faq_a5">We offer a 30-day return policy for all unopened items in their original packaging. If you receive a damaged or defective item, please contact us within 7 days of receipt, and we'll arrange for a replacement or refund. Please note that limited edition items may have different return conditions. For full details, please visit our Return Policy page.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta py-5 bg-primary text-white">
+            <div class="container text-center">
+                <h2 class="mb-3" data-translate="cta_title">Ready to Start Your Collection?</h2>
+                <p class="lead mb-4" data-translate="cta_text">Browse our selection of authentic Labubu dolls and enjoy free shipping across montreal!</p>
+                <a href="shop.html" class="btn btn-light btn-lg" data-translate="hero_button">Shop Now</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+                    <h5>LeLabubu.ca</h5>
+                    <p data-translate="footer_description">Your local Montreal destination for authentic Labubu dolls with free shipping across montreal.</p>
+                    <div class="social-icons">
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+                    <h5 data-translate="footer_shop">Shop</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="shop.html" data-translate="all_products">All Products</a></li>
+                        <li><a href="#" data-translate="new_arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-translate="best_sellers">Best Sellers</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+                    <h5 data-translate="footer_information">Information</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="about.html" data-translate="about_us">About Us</a></li>
+                        <li><a href="#" data-translate="shipping_policy">Shipping Policy</a></li>
+                        <li><a href="#" data-translate="return_policy">Return Policy</a></li>
+                        <li><a href="#" data-translate="privacy_policy">Privacy Policy</a></li>
+                        <li><a href="#" data-translate="terms_conditions">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-sm-6 mb-4 mb-lg-0">
+                    <h5 data-translate="contact_us">Contact Us</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 Doll Street, Montreal, QC H2Y 1C6</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2"></i> (514) 555-1234</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@lelabubu.ca</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <p class="mb-0" data-translate="copyright">&copy; 2025 LeLabubu.ca. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <p class="mb-0">
+                        <img src="images/payment-methods.png" alt="Payment Methods" style="height: 24px; max-width: 100%;">
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="js/products.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/stripe.js"></script>
+</body>
+</html>
