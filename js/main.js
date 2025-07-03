@@ -673,7 +673,7 @@ function displayProductById(productId) {
     }
     
     productCategory.forEach(el => {
-        el.textContent = product.category.charAt(0).toUpperCase() + product.category.slice(1);
+        el.textContent = "Authentic";
     });
     
     if (productTags) {
