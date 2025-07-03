@@ -371,5 +371,35 @@
     <script src="js/main.js"></script>
     <script src="js/translations.js"></script>
     <script src="js/stripe.js"></script>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, subject, message })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                this.innerHTML = `
+                    <div class="alert alert-success" role="alert">
+                        <h4 class="alert-heading">Message Sent!</h4>
+                        <p>Thank you for contacting us. We will get back to you shortly.</p>
+                    </div>
+                `;
+            } else {
+                alert('Error: ' + data.error);
+            }
+        });
+    </script>
 </body>
 </html>

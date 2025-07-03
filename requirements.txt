@@ -5,3 +5,4 @@ flask-cors
 gunicorn
 Flask-SQLAlchemy
 psycopg2-binary
+Flask-Mail

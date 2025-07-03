@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, send_from_directory, session
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail, Message
 from werkzeug.security import generate_password_hash, check_password_hash
 import stripe
 from dotenv import load_dotenv
@@ -12,6 +13,16 @@ app = Flask(__name__, static_folder='.')
 app.secret_key = os.getenv('SECRET_KEY', 'a_super_secret_key')
 CORS(app, origins=['https://lelabubu.ca', 'http://localhost:5000'], supports_credentials=True)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Mail Configuration
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'smtp.gmail.com')
+app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 587))
+app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', 'true').lower() in ['true', '1', 't']
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')
+
+mail = Mail(app)
 
 # Database Configuration
 if os.getenv('DATABASE_URL'):
@@ -320,6 +331,28 @@ def post_comment(product_id):
     db.session.commit()
 
     return jsonify({'message': 'Comment posted successfully', 'comment': {'id': new_comment.id, 'content': new_comment.content, 'user': new_comment.user.username}}), 201
+
+@app.route('/api/contact', methods=['POST'])
+def contact():
+    data = request.get_json()
+    name = data.get('name')
+    email = data.get('email')
+    subject = data.get('subject')
+    message = data.get('message')
+
+    if not name or not email or not subject or not message:
+        return jsonify({'error': 'All fields are required'}), 400
+
+    msg = Message(subject=f"Contact Form: {subject}",
+                  sender=app.config['MAIL_DEFAULT_SENDER'],
+                  recipients=['contact@lelabubu.ca'])
+    msg.body = f"From: {name} <{email}>\n\n{message}"
+    
+    try:
+        mail.send(msg)
+        return jsonify({'message': 'Message sent successfully!'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # Serve static HTML files
 @app.route('/<path:path>')
