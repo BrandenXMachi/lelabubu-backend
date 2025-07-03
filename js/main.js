@@ -696,6 +696,12 @@ function displayProductById(productId) {
         mainImage.alt = product.name;
     }
     
+    // This was the missing part.
+    const productImages = document.querySelectorAll('.main-product-image');
+    productImages.forEach(img => {
+        img.src = product.images[0];
+    });
+    
     if (thumbnailsContainer) {
         let thumbnailsHTML = '';
         
