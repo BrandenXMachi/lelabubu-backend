@@ -1287,3 +1287,23 @@ a:hover {
 body.checkout-active {
     overflow: hidden;
 }
+
+/* Comments Section */
+.comments-section {
+    background-color: #f9f9f9;
+}
+
+#comments-container .card {
+    border: 1px solid #e0e0e0;
+    box-shadow: none;
+}
+
+#comments-container .card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+#comment-form-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
