@@ -165,14 +165,8 @@
                                 <p>Each Labubu doll is a collectible art piece. Minor variations in color and finish may occur, as is characteristic of handcrafted items.</p>
                             </div>
                             <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-                                <h4>Customer Comments</h4>
-                                <div id="comments-container">
-                                    <!-- Comments will be dynamically inserted here -->
-                                </div>
-                                <hr class="my-4">
-                                <div id="comment-form-container">
-                                    <!-- Comment form will be dynamically inserted here -->
-                                </div>
+                                <h4>Customer Reviews</h4>
+                                <p>No reviews for this product yet.</p>
                             </div>
                         </div>
                     </div>
@@ -330,74 +324,6 @@
             });
         });
         
-        // Comments functionality
-        const productId = new URLSearchParams(window.location.search).get('id');
-
-        async function fetchAndDisplayComments() {
-            const commentsContainer = document.getElementById('comments-container');
-            const response = await fetch(`/api/products/${productId}/comments`);
-            const comments = await response.json();
-
-            if (comments.length > 0) {
-                commentsContainer.innerHTML = comments.map(comment => `
-                    <div class="mb-3">
-                        <strong>${comment.user}</strong>
-                        <p>${comment.content}</p>
-                    </div>
-                `).join('');
-            } else {
-                commentsContainer.innerHTML = '<p>No comments yet.</p>';
-            }
-        }
-
-        async function checkUserAndDisplayCommentForm() {
-            const commentFormContainer = document.getElementById('comment-form-container');
-            const sessionResponse = await fetch('/api/session', {credentials: 'include'});
-            const sessionData = await sessionResponse.json();
-
-            if (sessionData.user) {
-                // User is logged in, now check if they purchased the product
-                // This check is handled by the backend, but we can pre-emptively check here if we want
-                commentFormContainer.innerHTML = `
-                    <h5>Leave a Comment</h5>
-                    <form id="comment-form">
-                        <div class="mb-3">
-                            <textarea class="form-control" id="comment-text" rows="3" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit Comment</button>
-                    </form>
-                    <div id="comment-message" class="alert mt-3 d-none"></div>
-                `;
-
-                document.getElementById('comment-form').addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const content = document.getElementById('comment-text').value;
-                    const response = await fetch(`/api/products/${productId}/comments`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        credentials: 'include',
-                        body: JSON.stringify({ content })
-                    });
-                    const data = await response.json();
-                    const commentMessage = document.getElementById('comment-message');
-                    commentMessage.textContent = data.message || data.error;
-                    commentMessage.className = `alert ${response.ok ? 'alert-success' : 'alert-danger'}`;
-                    commentMessage.classList.remove('d-none');
-
-                    if (response.ok) {
-                        document.getElementById('comment-text').value = '';
-                        fetchAndDisplayComments();
-                    }
-                });
-            } else {
-                commentFormContainer.innerHTML = '<p><a href="login.html">Log in</a> to leave a comment.</p>';
-            }
-        }
-
-        if (productId) {
-            fetchAndDisplayComments();
-            checkUserAndDisplayCommentForm();
-        }
     </script>
 </body>
 </html>

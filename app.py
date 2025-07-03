@@ -56,7 +56,6 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
     user = db.relationship('User')
 
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
@@ -304,13 +303,13 @@ def get_session():
             return jsonify({'user': {'id': user.id, 'username': user.username}})
     return jsonify({'user': None})
 
-@app.route('/api/products/<int:product_id>/comments', methods=['GET'])
-def get_comments(product_id):
-    comments = Comment.query.filter_by(product_id=product_id).all()
+@app.route('/api/comments', methods=['GET'])
+def get_comments():
+    comments = Comment.query.order_by(Comment.id.desc()).all()
     return jsonify([{'id': c.id, 'content': c.content, 'user': c.user.username} for c in comments])
 
-@app.route('/api/products/<int:product_id>/comments', methods=['POST'])
-def post_comment(product_id):
+@app.route('/api/comments', methods=['POST'])
+def post_comment():
     if 'user_id' not in session:
         return jsonify({'error': 'Not logged in'}), 401
 
@@ -322,11 +321,11 @@ def post_comment(product_id):
         return jsonify({'error': 'Comment content is required'}), 400
 
     # Verify purchase
-    purchase = Purchase.query.filter_by(user_id=user_id, product_id=product_id).first()
+    purchase = Purchase.query.filter_by(user_id=user_id).first()
     if not purchase:
-        return jsonify({'error': 'You must purchase this product to leave a comment'}), 403
+        return jsonify({'error': 'You must make a purchase to leave a comment'}), 403
 
-    new_comment = Comment(content=content, user_id=user_id, product_id=product_id)
+    new_comment = Comment(content=content, user_id=user_id)
     db.session.add(new_comment)
     db.session.commit()
 

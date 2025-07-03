@@ -309,5 +309,89 @@
     <script src="js/main.js"></script>
     <script src="js/translations.js"></script>
     <script src="js/stripe.js"></script>
+
+    <!-- Comments Section -->
+    <section class="comments-section py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Community Comments</h2>
+            <div id="comments-container" class="mb-4">
+                <!-- Comments will be dynamically inserted here -->
+            </div>
+            <div id="comment-form-container">
+                <!-- Comment form will be dynamically inserted here -->
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            async function fetchAndDisplayComments() {
+                const commentsContainer = document.getElementById('comments-container');
+                const response = await fetch('/api/comments');
+                const comments = await response.json();
+
+                if (comments.length > 0) {
+                    commentsContainer.innerHTML = comments.map(comment => `
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">${comment.user}</h5>
+                                <p class="card-text">${comment.content}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    commentsContainer.innerHTML = '<p class="text-center">No comments yet. Be the first to leave a comment after making a purchase!</p>';
+                }
+            }
+
+            async function checkUserAndDisplayCommentForm() {
+                const commentFormContainer = document.getElementById('comment-form-container');
+                const sessionResponse = await fetch('/api/session', {credentials: 'include'});
+                const sessionData = await sessionResponse.json();
+
+                if (sessionData.user) {
+                    // The backend will verify if the user has made a purchase
+                    commentFormContainer.innerHTML = `
+                        <h4 class="text-center">Leave a Comment</h4>
+                        <form id="comment-form">
+                            <div class="mb-3">
+                                <textarea class="form-control" id="comment-text" rows="3" required placeholder="Write your comment here..."></textarea>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Submit Comment</button>
+                            </div>
+                        </form>
+                        <div id="comment-message" class="alert mt-3 d-none"></div>
+                    `;
+
+                    document.getElementById('comment-form').addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        const content = document.getElementById('comment-text').value;
+                        const response = await fetch('/api/comments', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            credentials: 'include',
+                            body: JSON.stringify({ content })
+                        });
+                        const data = await response.json();
+                        const commentMessage = document.getElementById('comment-message');
+                        commentMessage.textContent = data.message || data.error;
+                        commentMessage.className = `alert mt-3 ${response.ok ? 'alert-success' : 'alert-danger'}`;
+                        commentMessage.classList.remove('d-none');
+
+                        if (response.ok) {
+                            document.getElementById('comment-text').value = '';
+                            fetchAndDisplayComments();
+                        }
+                    });
+                } else {
+                    commentFormContainer.innerHTML = '<p class="text-center"><a href="login.html">Log in</a> and make a purchase to leave a comment.</p>';
+                }
+            }
+
+            fetchAndDisplayComments();
+            checkUserAndDisplayCommentForm();
+        });
+    </script>
 </body>
 </html>
