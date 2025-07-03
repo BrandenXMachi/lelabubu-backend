@@ -821,6 +821,25 @@ function displayProductById(productId) {
             addToCartBtn.textContent = 'Out of Stock';
         }
     }
+
+    // Initialize quantity buttons
+    const quantityDecrease = document.getElementById('quantity-decrease');
+    const quantityIncrease = document.getElementById('quantity-increase');
+    const quantityInput = document.getElementById('quantity');
+
+    if (quantityDecrease && quantityIncrease && quantityInput) {
+        quantityDecrease.addEventListener('click', function() {
+            const currentValue = parseInt(quantityInput.value);
+            if (currentValue > 1) {
+                quantityInput.value = currentValue - 1;
+            }
+        });
+
+        quantityIncrease.addEventListener('click', function() {
+            const currentValue = parseInt(quantityInput.value);
+            quantityInput.value = currentValue + 1;
+        });
+    }
     
     // Display related products
     if (relatedProductsContainer) {
