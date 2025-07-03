@@ -30,7 +30,7 @@ lelabubu/
 
 2. Create a `.env` file in the root directory with your Stripe API keys:
    ```
-   STRIPE_SECRET_KEY=sk_test_51Rerp84RpqeAczydn1QeEPWeTeIedEBX0BXKpmlWoHyFNtI1ZW3wE307p5J7lYXGhXsfP87zsauZxGbiiFn6jj0J009huEKmui
+   STRIPE_SECRET_KEY=your_stripe_secret_key_here
    STRIPE_PUBLISHABLE_KEY=pk_test_51Rerp84RpqeAczydMUzeLHi8R8iK3K3ghT1OYPoEUoGCKoCaJ3nZAes4CgjpePcJKriFt317fjVxq7vdnosjBPEW00YaPDWkGK
    ```
 

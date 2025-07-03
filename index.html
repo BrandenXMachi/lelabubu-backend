@@ -74,20 +74,26 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 hero-content">
-                    <h1 data-translate="welcome_to">Welcome to <span class="hero-title-le">Le</span><span class="hero-title-labubu">Labubu</span>.ca</h1>
-                    <p class="lead mb-4" data-translate="hero_description">Discover the enchanting world of Labubu dolls with free shipping across montreal - the perfect blend of cute and creepy that has captivated collectors worldwide.</p>
-                    <div class="d-flex">
-                        <a href="shop.html" class="btn btn-primary me-3" data-translate="hero_button">Shop Now</a>
-                        <a href="about.html" class="btn btn-outline-primary" data-translate="learn_more">Learn More</a>
-                    </div>
+        <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active" data-bs-interval="3000">
+                    <img src="images/slide-show-1.webp" class="d-block w-100" alt="Slide 1">
                 </div>
-                <div class="col-lg-6 hero-image mt-5 mt-lg-0">
-                    <img src="images/labubu-logo.png" alt="LeLabubu Logo" class="img-fluid rounded">
+                <div class="carousel-item" data-bs-interval="3000">
+                    <img src="images/slide-show-2.jpg" class="d-block w-100" alt="Slide 2">
+                </div>
+                <div class="carousel-item" data-bs-interval="3000">
+                    <img src="images/labubu-logo.png" class="d-block w-100" alt="Slide 3">
                 </div>
             </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
     </section>
 
