@@ -52,9 +52,6 @@
                                 <i class="fas fa-search"></i>
                             </button>
                         </form>
-                        <div id="user-session" class="d-flex align-items-center">
-                            <!-- This will be populated by JavaScript -->
-                        </div>
                         <div class="d-flex align-items-center ms-lg-2">
                             <a href="cart.html" class="btn btn-outline-primary position-relative me-2">
                                 <i class="fas fa-shopping-cart"></i>
@@ -273,62 +270,61 @@
                     commentsContainer.innerHTML = comments.map(comment => `
                         <div class="card mb-3">
                             <div class="card-body">
-                                <h5 class="card-title">${comment.user}</h5>
+                                <h5 class="card-title">${comment.author}</h5>
                                 <p class="card-text">${comment.content}</p>
                             </div>
                         </div>
                     `).join('');
                 } else {
-                    commentsContainer.innerHTML = '<p class="text-center">No comments yet. Be the first to leave a comment after making a purchase!</p>';
+                    commentsContainer.innerHTML = '<p class="text-center">No comments yet. Be the first to leave a comment!</p>';
                 }
             }
 
-            async function checkUserAndDisplayCommentForm() {
+            function displayCommentForm() {
                 const commentFormContainer = document.getElementById('comment-form-container');
-                const sessionResponse = await fetch('/api/session', {credentials: 'include'});
-                const sessionData = await sessionResponse.json();
+                commentFormContainer.innerHTML = `
+                    <h4 class="text-center">Leave a Comment</h4>
+                    <form id="comment-form">
+                        <div class="mb-3">
+                            <label for="comment-author" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="comment-author" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="comment-text" class="form-label">Comment</label>
+                            <textarea class="form-control" id="comment-text" rows="3" required></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Submit Comment</button>
+                        </div>
+                    </form>
+                    <div id="comment-message" class="alert mt-3 d-none"></div>
+                `;
 
-                if (sessionData.user) {
-                    commentFormContainer.innerHTML = `
-                        <h4 class="text-center">Leave a Comment</h4>
-                        <form id="comment-form">
-                            <div class="mb-3">
-                                <textarea class="form-control" id="comment-text" rows="3" required placeholder="Write your comment here..."></textarea>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary">Submit Comment</button>
-                            </div>
-                        </form>
-                        <div id="comment-message" class="alert mt-3 d-none"></div>
-                    `;
-
-                    document.getElementById('comment-form').addEventListener('submit', async (e) => {
-                        e.preventDefault();
-                        const content = document.getElementById('comment-text').value;
-                        const response = await fetch('/api/comments', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            credentials: 'include',
-                            body: JSON.stringify({ content })
-                        });
-                        const data = await response.json();
-                        const commentMessage = document.getElementById('comment-message');
-                        commentMessage.textContent = data.message || data.error;
-                        commentMessage.className = `alert mt-3 ${response.ok ? 'alert-success' : 'alert-danger'}`;
-                        commentMessage.classList.remove('d-none');
-
-                        if (response.ok) {
-                            document.getElementById('comment-text').value = '';
-                            fetchAndDisplayComments();
-                        }
+                document.getElementById('comment-form').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const author = document.getElementById('comment-author').value;
+                    const content = document.getElementById('comment-text').value;
+                    const response = await fetch('/api/comments', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ author, content })
                     });
-                } else {
-                    commentFormContainer.innerHTML = '<p class="text-center"><a href="login.html">Log in</a> to leave a comment.</p>';
-                }
+                    const data = await response.json();
+                    const commentMessage = document.getElementById('comment-message');
+                    commentMessage.textContent = data.message || data.error;
+                    commentMessage.className = `alert mt-3 ${response.ok ? 'alert-success' : 'alert-danger'}`;
+                    commentMessage.classList.remove('d-none');
+
+                    if (response.ok) {
+                        document.getElementById('comment-author').value = '';
+                        document.getElementById('comment-text').value = '';
+                        fetchAndDisplayComments();
+                    }
+                });
             }
 
             fetchAndDisplayComments();
-            checkUserAndDisplayCommentForm();
+            displayCommentForm();
         });
     </script>
 </body>

@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify, s
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
-from werkzeug.security import generate_password_hash, check_password_hash
 import stripe
 from dotenv import load_dotenv
 import os
@@ -33,30 +32,10 @@ else:
 db = SQLAlchemy(app)
 
 # Database Models
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128))
-    purchases = db.relationship('Purchase', backref='user', lazy=True)
-
-class Product(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    purchases = db.relationship('Purchase', backref='product', lazy=True)
-    comments = db.relationship('Comment', backref='product', lazy=True)
-
-class Purchase(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
-    stripe_session_id = db.Column(db.String(255), nullable=False)
-
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    author = db.Column(db.String(80), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User')
 
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 # Determine domain based on environment
@@ -256,75 +235,25 @@ def stripe_webhook():
 
 # API Routes
 
-@app.route('/api/register', methods=['POST'])
-def register():
-    data = request.get_json()
-    username = data.get('username')
-    email = data.get('email')
-    password = data.get('password')
-
-    if not username or not email or not password:
-        return jsonify({'error': 'Missing required fields'}), 400
-
-    if User.query.filter_by(username=username).first() or User.query.filter_by(email=email).first():
-        return jsonify({'error': 'User already exists'}), 409
-
-    hashed_password = generate_password_hash(password)
-    new_user = User(username=username, email=email, password_hash=hashed_password)
-    db.session.add(new_user)
-    db.session.commit()
-
-    return jsonify({'message': 'User created successfully'}), 201
-
-@app.route('/api/login', methods=['POST'])
-def login():
-    data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
-
-    user = User.query.filter_by(username=username).first()
-
-    if user and check_password_hash(user.password_hash, password):
-        session['user_id'] = user.id
-        return jsonify({'message': 'Logged in successfully', 'user': {'id': user.id, 'username': user.username}})
-    
-    return jsonify({'error': 'Invalid credentials'}), 401
-
-@app.route('/api/logout', methods=['POST'])
-def logout():
-    session.pop('user_id', None)
-    return jsonify({'message': 'Logged out successfully'})
-
-@app.route('/api/session')
-def get_session():
-    if 'user_id' in session:
-        user = User.query.get(session['user_id'])
-        if user:
-            return jsonify({'user': {'id': user.id, 'username': user.username}})
-    return jsonify({'user': None})
-
 @app.route('/api/comments', methods=['GET'])
 def get_comments():
     comments = Comment.query.order_by(Comment.id.desc()).all()
-    return jsonify([{'id': c.id, 'content': c.content, 'user': c.user.username} for c in comments])
+    return jsonify([{'id': c.id, 'author': c.author, 'content': c.content} for c in comments])
 
 @app.route('/api/comments', methods=['POST'])
 def post_comment():
-    if 'user_id' not in session:
-        return jsonify({'error': 'Not logged in'}), 401
-
-    user_id = session['user_id']
     data = request.get_json()
+    author = data.get('author')
     content = data.get('content')
 
-    if not content:
-        return jsonify({'error': 'Comment content is required'}), 400
+    if not author or not content:
+        return jsonify({'error': 'Author and content are required'}), 400
 
-    new_comment = Comment(content=content, user_id=user_id)
+    new_comment = Comment(author=author, content=content)
     db.session.add(new_comment)
     db.session.commit()
 
-    return jsonify({'message': 'Comment posted successfully', 'comment': {'id': new_comment.id, 'content': new_comment.content, 'user': new_comment.user.username}}), 201
+    return jsonify({'message': 'Comment posted successfully', 'comment': {'id': new_comment.id, 'author': new_comment.author, 'content': new_comment.content}}), 201
 
 @app.route('/api/contact', methods=['POST'])
 def contact():
