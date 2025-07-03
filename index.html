@@ -286,7 +286,6 @@
                 const sessionData = await sessionResponse.json();
 
                 if (sessionData.user) {
-                    // The backend will verify if the user has made a purchase
                     commentFormContainer.innerHTML = `
                         <h4 class="text-center">Leave a Comment</h4>
                         <form id="comment-form">
@@ -321,7 +320,7 @@
                         }
                     });
                 } else {
-                    commentFormContainer.innerHTML = '<p class="text-center"><a href="login.html">Log in</a> and make a purchase to leave a comment.</p>';
+                    commentFormContainer.innerHTML = '<p class="text-center"><a href="login.html">Log in</a> to leave a comment.</p>';
                 }
             }
 

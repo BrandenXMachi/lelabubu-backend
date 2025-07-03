@@ -320,11 +320,6 @@ def post_comment():
     if not content:
         return jsonify({'error': 'Comment content is required'}), 400
 
-    # Verify purchase
-    purchase = Purchase.query.filter_by(user_id=user_id).first()
-    if not purchase:
-        return jsonify({'error': 'You must make a purchase to leave a comment'}), 403
-
     new_comment = Comment(content=content, user_id=user_id)
     db.session.add(new_comment)
     db.session.commit()
