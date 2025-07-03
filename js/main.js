@@ -635,6 +635,12 @@ function displayProductById(productId) {
     // Update page title
     document.title = `${product.name} - LeLabubu.ca`;
     
+    // Hide loading indicator and show content
+    const loadingIndicator = document.querySelector('.product-info-loading');
+    const content = document.querySelector('.product-info-content');
+    if (loadingIndicator) loadingIndicator.style.display = 'none';
+    if (content) content.style.display = 'block';
+
     // Update product details
     const productTitle = document.querySelector('.product-title');
     const productPrice = document.querySelector('.product-price');
