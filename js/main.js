@@ -2,6 +2,9 @@
 
 // Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
+    // Handle user session
+    handleUserSession();
+
     // Initialize the shopping cart
     initCart();
     
@@ -837,6 +840,41 @@ function initAddToCartButtons() {
             addToCart(productId);
         });
     });
+}
+
+// User Session Handling
+async function handleUserSession() {
+    const userSessionDivs = document.querySelectorAll('#user-session');
+    if (userSessionDivs.length === 0) return;
+
+    try {
+        const response = await fetch('/api/session', {credentials: 'include'});
+        const data = await response.json();
+
+        userSessionDivs.forEach(userSessionDiv => {
+            if (data.user) {
+                userSessionDiv.innerHTML = `
+                    <span class="navbar-text me-2">Welcome, ${data.user.username}</span>
+                    <button id="logout-btn" class="btn btn-outline-secondary btn-sm">Logout</button>
+                `;
+                userSessionDiv.querySelector('#logout-btn').addEventListener('click', async () => {
+                    await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+                    window.location.reload();
+                });
+            } else {
+                userSessionDiv.innerHTML = `
+                    <a href="login.html" class="btn btn-outline-primary btn-sm">Login</a>
+                `;
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching user session:', error);
+        userSessionDivs.forEach(userSessionDiv => {
+            userSessionDiv.innerHTML = `
+                <a href="login.html" class="btn btn-outline-primary btn-sm">Login</a>
+            `;
+        });
+    }
 }
 
 // Initialize newsletter form

@@ -3,3 +3,5 @@ stripe
 python-dotenv
 flask-cors
 gunicorn
+Flask-SQLAlchemy
+psycopg2-binary
