@@ -6,7 +6,6 @@ const products = [
     {
         id: 9,
         name: "Labubu Monster Diary Series",
-        category: "authentic",
         price: 34.00,
         colors: ["purple", "multi-color"],
         sizes: ["small"],
@@ -23,7 +22,6 @@ const products = [
     {
         id: 8,
         name: "Labubu Chinese Zodiac Series",
-        category: "authentic",
         price: 34.00,
         colors: ["multi-color"],
         sizes: ["small"],
@@ -40,7 +38,6 @@ const products = [
     {
         id: 1,
         name: "Big into Energy",
-        category: "authentic",
         price: 100.00,
         colors: ["blue"],
         sizes: ["medium"],
@@ -57,7 +54,6 @@ const products = [
     {
         id: 2,
         name: "Exciting Macaron",
-        category: "authentic",
         price: 83.00,
         colors: ["red"],
         sizes: ["medium"],
@@ -74,7 +70,6 @@ const products = [
     {
         id: 3,
         name: "The Monsters Classic Series",
-        category: "authentic",
         price: 54.00,
         colors: ["red"],
         sizes: ["small"],
@@ -91,7 +86,6 @@ const products = [
     {
         id: 4,
         name: "Have A Seat",
-        category: "authentic",
         price: 78.00,
         colors: ["multi-color"],
         sizes: ["medium"],
@@ -108,7 +102,6 @@ const products = [
     {
         id: 5,
         name: "Full-size 'Fall in Wild' Series",
-        category: "authentic",
         price: 405.00,
         colors: ["multi-color"],
         sizes: ["large"],
@@ -125,7 +118,6 @@ const products = [
     {
         id: 6,
         name: "Pendant keychain 'Fall in Wild' Series",
-        category: "authentic",
         price: 119.50,
         colors: ["multi-color"],
         sizes: ["one-size"],
@@ -142,7 +134,6 @@ const products = [
     {
         id: 7,
         name: "Labubu Pirate Treasure Series",
-        category: "authentic",
         price: 58.75,
         colors: ["multi-color"],
         sizes: ["medium"],
@@ -157,58 +148,6 @@ const products = [
         tags: ["multi-color", "limited", "vinyl", "kasing lung", "pirate", "treasure", "one piece"]
     },
     
-    // LaFuFu products
-    {
-        id: 101,
-        name: "Big into Energy (LaFuFu)",
-        category: "replica",
-        price: 35.00,
-        colors: ["blue"],
-        sizes: ["medium"],
-        rating: 4.2,
-        reviews: 87,
-        inStock: true,
-        description: "A replica of the original Labubu doll in a vibrant blue color. This classic design features the iconic mischievous expression that has made Labubu dolls famous worldwide. Each doll is crafted with quality materials and stands approximately 8 inches tall.",
-        details: "This replica version of the popular Labubu doll captures the essence of the original design at a more affordable price point. The blue variant is one of the most popular colorways in the classic line.",
-        images: [
-            "images/products/labubu-image-2.webp"
-        ],
-        tags: ["blue", "replica", "vinyl", "kasing lung"]
-    },
-    {
-        id: 102,
-        name: "Exciting Macaron (LaFuFu)",
-        category: "replica",
-        price: 30.00,
-        colors: ["red"],
-        sizes: ["medium"],
-        rating: 4.3,
-        reviews: 65,
-        inStock: true,
-        description: "A replica of the original Labubu doll in a striking red color. This classic design features the iconic mischievous expression that has made Labubu dolls famous worldwide. Each doll is crafted with quality materials and stands approximately 8 inches tall.",
-        details: "This replica version of the popular Labubu doll captures the essence of the original design at a more affordable price point. The red variant adds a bold, eye-catching element to any collection.",
-        images: [
-            "images/products/labubu-image-3.webp"
-        ],
-        tags: ["red", "replica", "vinyl", "kasing lung"]
-    },
-    {
-        id: 104,
-        name: "Have A Seat (LaFuFu)",
-        category: "replica",
-        price: 30.00,
-        colors: ["multi-color"],
-        sizes: ["medium"],
-        rating: 4.4,
-        reviews: 31,
-        inStock: true,
-        description: "A replica of the charming Labubu doll that invites you to take a seat and relax. This delightful design features the iconic character in a comfortable seated position, perfect for display on shelves, desks, or any special spot in your collection.",
-        details: "This replica version captures a moment of relaxation while maintaining the character's signature charm at a more affordable price point. The multi-colored design adds a vibrant touch to any collection and makes for an eye-catching display piece.",
-        images: [
-            "images/products/have-a-seat.jpg"
-        ],
-        tags: ["multi-color", "replica", "vinyl", "kasing lung", "seated"]
-    },
 ];
 
 // Featured products (IDs of products to be featured on the homepage)
@@ -223,11 +162,6 @@ const bestSellers = [1, 2, 3, 5, 8, 9];
 // Get product by ID
 function getProductById(id) {
     return products.find(product => product.id === id);
-}
-
-// Get products by category
-function getProductsByCategory(category) {
-    return products.filter(product => product.category === category);
 }
 
 // Get products by IDs
@@ -255,8 +189,9 @@ function getRelatedProducts(productId, limit = 4) {
     const product = getProductById(productId);
     if (!product) return [];
     
+    // Since categories are removed, we can suggest any other products as related
     return products
-        .filter(p => p.category === product.category && p.id !== productId)
+        .filter(p => p.id !== productId)
         .slice(0, limit);
 }
 
@@ -273,11 +208,6 @@ function searchProducts(query) {
 // Filter products by multiple criteria
 function filterProducts(filters) {
     return products.filter(product => {
-        // Filter by category
-        if (filters.category && !filters.category.includes(product.category)) {
-            return false;
-        }
-        
         // Filter by price range
         if (filters.minPrice && product.price < filters.minPrice) {
             return false;

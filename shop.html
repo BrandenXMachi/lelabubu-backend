@@ -79,28 +79,6 @@
         <!-- Shop Content -->
         <section class="shop-content py-5">
             <div class="container">
-                <!-- Category Tabs -->
-                <div class="category-tabs mb-4">
-                    <ul class="nav nav-pills nav-fill flex-column flex-sm-row">
-                        <li class="nav-item mb-2 mb-sm-0">
-                            <button class="nav-link active w-100" id="all-tab" data-category="all" data-translate="all_products">All Products</button>
-                        </li>
-                        <li class="nav-item mb-2 mb-sm-0">
-                            <button class="nav-link w-100" id="authentic-tab" data-category="authentic" data-translate="authentic_products">Authentic Products</button>
-                        </li>
-                        <li class="nav-item">
-                            <button class="nav-link w-100" id="replica-tab" data-category="replica" data-translate="replica_products">LaFuFus</button>
-                        </li>
-                    </ul>
-                </div>
-                
-                <!-- Category Descriptions -->
-                <div id="category-descriptions" class="mb-4">
-                    <div id="replica-description" class="alert alert-info d-none">
-                        <i class="fas fa-info-circle me-2"></i>
-                        LaFuFus are near perfect inauthentic products that offer the Labubu experience at a more affordable price point.
-                    </div>
-                </div>
                 
                 <div class="row">
                     <!-- Products Grid -->
@@ -211,41 +189,6 @@
             // This will be handled by the main.js file
         });
         
-        // Category filtering
-        document.querySelectorAll('.category-tabs .nav-link').forEach(tab => {
-            tab.addEventListener('click', function() {
-                // Remove active class from all tabs
-                document.querySelectorAll('.category-tabs .nav-link').forEach(t => {
-                    t.classList.remove('active');
-                });
-                
-                // Add active class to clicked tab
-                this.classList.add('active');
-                
-                // Get selected category
-                const category = this.getAttribute('data-category');
-                
-                // Show/hide category descriptions
-                const replicaDescription = document.getElementById('replica-description');
-                if (category === 'replica') {
-                    replicaDescription.classList.remove('d-none');
-                } else {
-                    replicaDescription.classList.add('d-none');
-                }
-                
-                // Filter products by category (this will be handled by main.js)
-                if (typeof filterProductsByCategory === 'function') {
-                    filterProductsByCategory(category);
-                }
-            });
-        });
-        
-        // Initialize category description visibility based on URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const categoryParam = urlParams.get('category');
-        if (categoryParam === 'replica') {
-            document.getElementById('replica-description').classList.remove('d-none');
-        }
     </script>
 </body>
 </html>
