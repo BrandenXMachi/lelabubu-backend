@@ -1,5 +1,9 @@
 /* LeLabubu.ca - Custom CSS */
 
+html, body {
+    overflow-x: hidden;
+}
+
 /* Global Styles */
 :root {
     --primary-color: #4b1a8c; /* Deep purple for high-end look */
