@@ -612,10 +612,21 @@ function displayProductDetails() {
     const productId = parseInt(urlParams.get('id'));
     
     if (!productId) {
-        console.log('No product ID found in URL, checking for default product');
-        // If no product ID is found, default to the first product
-        if (products && products.length > 0) {
-            displayProductById(products[0].id);
+        console.error('No product ID found in URL');
+        // Show error message instead of defaulting to first product
+        const content = document.querySelector('.product-info-content');
+        const loadingIndicator = document.querySelector('.product-info-loading');
+        
+        if (loadingIndicator) loadingIndicator.style.display = 'none';
+        if (content) {
+            content.style.display = 'block';
+            content.innerHTML = `
+                <div class="text-center py-5">
+                    <h3>Product Not Found</h3>
+                    <p>The product you're looking for could not be found.</p>
+                    <a href="shop.html" class="btn btn-primary">Browse All Products</a>
+                </div>
+            `;
         }
         return;
     }
@@ -700,6 +711,7 @@ function displayProductById(productId) {
     if (mainImage) {
         mainImage.src = product.images[0];
         mainImage.alt = product.name;
+        mainImage.style.display = 'block'; // Show the image once it's loaded with correct product
     }
     
     if (thumbnailsContainer) {
