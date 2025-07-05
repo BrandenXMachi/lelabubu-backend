@@ -84,7 +84,8 @@ const products = [
         description: "A smaller version of the beloved Labubu doll in a striking red color. The Mini Labubu maintains all the charm of the original in a more compact size, perfect for collectors with limited display space or those who want to create multi-character scenes.",
         details: "Standing at approximately 4 inches tall, the Mini Labubu is crafted with the same attention to detail and high-quality materials as its larger counterpart. The red Mini Labubu adds a bold pop of color to any collection.",
         images: [
-            "images/products/labubu-image-8.webp"
+            "images/products/labubu-image-8.webp",
+            "images/products/labubu image 10.webp"
         ],
         tags: ["red", "mini", "small", "vinyl", "kasing lung"]
     },
