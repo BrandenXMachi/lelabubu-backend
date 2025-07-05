@@ -172,104 +172,8 @@ also<!DOCTYPE html>
         <section class="related-products py-5 bg-light">
             <div class="container">
                 <h2 class="text-center mb-4" data-translate="you_may_also_like">You May Also Like</h2>
-                <div class="row g-3">
+                <div class="row g-3" id="relatedProductsContainer">
                     <!-- Product cards will be dynamically inserted here by JavaScript -->
-                    <div class="col-6 col-md-3 mb-4">
-                        <div class="card product-card h-100">
-                            <a href="product.html?id=1">
-                                <img src="images/products/product-placeholder.jpg" class="card-img-top" alt="Classic Labubu - Blue">
-                            </a>
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">
-                                    <a href="product.html?id=1">Classic Labubu - Blue</a>
-                                </h5>
-                                <div class="rating mb-2">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                    <small class="text-muted ml-2">(124)</small>
-                                </div>
-                                <p class="price mb-2">$89.99</p>
-                                <button class="btn btn-primary btn-sm add-to-cart mt-auto" data-product-id="1" data-translate="add_to_cart">
-                                    Add to Cart
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3 mb-4">
-                        <div class="card product-card h-100">
-                            <a href="product.html?id=5">
-                                <img src="images/products/product-placeholder.jpg" class="card-img-top" alt="Mini Labubu - Blue">
-                            </a>
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">
-                                    <a href="product.html?id=5">Mini Labubu - Blue</a>
-                                </h5>
-                                <div class="rating mb-2">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                    <small class="text-muted ml-2">(78)</small>
-                                </div>
-                                <p class="price mb-2">$49.99</p>
-                                <button class="btn btn-primary btn-sm add-to-cart mt-auto" data-product-id="5" data-translate="add_to_cart">
-                                    Add to Cart
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3 mb-4">
-                        <div class="card product-card h-100">
-                            <a href="product.html?id=7">
-                                <img src="images/products/product-placeholder.jpg" class="card-img-top" alt="Limited Edition Glow Labubu">
-                            </a>
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">
-                                    <a href="product.html?id=7">Limited Edition Glow Labubu</a>
-                                </h5>
-                                <div class="rating mb-2">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <small class="text-muted ml-2">(42)</small>
-                                </div>
-                                <p class="price mb-2">$129.99</p>
-                                <button class="btn btn-primary btn-sm add-to-cart mt-auto" data-product-id="7" data-translate="add_to_cart">
-                                    Add to Cart
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3 mb-4">
-                        <div class="card product-card h-100">
-                            <a href="product.html?id=9">
-                                <img src="images/products/product-placeholder.jpg" class="card-img-top" alt="Labubu Keychain">
-                            </a>
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">
-                                    <a href="product.html?id=9">Labubu Keychain</a>
-                                </h5>
-                                <div class="rating mb-2">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                    <small class="text-muted ml-2">(112)</small>
-                                </div>
-                                <p class="price mb-2">$19.99</p>
-                                <button class="btn btn-primary btn-sm add-to-cart mt-auto" data-product-id="9" data-translate="add_to_cart">
-                                    Add to Cart
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
@@ -383,6 +287,48 @@ also<!DOCTYPE html>
             } else {
                 alert('Please enter a promo code');
             }
+        });
+        
+        // Load related products for "You May Also Like" section
+        function loadRelatedProducts() {
+            const container = document.getElementById('relatedProductsContainer');
+            if (!container || typeof getFeaturedProducts !== 'function') return;
+            
+            // Get 4 featured products for the "You May Also Like" section
+            const relatedProducts = getFeaturedProducts().slice(0, 4);
+            
+            container.innerHTML = relatedProducts.map(product => `
+                <div class="col-6 col-md-3 mb-4">
+                    <div class="card product-card h-100">
+                        <a href="product.html?id=${product.id}">
+                            <img src="${product.images[0]}" class="card-img-top" alt="${product.name}">
+                        </a>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">
+                                <a href="product.html?id=${product.id}">${product.name}</a>
+                            </h5>
+                            <div class="rating mb-2">
+                                ${generateRatingStars(product.rating)}
+                                <small class="text-muted ml-2">(${product.reviews})</small>
+                            </div>
+                            <p class="price mb-2">${formatPrice(product.price)}</p>
+                            ${product.inStock ? 
+                                `<button class="btn btn-primary btn-sm add-to-cart mt-auto" data-product-id="${product.id}" data-translate="add_to_cart">
+                                    Add to Cart
+                                </button>` : 
+                                `<button class="btn btn-danger btn-sm mt-auto" disabled>
+                                    Out of Stock
+                                </button>`
+                            }
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Initialize page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            loadRelatedProducts();
         });
         
         // Initialize translations
