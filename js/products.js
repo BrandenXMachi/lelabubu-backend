@@ -34,7 +34,10 @@ const products = [
         description: "Celebrate Chinese culture with the Labubu Chinese Zodiac Series. This special collection features our beloved character reimagined with elements from the traditional Chinese zodiac, creating a perfect blend of contemporary art toy design and cultural heritage.",
         details: "Designed by Kasing Lung, this limited edition Labubu collection pays homage to Chinese zodiac traditions. Each figure is meticulously crafted with vibrant colors and intricate details representing different zodiac animals. These collectibles make perfect gifts for cultural celebrations or for fans looking to add a unique cultural piece to their collection.",
         images: [
-            "images/products/labubu-chinese-zodiac.webp"
+            "images/products/labubu-chinese-zodiac.webp",
+            "images/products/zodiac 1.webp",
+            "images/products/zodiac 2.webp",
+            "images/products/zodiac 3.webp"
         ],
         tags: ["multi-color", "limited", "zodiac", "chinese", "cultural", "kasing lung"]
     },
