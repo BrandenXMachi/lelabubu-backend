@@ -141,7 +141,8 @@ const products = [
         description: "A beautiful pendant keychain from the 'Fall in Wild' Series. This miniature accessory captures all the charm and detail of the full-size figure in a convenient keychain format that you can take with you anywhere.",
         details: "Part of the popular 'Fall in Wild' Series designed by Kasing Lung, this pendant keychain features the same nature-inspired design elements as the larger figures. Made from high-quality materials with a secure metal keyring, it's perfect for collectors who want to showcase their love for Labubu on the go.",
         images: [
-            "images/products/wind-pendant.webp"
+            "images/products/wind-pendant.webp",
+            "images/products/mini fall 0.webp"
         ],
         tags: ["keychain", "pendant", "accessories", "multi-color", "vinyl", "kasing lung", "wild"]
     },
