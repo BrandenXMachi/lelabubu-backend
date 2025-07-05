@@ -49,7 +49,6 @@ const products = [
         images: [
             "images/products/labubu-image-2.webp",
             "images/products/big into energy 1.webp",
-            "images/products/big into energy 2.webp",
             "images/products/big into energy 3.webp"
         ],
         tags: ["blue", "classic", "vinyl", "kasing lung"]
