@@ -161,7 +161,9 @@ const products = [
         description: "Join Labubu on a swashbuckling adventure with the Pirate Treasure Series. This special edition features our favorite character dressed as a pirate, complete with themed accessories and a treasure chest display base.",
         details: "Designed by Kasing Lung, this limited edition Labubu captures the spirit of adventure on the high seas. The detailed pirate costume includes a hat, eye patch, and other accessories that transform the character into a charming buccaneer. The special display base resembles a treasure chest, making this piece a true collector's treasure.",
         images: [
-            "images/products/the-monsters-one-piece-series-01.webp"
+            "images/products/the-monsters-one-piece-series-01.webp",
+            "images/products/one piece 1.webp",
+            "images/products/one piece 2.webp"
         ],
         tags: ["multi-color", "limited", "vinyl", "kasing lung", "pirate", "treasure", "one piece"]
     },
