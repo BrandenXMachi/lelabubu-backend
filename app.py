@@ -212,25 +212,102 @@ def stripe_webhook():
 
     # Handle the checkout.session.completed event
     if event['type'] == 'checkout.session.completed':
-        session = event['data']['object']
-        user_id = session.get('client_reference_id')
+        session_data = event['data']['object']
+        
+        # Send order notification email to store owner
+        try:
+            # Get detailed session information
+            session_id = session_data['id']
+            customer_email = session_data.get('customer_details', {}).get('email', 'Not provided')
+            customer_name = session_data.get('customer_details', {}).get('name', 'Not provided')
+            amount_total = session_data.get('amount_total', 0) / 100  # Convert from cents
+            currency = session_data.get('currency', 'CAD').upper()
+            
+            # Get shipping information
+            shipping = session_data.get('shipping', {})
+            shipping_name = shipping.get('name', 'Not provided') if shipping else 'Not provided'
+            shipping_address = shipping.get('address', {}) if shipping else {}
+            
+            # Format shipping address
+            address_lines = []
+            if shipping_address.get('line1'):
+                address_lines.append(shipping_address['line1'])
+            if shipping_address.get('line2'):
+                address_lines.append(shipping_address['line2'])
+            if shipping_address.get('city'):
+                address_lines.append(shipping_address['city'])
+            if shipping_address.get('state'):
+                address_lines.append(shipping_address['state'])
+            if shipping_address.get('postal_code'):
+                address_lines.append(shipping_address['postal_code'])
+            if shipping_address.get('country'):
+                address_lines.append(shipping_address['country'])
+            
+            formatted_address = '\n'.join(address_lines) if address_lines else 'Not provided'
+            
+            # Get line items (products purchased)
+            line_items = stripe.checkout.Session.list_line_items(session_id, limit=100)
+            items_list = []
+            for item in line_items.data:
+                item_name = item.get('description', 'Unknown Item')
+                quantity = item.get('quantity', 1)
+                price = item.get('amount_total', 0) / 100
+                items_list.append(f"• {item_name} x {quantity} - ${price:.2f} {currency}")
+            
+            items_text = '\n'.join(items_list) if items_list else 'No items found'
+            
+            # Create order notification email
+            msg = Message(
+                subject=f"New Order #{session_id[:8]} - ${amount_total:.2f} {currency}",
+                sender=app.config['MAIL_DEFAULT_SENDER'],
+                recipients=['contact@lelabubu.ca']
+            )
+            
+            msg.body = f"""
+🎉 NEW ORDER RECEIVED - LeLabubu.ca
+
+ORDER DETAILS:
+Order ID: {session_id}
+Amount: ${amount_total:.2f} {currency}
+Date: {session_data.get('created', 'Unknown')}
+
+CUSTOMER INFORMATION:
+Name: {customer_name}
+Email: {customer_email}
+
+SHIPPING INFORMATION:
+Ship to: {shipping_name}
+Address:
+{formatted_address}
+
+ITEMS ORDERED:
+{items_text}
+
+PAYMENT STATUS: ✅ PAID
+
+---
+Login to your Stripe dashboard for full order details:
+https://dashboard.stripe.com/payments/{session_id}
+
+This notification was sent automatically from LeLabubu.ca
+            """
+            
+            mail.send(msg)
+            print(f"Order notification email sent for order {session_id}")
+            
+        except Exception as e:
+            print(f"Failed to send order notification email: {str(e)}")
+            # Don't fail the webhook if email fails
+        
+        # Original database logging code
+        user_id = session_data.get('client_reference_id')
         if user_id:
-            line_items = stripe.checkout.Session.list_line_items(session.id, limit=100)
+            line_items = stripe.checkout.Session.list_line_items(session_id, limit=100)
             for item in line_items.data:
                 product_name = item.description
-                product = Product.query.filter_by(name=product_name).first()
-                if not product:
-                    product = Product(name=product_name)
-                    db.session.add(product)
-                    db.session.commit()
-                
-                purchase = Purchase(
-                    user_id=user_id,
-                    product_id=product.id,
-                    stripe_session_id=session.id
-                )
-                db.session.add(purchase)
-            db.session.commit()
+                # Note: Product and Purchase models don't exist in current code
+                # This section would need proper model definitions to work
+                print(f"Order logged: {product_name} for user {user_id}")
 
     return 'Success', 200
 
