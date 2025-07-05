@@ -14,10 +14,10 @@ CORS(app, origins=['https://lelabubu.ca', 'http://localhost:5000'], supports_cre
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Mail Configuration for Network Solutions
-app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'mail.lelabubu.ca')
-app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 587))
-app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', 'true').lower() in ['true', '1', 't']
-app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL', 'false').lower() in ['true', '1', 't']
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'smtp.networksolutions.com')
+app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 465))
+app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', 'false').lower() in ['true', '1', 't']
+app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL', 'true').lower() in ['true', '1', 't']
 app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME', 'contact@lelabubu.ca')
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER', 'contact@lelabubu.ca')
@@ -293,9 +293,10 @@ This message was sent from the contact form on LeLabubu.ca
         return jsonify({'message': 'Thank you for your message! We will get back to you soon.'}), 200
         
     except Exception as e:
-        print(f"Failed to send contact form email: {str(e)}")
-        # Still return success to user, but log the error
-        return jsonify({'message': 'Thank you for your message! We will get back to you soon.'}), 200
+        error_msg = str(e)
+        print(f"Failed to send contact form email: {error_msg}")
+        # Return the actual error so we can debug
+        return jsonify({'error': f'Email sending failed: {error_msg}'}), 500
 
 # Serve static HTML files
 @app.route('/<path:path>')
