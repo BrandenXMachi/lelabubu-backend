@@ -123,7 +123,9 @@ const products = [
         description: "The stunning 'Fall in Wild' Series features a full-size Labubu doll in a nature-inspired design. This special edition captures the essence of wilderness with its unique color palette and detailed craftsmanship.",
         details: "Designed by Kasing Lung, this full-size Labubu doll stands taller than the standard editions and showcases intricate details that highlight the character's playful yet mysterious nature. The 'Fall in Wild' Series is perfect for collectors looking for statement pieces that celebrate the beauty of the natural world.",
         images: [
-            "images/products/full-sized-wind.jpg"
+            "images/products/big fall 0.webp",
+            "images/products/big fall 1.webp",
+            "images/products/big fall 2.webp"
         ],
         tags: ["multi-color", "classic", "vinyl", "kasing lung", "nature", "full-size", "wild"]
     },
