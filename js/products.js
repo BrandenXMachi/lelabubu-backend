@@ -48,8 +48,8 @@ const products = [
         details: "Designed by Kasing Lung, this Labubu doll captures the perfect blend of cute and creepy that has made the character so beloved by collectors. The blue variant is one of the most popular colorways in the classic line.",
         images: [
             "images/products/labubu-image-2.webp",
-            "images/products/big into energy 1.webp",
-            "images/products/big into energy 3.webp"
+            "images/products/big into energy 3.webp",
+            "images/products/big into energy 1.webp"
         ],
         tags: ["blue", "classic", "vinyl", "kasing lung"]
     },
