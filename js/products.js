@@ -15,7 +15,10 @@ const products = [
         description: "The charming Labubu Monster Diary Series features our beloved character in a playful ninja-inspired design. This special edition combines cute and mysterious elements with a vibrant purple color scheme and gold accents.",
         details: "Designed by Kasing Lung, this Labubu Monster Diary Series figure showcases the character in a unique ninja-inspired outfit. The purple and gold color scheme adds a touch of mystery and elegance to your collection. Each piece is carefully crafted with attention to detail and comes in special collector's packaging.",
         images: [
-            "images/products/labubu-monster-diary.webp"
+            "images/products/labubu-monster-diary.webp",
+            "images/products/Labubu Monster Diary Series 0.jpg",
+            "images/products/Labubu Monster Diary Series 1.webp",
+            "images/products/Labubu Monster Diary Series 2.jpg"
         ],
         tags: ["purple", "limited", "diary", "monster", "ninja", "kasing lung"]
     },
