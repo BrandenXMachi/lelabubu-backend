@@ -101,7 +101,10 @@ const products = [
         description: "A charming Labubu doll that invites you to take a seat and relax. This delightful design features the iconic character in a comfortable seated position, perfect for display on shelves, desks, or any special spot in your collection.",
         details: "Designed by Kasing Lung, this Labubu doll captures a moment of relaxation while maintaining the character's signature charm. The multi-colored design adds a vibrant touch to any collection and makes for an eye-catching display piece.",
         images: [
-            "images/products/have-a-seat.jpg"
+            "images/products/have-a-seat.jpg",
+            "images/products/Have A Seat 2.jpg",
+            "images/products/Have A Seat 1.jpg",
+            "images/products/Have A Seat 3.jpg"
         ],
         tags: ["multi-color", "classic", "vinyl", "kasing lung", "seated"]
     },
