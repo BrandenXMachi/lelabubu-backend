@@ -65,7 +65,10 @@ const products = [
         description: "The original Labubu doll in a striking red color. This classic design features the iconic mischievous expression that has made Labubu dolls famous worldwide. Each doll is crafted with high-quality vinyl and stands approximately 8 inches tall.",
         details: "Designed by Kasing Lung, this Labubu doll captures the perfect blend of cute and creepy that has made the character so beloved by collectors. The red variant adds a bold, eye-catching element to any collection.",
         images: [
-            "images/products/labubu-image-3.webp"
+            "images/products/labubu-image-3.webp",
+            "images/products/exciting macaron 1.webp",
+            "images/products/exciting macaron 2.webp",
+            "images/products/exciting macaron 4.webp"
         ],
         tags: ["red", "classic", "vinyl", "kasing lung"]
     },
