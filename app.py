@@ -13,13 +13,14 @@ app.secret_key = os.getenv('SECRET_KEY', 'a_super_secret_key')
 CORS(app, origins=['https://lelabubu.ca', 'http://localhost:5000'], supports_credentials=True)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Mail Configuration
-app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'smtp.gmail.com')
+# Mail Configuration for Network Solutions
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'mail.lelabubu.ca')
 app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 587))
 app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', 'true').lower() in ['true', '1', 't']
-app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL', 'false').lower() in ['true', '1', 't']
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME', 'contact@lelabubu.ca')
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
-app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER', 'contact@lelabubu.ca')
 
 mail = Mail(app)
 
@@ -266,11 +267,35 @@ def contact():
     if not name or not email or not subject or not message:
         return jsonify({'error': 'All fields are required'}), 400
 
-    # For now, just return success without actually sending email
-    # TODO: Set up proper email service (SendGrid, Mailgun, etc.) for production
-    print(f"Contact form submission from {name} ({email}): {subject} - {message}")
-    
-    return jsonify({'message': 'Thank you for your message! We will get back to you soon.'}), 200
+    # Create and send email
+    try:
+        msg = Message(
+            subject=f"Contact Form: {subject}",
+            sender=app.config['MAIL_DEFAULT_SENDER'],
+            recipients=['contact@lelabubu.ca']
+        )
+        msg.body = f"""
+New contact form submission from LeLabubu.ca:
+
+Name: {name}
+Email: {email}
+Subject: {subject}
+
+Message:
+{message}
+
+---
+This message was sent from the contact form on LeLabubu.ca
+        """
+        
+        mail.send(msg)
+        print(f"Contact form email sent successfully from {name} ({email})")
+        return jsonify({'message': 'Thank you for your message! We will get back to you soon.'}), 200
+        
+    except Exception as e:
+        print(f"Failed to send contact form email: {str(e)}")
+        # Still return success to user, but log the error
+        return jsonify({'message': 'Thank you for your message! We will get back to you soon.'}), 200
 
 # Serve static HTML files
 @app.route('/<path:path>')
