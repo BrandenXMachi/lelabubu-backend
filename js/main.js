@@ -694,7 +694,7 @@ function displayProductById(productId) {
     });
     
     if (productTags) {
-        productTags.textContent = product.tags.join(', ');
+        productTags.textContent = '';
     }
     
     if (stockStatus) {
