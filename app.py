@@ -68,10 +68,21 @@ def create_checkout_session():
             # Calculate amount
             amount = sum(int(float(item['price']) * 100) * item['quantity'] for item in cart_items)
             
-            # Add shipping cost if not in Montreal
+            # Add shipping cost based on location
             shipping_cost = 0
-            if customer_info and customer_info.get('address', {}).get('city', '').lower() not in ['montreal', 'montréal']:
-                shipping_cost = 2500  # $25.00 in cents
+            if customer_info and customer_info.get('address', {}):
+                city = customer_info.get('address', {}).get('city', '').lower()
+                country = customer_info.get('address', {}).get('country', '').lower()
+                
+                # Free shipping in Montreal
+                if city in ['montreal', 'montréal']:
+                    shipping_cost = 0
+                # $25 shipping elsewhere in Canada
+                elif country in ['canada', 'ca']:
+                    shipping_cost = 2500  # $25.00 in cents
+                # $40 shipping outside Canada
+                else:
+                    shipping_cost = 4000  # $40.00 in cents
             
             amount += shipping_cost
             

@@ -257,8 +257,8 @@ const translations = {
         "fr": "Étiquettes:"
     },
     "free_delivery": {
-        "en": "Free shipping across montreal",
-        "fr": "Livraison gratuite à travers Montréal"
+        "en": "Free shipping in Montreal • $25 Canada • $40 International",
+        "fr": "Livraison gratuite à Montréal • 25$ Canada • 40$ International"
     },
     "return_policy": {
         "en": "30-day return policy",

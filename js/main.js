@@ -347,7 +347,17 @@ function displayCartItems() {
     cartItemsContainer.innerHTML = cartItemsHTML;
     
     // Calculate shipping and total
-    const shipping = subtotal >= 100 ? 0 : 10;
+    // Note: This is a simplified calculation for display purposes
+    // The actual shipping cost will be calculated on the server based on the customer's address
+    let shipping = 0;
+    
+    // For display purposes, we'll show estimated shipping costs
+    // The actual cost will be determined during checkout based on the shipping address
+    if (subtotal < 100) {
+        // Show estimated shipping (will be updated during checkout)
+        shipping = 25; // Default to Canada shipping estimate
+    }
+    
     const total = subtotal + shipping;
     
     // Update cart summary
