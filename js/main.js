@@ -660,7 +660,6 @@ function displayProductById(productId) {
     const reviewCount = document.querySelector('.review-count');
     const productSKU = document.querySelector('.product-sku');
     const productCategory = document.querySelectorAll('.product-category');
-    const productTags = document.querySelector('.product-tags');
     const stockStatus = document.querySelector('.stock-status');
     const mainImage = document.querySelector('.main-product-image');
     const thumbnailsContainer = document.querySelector('.product-thumbnails');
@@ -693,9 +692,6 @@ function displayProductById(productId) {
         el.textContent = "Authentic";
     });
     
-    if (productTags) {
-        productTags.textContent = '';
-    }
     
     if (stockStatus) {
         if (product.inStock) {
