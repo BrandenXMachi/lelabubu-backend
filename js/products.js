@@ -19,8 +19,7 @@ const products = [
             "images/products/Labubu Monster Diary Series 0.jpg",
             "images/products/Labubu Monster Diary Series 1.webp",
             "images/products/Labubu Monster Diary Series 2.jpg"
-        ],
-        tags: ["purple", "limited", "diary", "monster", "ninja", "kasing lung"]
+        ]
     },
     {
         id: 8,
@@ -38,8 +37,7 @@ const products = [
             "images/products/zodiac 1.webp",
             "images/products/zodiac 2.webp",
             "images/products/zodiac 3.webp"
-        ],
-        tags: ["multi-color", "limited", "zodiac", "chinese", "cultural", "kasing lung"]
+        ]
     },
     {
         id: 1,
@@ -56,8 +54,7 @@ const products = [
             "images/products/labubu-image-2.webp",
             "images/products/big into energy 3.webp",
             "images/products/big into energy 1.webp"
-        ],
-        tags: ["blue", "classic", "vinyl", "kasing lung"]
+        ]
     },
     {
         id: 2,
@@ -75,8 +72,7 @@ const products = [
             "images/products/exciting macaron 1.webp",
             "images/products/exciting macaron 2.webp",
             "images/products/exciting macaron 4.webp"
-        ],
-        tags: ["red", "classic", "vinyl", "kasing lung"]
+        ]
     },
     {
         id: 3,
@@ -92,8 +88,7 @@ const products = [
         images: [
             "images/products/labubu-image-8.webp",
             "images/products/labubu image 10.webp"
-        ],
-        tags: ["red", "mini", "small", "vinyl", "kasing lung"]
+        ]
     },
     {
         id: 4,
@@ -111,8 +106,7 @@ const products = [
             "images/products/Have A Seat 2.jpg",
             "images/products/Have A Seat 1.jpg",
             "images/products/Have A Seat 3.jpg"
-        ],
-        tags: ["multi-color", "classic", "vinyl", "kasing lung", "seated"]
+        ]
     },
     {
         id: 5,
@@ -129,8 +123,7 @@ const products = [
             "images/products/big fall 0.webp",
             "images/products/big fall 1.webp",
             "images/products/big fall 2.webp"
-        ],
-        tags: ["multi-color", "classic", "vinyl", "kasing lung", "nature", "full-size", "wild"]
+        ]
     },
     {
         id: 6,
@@ -146,8 +139,7 @@ const products = [
         images: [
             "images/products/wind-pendant.webp",
             "images/products/mini fall 0.webp"
-        ],
-        tags: ["keychain", "pendant", "accessories", "multi-color", "vinyl", "kasing lung", "wild"]
+        ]
     },
     {
         id: 7,
@@ -164,8 +156,7 @@ const products = [
             "images/products/the-monsters-one-piece-series-01.webp",
             "images/products/one piece 1.webp",
             "images/products/one piece 2.webp"
-        ],
-        tags: ["multi-color", "limited", "vinyl", "kasing lung", "pirate", "treasure", "one piece"]
+        ]
     },
     
 ];
@@ -220,8 +211,7 @@ function searchProducts(query) {
     const searchTerm = query.toLowerCase();
     return products.filter(product => 
         product.name.toLowerCase().includes(searchTerm) || 
-        product.description.toLowerCase().includes(searchTerm) ||
-        product.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+        product.description.toLowerCase().includes(searchTerm)
     );
 }
 
