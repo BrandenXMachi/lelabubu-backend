@@ -12,8 +12,8 @@ const products = [
         rating: 4.9,
         reviews: 18,
         inStock: true,
-        description: "The charming Labubu Monster Diary Series features our beloved character in a playful ninja-inspired design. This special edition combines cute and mysterious elements with a vibrant purple color scheme and gold accents.",
-        details: "Designed by Kasing Lung, this Labubu Monster Diary Series figure showcases the character in a unique ninja-inspired outfit. The purple and gold color scheme adds a touch of mystery and elegance to your collection. Each piece is carefully crafted with attention to detail and comes in special collector's packaging.",
+        description: "📓 Tales from the shadows. Peek into the pages of Labubu's monstrous journal with this eerie and expressive series. Each figure represents a unique emotion or monster form—raw, emotional, and deeply collectible.",
+        details: "Designed by Kasing Lung, this Labubu Monster Diary Series figure showcases the character in a unique ninja-inspired outfit. The purple and gold color scheme adds a touch of mystery and elegance to your collection. Each piece is carefully crafted with attention to detail and comes in special collector's packaging. ✨ 100% Authentic Blind Box - Each purchase is a surprise!",
         images: [
             "images/products/labubu-monster-diary.webp",
             "images/products/Labubu Monster Diary Series 0.jpg",
@@ -31,8 +31,8 @@ const products = [
         rating: 5.0,
         reviews: 22,
         inStock: false,
-        description: "Celebrate Chinese culture with the Labubu Chinese Zodiac Series. This special collection features our beloved character reimagined with elements from the traditional Chinese zodiac, creating a perfect blend of contemporary art toy design and cultural heritage.",
-        details: "Designed by Kasing Lung, this limited edition Labubu collection pays homage to Chinese zodiac traditions. Each figure is meticulously crafted with vibrant colors and intricate details representing different zodiac animals. These collectibles make perfect gifts for cultural celebrations or for fans looking to add a unique cultural piece to their collection.",
+        description: "🐇 A year of Labubu. Celebrate every sign of the Chinese Zodiac with this adorable boxed set featuring Labubu dressed as each animal. A culturally inspired and playful collectible with vibrant design. Status: Out of stock.",
+        details: "Designed by Kasing Lung, this limited edition Labubu collection pays homage to Chinese zodiac traditions. Each figure is meticulously crafted with vibrant colors and intricate details representing different zodiac animals. These collectibles make perfect gifts for cultural celebrations or for fans looking to add a unique cultural piece to their collection. ✨ 100% Authentic Blind Box - Each purchase is a surprise!",
         images: [
             "images/products/labubu-chinese-zodiac.webp",
             "images/products/zodiac 1.webp",
@@ -50,8 +50,8 @@ const products = [
         rating: 4.5,
         reviews: 124,
         inStock: true,
-        description: "The original Labubu doll in a vibrant blue color. This classic design features the iconic mischievous expression that has made Labubu dolls famous worldwide. Each doll is crafted with high-quality vinyl and stands approximately 8 inches tall.",
-        details: "Designed by Kasing Lung, this Labubu doll captures the perfect blend of cute and creepy that has made the character so beloved by collectors. The blue variant is one of the most popular colorways in the classic line.",
+        description: "💥 Energize your collection! This bold Labubu figure bursts with power and personality. With its striking look and iconic stance, \"Big into Energy\" is perfect for fans who want their shelves to radiate excitement. A must-have centerpiece for Labubu lovers.",
+        details: "Designed by Kasing Lung, this Labubu doll captures the perfect blend of cute and creepy that has made the character so beloved by collectors. The blue variant is one of the most popular colorways in the classic line. ✨ 100% Authentic Blind Box - Each purchase is a surprise!",
         images: [
             "images/products/labubu-image-2.webp",
             "images/products/big into energy 3.webp",
@@ -68,8 +68,8 @@ const products = [
         rating: 4.7,
         reviews: 98,
         inStock: true,
-        description: "The original Labubu doll in a striking red color. This classic design features the iconic mischievous expression that has made Labubu dolls famous worldwide. Each doll is crafted with high-quality vinyl and stands approximately 8 inches tall.",
-        details: "Designed by Kasing Lung, this Labubu doll captures the perfect blend of cute and creepy that has made the character so beloved by collectors. The red variant adds a bold, eye-catching element to any collection.",
+        description: "🧁 Sweet meets spooky. Labubu takes on a deliciously pastel look in the \"Exciting Macaron\" series. With candy-colored details and signature mischief, this figure is a treat for fans of cute, quirky design.",
+        details: "Designed by Kasing Lung, this Labubu doll captures the perfect blend of cute and creepy that has made the character so beloved by collectors. The red variant adds a bold, eye-catching element to any collection. ✨ 100% Authentic Blind Box - Each purchase is a surprise!",
         images: [
             "images/products/labubu-image-3.webp",
             "images/products/exciting macaron 1.webp",
@@ -87,8 +87,8 @@ const products = [
         rating: 4.6,
         reviews: 65,
         inStock: true,
-        description: "A smaller version of the beloved Labubu doll in a striking red color. The Mini Labubu maintains all the charm of the original in a more compact size, perfect for collectors with limited display space or those who want to create multi-character scenes.",
-        details: "Standing at approximately 4 inches tall, the Mini Labubu is crafted with the same attention to detail and high-quality materials as its larger counterpart. The red Mini Labubu adds a bold pop of color to any collection.",
+        description: "👹 Where it all began. The original Labubu collection that introduced the world to these mischievous forest monsters. Each figure in this series celebrates the raw, classic essence of Labubu's whimsical and wild personality.",
+        details: "Standing at approximately 4 inches tall, the Mini Labubu is crafted with the same attention to detail and high-quality materials as its larger counterpart. The red Mini Labubu adds a bold pop of color to any collection. ✨ 100% Authentic Blind Box - Each purchase is a surprise!",
         images: [
             "images/products/labubu-image-8.webp",
             "images/products/labubu image 10.webp"
@@ -104,8 +104,8 @@ const products = [
         rating: 4.8,
         reviews: 45,
         inStock: true,
-        description: "A charming Labubu doll that invites you to take a seat and relax. This delightful design features the iconic character in a comfortable seated position, perfect for display on shelves, desks, or any special spot in your collection.",
-        details: "Designed by Kasing Lung, this Labubu doll captures a moment of relaxation while maintaining the character's signature charm. The multi-colored design adds a vibrant touch to any collection and makes for an eye-catching display piece.",
+        description: "🪑 Sit back and admire. This charming figure captures Labubu in a rare moment of calm, seated and serene—but still with a twinkle of mischief in its eyes. \"Have A Seat\" blends calm design with playful charm, perfect for peaceful corners or desk buddies.",
+        details: "Designed by Kasing Lung, this Labubu doll captures a moment of relaxation while maintaining the character's signature charm. The multi-colored design adds a vibrant touch to any collection and makes for an eye-catching display piece. ✨ 100% Authentic Blind Box - Each purchase is a surprise!",
         images: [
             "images/products/have-a-seat.jpg",
             "images/products/Have A Seat 2.jpg",
@@ -123,7 +123,7 @@ const products = [
         rating: 4.9,
         reviews: 32,
         inStock: true,
-        description: "The stunning 'Fall in Wild' Series features a full-size Labubu doll in a nature-inspired design. This special edition captures the essence of wilderness with its unique color palette and detailed craftsmanship.",
+        description: "🌲 Adventure, full-size. Standing tall and full of detail, this large-scale Labubu dons explorer gear from head to toe. With rugged clothes and fluffy ears, it's perfect for collectors who love detailed craftsmanship and wild tales.",
         details: "Designed by Kasing Lung, this full-size Labubu doll stands taller than the standard editions and showcases intricate details that highlight the character's playful yet mysterious nature. The 'Fall in Wild' Series is perfect for collectors looking for statement pieces that celebrate the beauty of the natural world.",
         images: [
             "images/products/big fall 0.webp",
@@ -141,7 +141,7 @@ const products = [
         rating: 4.8,
         reviews: 28,
         inStock: true,
-        description: "A beautiful pendant keychain from the 'Fall in Wild' Series. This miniature accessory captures all the charm and detail of the full-size figure in a convenient keychain format that you can take with you anywhere.",
+        description: "🎒 Carry your wild side. Take Labubu wherever you go with this adorable keychain version of the \"Fall in Wild\" explorer. Features fine detailing in a compact form—ideal for backpacks, purses, or collector displays.",
         details: "Part of the popular 'Fall in Wild' Series designed by Kasing Lung, this pendant keychain features the same nature-inspired design elements as the larger figures. Made from high-quality materials with a secure metal keyring, it's perfect for collectors who want to showcase their love for Labubu on the go.",
         images: [
             "images/products/wind-pendant.webp",
@@ -158,8 +158,8 @@ const products = [
         rating: 4.9,
         reviews: 23,
         inStock: true,
-        description: "Join Labubu on a swashbuckling adventure with the Pirate Treasure Series. This special edition features our favorite character dressed as a pirate, complete with themed accessories and a treasure chest display base.",
-        details: "Designed by Kasing Lung, this limited edition Labubu captures the spirit of adventure on the high seas. The detailed pirate costume includes a hat, eye patch, and other accessories that transform the character into a charming buccaneer. The special display base resembles a treasure chest, making this piece a true collector's treasure.",
+        description: "🏴‍☠️ Aye aye, cutie! Set sail with Labubu and friends in this pirate-themed series. Each figure brings a unique nautical design, from captains to swabbies. A fun and colorful journey through the seas of imagination.",
+        details: "Designed by Kasing Lung, this limited edition Labubu captures the spirit of adventure on the high seas. The detailed pirate costume includes a hat, eye patch, and other accessories that transform the character into a charming buccaneer. The special display base resembles a treasure chest, making this piece a true collector's treasure. ✨ 100% Authentic Blind Box - Each purchase is a surprise!",
         images: [
             "images/products/the-monsters-one-piece-series-01.webp",
             "images/products/one piece 1.webp",
