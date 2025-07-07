@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Cart - Add Sample Items</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .btn {
+            background-color: #4b1a8c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .btn:hover {
+            background-color: #6a3aa5;
+        }
+        .status {
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Cart - Add Sample Items</h1>
+    <p>This page allows you to add sample items to your cart for testing the checkout functionality.</p>
+    
+    <button class="btn" onclick="addSampleItems()">Add Sample Items to Cart</button>
+    <button class="btn" onclick="clearCart()">Clear Cart</button>
+    <button class="btn" onclick="viewCart()">View Cart</button>
+    
+    <div id="status"></div>
+    
+    <script>
+        function addSampleItems() {
+            const sampleItems = [
+                {
+                    id: 1,
+                    name: "Labubu Monster Diary Series",
+                    price: 45.99,
+                    quantity: 2,
+                    image: "images/products/labubu-monster-diary.webp"
+                },
+                {
+                    id: 2,
+                    name: "Labubu Chinese Zodiac Series",
+                    price: 52.99,
+                    quantity: 1,
+                    image: "images/products/labubu-chinese-zodiac.webp"
+                },
+                {
+                    id: 3,
+                    name: "Labubu Have A Seat Series",
+                    price: 38.99,
+                    quantity: 1,
+                    image: "images/products/have-a-seat.jpg"
+                }
+            ];
+            
+            try {
+                localStorage.setItem('lelabubuCart', JSON.stringify(sampleItems));
+                showStatus('Sample items added to cart successfully!', 'success');
+            } catch (error) {
+                showStatus('Error adding items to cart: ' + error.message, 'error');
+            }
+        }
+        
+        function clearCart() {
+            try {
+                localStorage.removeItem('lelabubuCart');
+                showStatus('Cart cleared successfully!', 'success');
+            } catch (error) {
+                showStatus('Error clearing cart: ' + error.message, 'error');
+            }
+        }
+        
+        function viewCart() {
+            window.location.href = 'cart.html';
+        }
+        
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+            
+            setTimeout(() => {
+                statusDiv.innerHTML = '';
+            }, 3000);
+        }
+        
+        // Show current cart status on load
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                const cart = localStorage.getItem('lelabubuCart');
+                if (cart) {
+                    const items = JSON.parse(cart);
+                    showStatus(`Current cart has ${items.length} item(s)`, 'success');
+                } else {
+                    showStatus('Cart is currently empty', 'success');
+                }
+            } catch (error) {
+                showStatus('Error reading cart: ' + error.message, 'error');
+            }
+        });
+    </script>
+</body>
+</html>
