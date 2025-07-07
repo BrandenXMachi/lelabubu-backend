@@ -2,6 +2,8 @@
 
 // Initialize Stripe with your publishable key
 let stripe;
+let elements;
+let card;
 
 try {
     stripe = Stripe('pk_test_51Rerp84RpqeAczydMUzeLHi8R8iK3K3ghT1OYPoEUoGCKoCaJ3nZAes4CgjpePcJKriFt317fjVxq7vdnosjBPEW00YaPDWkGK');
@@ -26,29 +28,37 @@ function initCheckoutButton() {
     const checkoutBtn = document.querySelector('.checkout-btn');
     
     if (checkoutBtn) {
-        checkoutBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Get cart data
-            let cart = [];
-            try {
-                const savedCart = localStorage.getItem('lelabubuCart');
-                if (savedCart) {
-                    cart = JSON.parse(savedCart);
-                }
-            } catch (error) {
-                console.error('Error loading cart:', error);
-            }
-            
-            if (!cart || cart.length === 0) {
-                alert('Your cart is empty. Please add some products before checkout.');
-                return;
-            }
-            
-            // Process checkout with Stripe
-            processStripeCheckout(cart);
-        });
+        // Remove any existing event listeners to prevent conflicts
+        checkoutBtn.removeEventListener('click', handleOldCheckout);
+        
+        // Don't add event listener here - let the new modal system handle it
+        // The new checkout modal system in cart.html will handle the checkout process
+        console.log('Checkout button found - letting new modal system handle it');
     }
+}
+
+// Legacy function for old checkout (kept for compatibility)
+function handleOldCheckout(e) {
+    e.preventDefault();
+    
+    // Get cart data
+    let cart = [];
+    try {
+        const savedCart = localStorage.getItem('lelabubuCart');
+        if (savedCart) {
+            cart = JSON.parse(savedCart);
+        }
+    } catch (error) {
+        console.error('Error loading cart:', error);
+    }
+    
+    if (!cart || cart.length === 0) {
+        alert('Your cart is empty. Please add some products before checkout.');
+        return;
+    }
+    
+    // Process checkout with Stripe
+    processStripeCheckout(cart);
 }
 
 // Initialize buy now buttons on product pages
