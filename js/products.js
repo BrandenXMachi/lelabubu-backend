@@ -6,7 +6,7 @@ const products = [
     {
         id: 9,
         name: "Labubu Monster Diary Series",
-        price: 34.00,
+        price: 33.99,
         colors: ["purple", "multi-color"],
         sizes: ["small"],
         rating: 4.9,
@@ -42,7 +42,7 @@ const products = [
     {
         id: 1,
         name: "Big into Energy",
-        price: 100.00,
+        price: 124.99,
         colors: ["blue"],
         sizes: ["medium"],
         rating: 4.5,
@@ -59,7 +59,7 @@ const products = [
     {
         id: 2,
         name: "Exciting Macaron",
-        price: 83.00,
+        price: 79.99,
         colors: ["red"],
         sizes: ["medium"],
         rating: 4.7,
@@ -77,7 +77,7 @@ const products = [
     {
         id: 3,
         name: "The Monsters Classic Series",
-        price: 54.00,
+        price: 68.99,
         colors: ["red"],
         sizes: ["small"],
         rating: 4.6,
@@ -93,7 +93,7 @@ const products = [
     {
         id: 4,
         name: "Have A Seat",
-        price: 78.00,
+        price: 76.99,
         colors: ["multi-color"],
         sizes: ["medium"],
         rating: 4.8,
@@ -111,7 +111,7 @@ const products = [
     {
         id: 5,
         name: "Full-size 'Fall in Wild' Series",
-        price: 405.00,
+        price: 275.00,
         colors: ["multi-color"],
         sizes: ["large"],
         rating: 4.9,
