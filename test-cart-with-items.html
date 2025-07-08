@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Cart - LeLabubu.ca</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Test Cart with Items</h2>
+        <button id="addTestItems" class="btn btn-primary mb-3">Add Test Items to Cart</button>
+        <button id="viewCart" class="btn btn-secondary mb-3">View Cart</button>
+        <button id="clearCart" class="btn btn-danger mb-3">Clear Cart</button>
+        
+        <div id="cartStatus" class="alert alert-info">
+            Cart Status: <span id="cartCount">0</span> items
+        </div>
+    </div>
+
+    <script src="js/products.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.getElementById('addTestItems').addEventListener('click', function() {
+            // Add some test items to the cart
+            addToCart(1, 1); // Big into Energy
+            addToCart(2, 2); // Exciting Macaron
+            addToCart(3, 1); // The Monsters Classic Series
+            
+            updateCartStatus();
+        });
+        
+        document.getElementById('viewCart').addEventListener('click', function() {
+            window.location.href = 'cart.html';
+        });
+        
+        document.getElementById('clearCart').addEventListener('click', function() {
+            cart = [];
+            saveCart();
+            updateCartStatus();
+        });
+        
+        function updateCartStatus() {
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cartCount').textContent = totalItems;
+        }
+        
+        // Update status on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartStatus();
+        });
+    </script>
+</body>
+</html>
