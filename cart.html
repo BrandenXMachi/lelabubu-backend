@@ -236,67 +236,66 @@
                                             </div>
                                         </div>
                                         
-                                        <div class="form-row">
-                                            <div class="form-group">
-                                                <label for="address1">Address Line 1 *</label>
-                                                <input type="text" class="form-control" id="address1" placeholder="Street address" required>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="form-row">
-                                            <div class="form-group">
-                                                <label for="address2">Address Line 2</label>
-                                                <input type="text" class="form-control" id="address2" placeholder="Apartment, suite, etc. (optional)">
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="form-row">
-                                            <div class="form-group">
-                                                <label for="country">Country *</label>
-                                                <select class="form-control" id="country" required>
-                                                    <option value="">Select Country</option>
-                                                    <option value="CA">Canada</option>
-                                                </select>
-                                                <div class="form-text">We currently only ship within Canada</div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="form-row">
-                                            <div class="form-group">
-                                                <label for="province">Province *</label>
-                                                <select class="form-control" id="province" required disabled>
-                                                    <option value="">Select Province</option>
-                                                    <option value="AB">Alberta</option>
-                                                    <option value="BC">British Columbia</option>
-                                                    <option value="MB">Manitoba</option>
-                                                    <option value="NB">New Brunswick</option>
-                                                    <option value="NL">Newfoundland and Labrador</option>
-                                                    <option value="NS">Nova Scotia</option>
-                                                    <option value="ON">Ontario</option>
-                                                    <option value="PE">Prince Edward Island</option>
-                                                    <option value="QC">Quebec</option>
-                                                    <option value="SK">Saskatchewan</option>
-                                                    <option value="NT">Northwest Territories</option>
-                                                    <option value="NU">Nunavut</option>
-                                                    <option value="YT">Yukon</option>
-                                                </select>
-                                            </div>
-                                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="country">Country *</label>
+                                <select class="form-control" id="country" required>
+                                    <option value="">Select Country</option>
+                                    <option value="CA">Canada</option>
+                                </select>
+                                <div class="form-text">We currently only ship within Canada</div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="province">Province *</label>
+                                <select class="form-control" id="province" required disabled>
+                                    <option value="">Select Province</option>
+                                    <option value="AB">Alberta</option>
+                                    <option value="BC">British Columbia</option>
+                                    <option value="MB">Manitoba</option>
+                                    <option value="NB">New Brunswick</option>
+                                    <option value="NL">Newfoundland and Labrador</option>
+                                    <option value="NS">Nova Scotia</option>
+                                    <option value="ON">Ontario</option>
+                                    <option value="PE">Prince Edward Island</option>
+                                    <option value="QC">Quebec</option>
+                                    <option value="SK">Saskatchewan</option>
+                                    <option value="NT">Northwest Territories</option>
+                                    <option value="NU">Nunavut</option>
+                                    <option value="YT">Yukon</option>
+                                </select>
+                            </div>
+                        </div>
 
-                                        <div class="form-row">
-                                            <div class="form-group">
-                                                <label for="city">City *</label>
-                                                <input type="text" class="form-control" id="city" required disabled placeholder="Select province first">
-                                                <div class="address-suggestions" id="citySuggestions" style="display: none;"></div>
-                                            </div>
-                                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">City *</label>
+                                <input type="text" class="form-control" id="city" required disabled placeholder="Select province first">
+                                <div class="address-suggestions" id="citySuggestions" style="display: none;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="address1">Street Address *</label>
+                                <input type="text" class="form-control" id="address1" placeholder="Enter your street address" required disabled>
+                                <div class="address-suggestions" id="addressSuggestions" style="display: none;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row two-columns">
+                            <div class="form-group">
+                                <label for="address2">Apartment/Unit #</label>
+                                <input type="text" class="form-control" id="address2" placeholder="Apt, Suite, Unit (optional)" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="postalCode">Postal Code *</label>
+                                <input type="text" class="form-control" id="postalCode" required placeholder="A1A 1A1" maxlength="7" disabled>
+                            </div>
+                        </div>
                                         
-                                        <div class="form-row">
-                                            <div class="form-group">
-                                                <label for="postalCode">Postal Code *</label>
-                                                <input type="text" class="form-control" id="postalCode" required placeholder="A1A 1A1" maxlength="7">
-                                            </div>
-                                        </div>
 
                                         <!-- Shipping Cost Display -->
                                         <div class="shipping-cost-display" id="shippingCostDisplay" style="display: none;">
@@ -575,6 +574,13 @@
                 cityInput.addEventListener('blur', hideCitySuggestions);
             }
 
+            // Address input with autocomplete
+            const addressInput = document.getElementById('address1');
+            if (addressInput) {
+                addressInput.addEventListener('input', handleAddressInput);
+                addressInput.addEventListener('blur', hideAddressSuggestions);
+            }
+
             // Postal code formatting
             const postalCodeInput = document.getElementById('postalCode');
             if (postalCodeInput) {
@@ -686,6 +692,15 @@
             const cityInput = document.getElementById('city');
             cityInput.value = city;
             hideCitySuggestions();
+            
+            // Enable address field when city is selected
+            const addressInput = document.getElementById('address1');
+            if (addressInput) {
+                addressInput.disabled = false;
+                addressInput.placeholder = 'Enter your street address';
+                addressInput.focus();
+            }
+            
             updateShippingCalculation();
             
             // Show special message for Montreal
@@ -697,6 +712,101 @@
         function hideCitySuggestions() {
             setTimeout(() => {
                 const suggestionsContainer = document.getElementById('citySuggestions');
+                if (suggestionsContainer) {
+                    suggestionsContainer.style.display = 'none';
+                }
+            }, 200);
+        }
+
+        function handleAddressInput(event) {
+            const query = event.target.value.trim();
+            const city = document.getElementById('city').value;
+            const province = document.getElementById('province').value;
+            
+            if (query.length < 3 || !city || !province) {
+                hideAddressSuggestions();
+                return;
+            }
+            
+            // Enable postal code and apartment fields when address is being entered
+            const postalCodeInput = document.getElementById('postalCode');
+            const address2Input = document.getElementById('address2');
+            
+            if (postalCodeInput) postalCodeInput.disabled = false;
+            if (address2Input) address2Input.disabled = false;
+            
+            // Get address suggestions (in a real app, this would use Google Places API or similar)
+            const suggestions = getAddressSuggestions(query, city, province);
+            showAddressSuggestions(suggestions);
+        }
+
+        function getAddressSuggestions(query, city, province) {
+            // Sample address suggestions - in production, use Google Places API or similar
+            const commonStreets = [
+                'Main Street', 'First Avenue', 'Second Avenue', 'Third Avenue', 'King Street', 
+                'Queen Street', 'Church Street', 'Park Avenue', 'Oak Street', 'Maple Street',
+                'Pine Street', 'Cedar Street', 'Elm Street', 'Victoria Street', 'Wellington Street'
+            ];
+            
+            const suggestions = [];
+            const queryLower = query.toLowerCase();
+            
+            // Generate realistic address suggestions
+            commonStreets.forEach(street => {
+                if (street.toLowerCase().includes(queryLower) || queryLower.includes(street.toLowerCase().split(' ')[0])) {
+                    // Generate some house numbers
+                    for (let i = 1; i <= 3; i++) {
+                        const houseNumber = Math.floor(Math.random() * 9999) + 1;
+                        suggestions.push(`${houseNumber} ${street}, ${city}, ${province}`);
+                    }
+                }
+            });
+            
+            // If query looks like it starts with a number, suggest that number with common streets
+            const numberMatch = query.match(/^\d+/);
+            if (numberMatch && suggestions.length < 5) {
+                const number = numberMatch[0];
+                commonStreets.slice(0, 5 - suggestions.length).forEach(street => {
+                    suggestions.push(`${number} ${street}, ${city}, ${province}`);
+                });
+            }
+            
+            return suggestions.slice(0, 5);
+        }
+
+        function showAddressSuggestions(suggestions) {
+            const suggestionsContainer = document.getElementById('addressSuggestions');
+            
+            if (suggestions.length === 0) {
+                hideAddressSuggestions();
+                return;
+            }
+            
+            const suggestionsHtml = suggestions.map(address => {
+                const addressParts = address.split(',');
+                const streetAddress = addressParts[0];
+                return `<div class="suggestion-item" onclick="selectAddress('${streetAddress.trim()}')">${address}</div>`;
+            }).join('');
+            
+            suggestionsContainer.innerHTML = suggestionsHtml;
+            suggestionsContainer.style.display = 'block';
+        }
+
+        function selectAddress(address) {
+            const addressInput = document.getElementById('address1');
+            addressInput.value = address;
+            hideAddressSuggestions();
+            
+            // Focus on apartment field for convenience
+            const address2Input = document.getElementById('address2');
+            if (address2Input) {
+                address2Input.focus();
+            }
+        }
+
+        function hideAddressSuggestions() {
+            setTimeout(() => {
+                const suggestionsContainer = document.getElementById('addressSuggestions');
                 if (suggestionsContainer) {
                     suggestionsContainer.style.display = 'none';
                 }
@@ -972,12 +1082,8 @@
                 }
             });
 
-            // Check if shipping option is selected
-            const shippingSelected = document.querySelector('input[name="shipping"]:checked');
-            if (!shippingSelected) {
-                alert('Please select a shipping option.');
-                isValid = false;
-            }
+            // No need to check for shipping option selection since it's calculated automatically
+            // The shipping cost is determined by the address entered
 
             return isValid;
         }
