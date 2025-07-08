@@ -231,7 +231,7 @@
                                         <div class="form-row">
                                             <div class="form-group">
                                                 <label for="phone">Phone Number</label>
-                                                <input type="tel" class="form-control" id="phone">
+                                                <input type="tel" class="form-control" id="phone" placeholder="123-456-7890">
                                                 <div class="form-text">For delivery updates (optional)</div>
                                             </div>
                                         </div>
@@ -250,73 +250,61 @@
                                             </div>
                                         </div>
                                         
-                                        <div class="form-row three-columns">
-                                            <div class="form-group">
-                                                <label for="city">City *</label>
-                                                <input type="text" class="form-control" id="city" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="province">Province/State *</label>
-                                                <input type="text" class="form-control" id="province" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="postalCode">Postal/Zip Code *</label>
-                                                <input type="text" class="form-control" id="postalCode" required>
-                                            </div>
-                                        </div>
-                                        
                                         <div class="form-row">
                                             <div class="form-group">
                                                 <label for="country">Country *</label>
                                                 <select class="form-control" id="country" required>
                                                     <option value="">Select Country</option>
                                                     <option value="CA">Canada</option>
-                                                    <option value="US">United States</option>
-                                                    <option value="GB">United Kingdom</option>
-                                                    <option value="AU">Australia</option>
-                                                    <option value="FR">France</option>
-                                                    <option value="DE">Germany</option>
-                                                    <option value="JP">Japan</option>
-                                                    <option value="KR">South Korea</option>
-                                                    <option value="CN">China</option>
-                                                    <option value="other">Other</option>
+                                                </select>
+                                                <div class="form-text">We currently only ship within Canada</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="province">Province *</label>
+                                                <select class="form-control" id="province" required disabled>
+                                                    <option value="">Select Province</option>
+                                                    <option value="AB">Alberta</option>
+                                                    <option value="BC">British Columbia</option>
+                                                    <option value="MB">Manitoba</option>
+                                                    <option value="NB">New Brunswick</option>
+                                                    <option value="NL">Newfoundland and Labrador</option>
+                                                    <option value="NS">Nova Scotia</option>
+                                                    <option value="ON">Ontario</option>
+                                                    <option value="PE">Prince Edward Island</option>
+                                                    <option value="QC">Quebec</option>
+                                                    <option value="SK">Saskatchewan</option>
+                                                    <option value="NT">Northwest Territories</option>
+                                                    <option value="NU">Nunavut</option>
+                                                    <option value="YT">Yukon</option>
                                                 </select>
                                             </div>
                                         </div>
 
-                                        <!-- Shipping Options (will be populated after address validation) -->
-                                        <div class="shipping-options" id="shippingOptions" style="display: none;">
-                                            <h4>Shipping Options</h4>
-                                            <div class="shipping-option">
-                                                <input type="radio" id="shipping-free" name="shipping" value="0">
-                                                <label for="shipping-free" class="shipping-option-label">
-                                                    <div class="shipping-option-info">
-                                                        <div class="shipping-option-name">Free Shipping</div>
-                                                        <div class="shipping-option-description">5-7 business days</div>
-                                                    </div>
-                                                    <div class="shipping-option-price free-shipping">FREE</div>
-                                                </label>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="city">City *</label>
+                                                <input type="text" class="form-control" id="city" required disabled placeholder="Select province first">
+                                                <div class="address-suggestions" id="citySuggestions" style="display: none;"></div>
                                             </div>
-                                            <div class="shipping-option">
-                                                <input type="radio" id="shipping-standard" name="shipping" value="25">
-                                                <label for="shipping-standard" class="shipping-option-label">
-                                                    <div class="shipping-option-info">
-                                                        <div class="shipping-option-name">Standard Shipping</div>
-                                                        <div class="shipping-option-description">3-5 business days</div>
-                                                    </div>
-                                                    <div class="shipping-option-price">$25.00</div>
-                                                </label>
+                                        </div>
+                                        
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="postalCode">Postal Code *</label>
+                                                <input type="text" class="form-control" id="postalCode" required placeholder="A1A 1A1" maxlength="7">
                                             </div>
-                                            <div class="shipping-option">
-                                                <input type="radio" id="shipping-international" name="shipping" value="40">
-                                                <label for="shipping-international" class="shipping-option-label">
-                                                    <div class="shipping-option-info">
-                                                        <div class="shipping-option-name">International Shipping</div>
-                                                        <div class="shipping-option-description">7-14 business days</div>
-                                                    </div>
-                                                    <div class="shipping-option-price">$40.00</div>
-                                                </label>
+                                        </div>
+
+                                        <!-- Shipping Cost Display -->
+                                        <div class="shipping-cost-display" id="shippingCostDisplay" style="display: none;">
+                                            <div class="shipping-cost-info">
+                                                <div class="shipping-cost-label">Shipping Cost:</div>
+                                                <div class="shipping-cost-value" id="shippingCostValue">$25.00</div>
                                             </div>
+                                            <div class="shipping-cost-note" id="shippingCostNote">Standard delivery: 1-2 weeks</div>
                                         </div>
                                     </form>
                                 </div>
@@ -441,25 +429,6 @@
                             </div>
 
                             <div class="summary-footer">
-                                <div class="trust-badges">
-                                    <div class="trust-badge">
-                                        <i class="fas fa-lock"></i>
-                                        <span>Secure Payment</span>
-                                    </div>
-                                    <div class="trust-badge">
-                                        <i class="fas fa-shield-alt"></i>
-                                        <span>SSL Protected</span>
-                                    </div>
-                                    <div class="trust-badge">
-                                        <i class="fas fa-undo"></i>
-                                        <span>30-Day Returns</span>
-                                    </div>
-                                    <div class="trust-badge">
-                                        <i class="fas fa-truck"></i>
-                                        <span>Fast Shipping</span>
-                                    </div>
-                                </div>
-
                                 <div class="payment-methods-accepted">
                                     <div class="payment-methods-title">We Accept</div>
                                     <div class="payment-methods-icons">
@@ -467,6 +436,13 @@
                                         <i class="fab fa-cc-mastercard"></i>
                                         <i class="fab fa-cc-amex"></i>
                                         <i class="fab fa-cc-discover"></i>
+                                    </div>
+                                </div>
+                                
+                                <div class="delivery-info">
+                                    <div class="delivery-note">
+                                        <i class="fas fa-truck me-2"></i>
+                                        Delivery takes 1-2 weeks
                                     </div>
                                 </div>
                             </div>
@@ -553,14 +529,8 @@
             if (prevStep) prevStep.addEventListener('click', handlePrevStep);
             if (completeOrder) completeOrder.addEventListener('click', handleCompleteOrder);
 
-            // Address validation
-            const addressFields = ['city', 'country'];
-            addressFields.forEach(field => {
-                const element = document.getElementById(field);
-                if (element) {
-                    element.addEventListener('change', validateShippingAddress);
-                }
-            });
+            // Enhanced form functionality
+            initializeFormEnhancements();
 
             // Promo code functionality
             const applyPromo = document.getElementById('applyPromo');
@@ -577,6 +547,254 @@
                     }
                 });
             }
+        }
+
+        function initializeFormEnhancements() {
+            // Phone number formatting
+            const phoneInput = document.getElementById('phone');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', formatPhoneNumber);
+            }
+
+            // Country selection enables province
+            const countrySelect = document.getElementById('country');
+            if (countrySelect) {
+                countrySelect.addEventListener('change', handleCountryChange);
+            }
+
+            // Province selection enables city
+            const provinceSelect = document.getElementById('province');
+            if (provinceSelect) {
+                provinceSelect.addEventListener('change', handleProvinceChange);
+            }
+
+            // City input with suggestions
+            const cityInput = document.getElementById('city');
+            if (cityInput) {
+                cityInput.addEventListener('input', handleCityInput);
+                cityInput.addEventListener('blur', hideCitySuggestions);
+            }
+
+            // Postal code formatting
+            const postalCodeInput = document.getElementById('postalCode');
+            if (postalCodeInput) {
+                postalCodeInput.addEventListener('input', formatPostalCode);
+            }
+        }
+
+        function formatPhoneNumber(event) {
+            let value = event.target.value.replace(/\D/g, '');
+            
+            if (value.length >= 6) {
+                value = value.substring(0, 3) + '-' + value.substring(3, 6) + '-' + value.substring(6, 10);
+            } else if (value.length >= 3) {
+                value = value.substring(0, 3) + '-' + value.substring(3);
+            }
+            
+            event.target.value = value;
+        }
+
+        function handleCountryChange(event) {
+            const provinceSelect = document.getElementById('province');
+            const cityInput = document.getElementById('city');
+            
+            if (event.target.value === 'CA') {
+                provinceSelect.disabled = false;
+                provinceSelect.focus();
+            } else {
+                provinceSelect.disabled = true;
+                provinceSelect.value = '';
+                cityInput.disabled = true;
+                cityInput.value = '';
+                cityInput.placeholder = 'Select country first';
+            }
+            
+            updateShippingCalculation();
+        }
+
+        function handleProvinceChange(event) {
+            const cityInput = document.getElementById('city');
+            
+            if (event.target.value) {
+                cityInput.disabled = false;
+                cityInput.placeholder = 'Enter your city';
+                cityInput.focus();
+            } else {
+                cityInput.disabled = true;
+                cityInput.value = '';
+                cityInput.placeholder = 'Select province first';
+            }
+            
+            updateShippingCalculation();
+        }
+
+        function handleCityInput(event) {
+            const query = event.target.value.toLowerCase().trim();
+            const province = document.getElementById('province').value;
+            
+            if (query.length < 2) {
+                hideCitySuggestions();
+                return;
+            }
+            
+            const suggestions = getCitySuggestions(query, province);
+            showCitySuggestions(suggestions);
+            updateShippingCalculation();
+        }
+
+        function getCitySuggestions(query, province) {
+            // Canadian cities database (sample - in production, use a comprehensive API)
+            const cities = {
+                'QC': ['Montreal', 'Quebec City', 'Laval', 'Gatineau', 'Longueuil', 'Sherbrooke', 'Saguenay', 'Trois-Rivières', 'Terrebonne', 'Saint-Jean-sur-Richelieu'],
+                'ON': ['Toronto', 'Ottawa', 'Mississauga', 'Brampton', 'Hamilton', 'London', 'Markham', 'Vaughan', 'Kitchener', 'Windsor'],
+                'BC': ['Vancouver', 'Surrey', 'Burnaby', 'Richmond', 'Abbotsford', 'Coquitlam', 'Kelowna', 'Saanich', 'Delta', 'Kamloops'],
+                'AB': ['Calgary', 'Edmonton', 'Red Deer', 'Lethbridge', 'St. Albert', 'Medicine Hat', 'Grande Prairie', 'Airdrie', 'Spruce Grove', 'Okotoks'],
+                'MB': ['Winnipeg', 'Brandon', 'Steinbach', 'Thompson', 'Portage la Prairie', 'Winkler', 'Selkirk', 'Morden', 'Dauphin', 'The Pas'],
+                'SK': ['Saskatoon', 'Regina', 'Prince Albert', 'Moose Jaw', 'Swift Current', 'Yorkton', 'North Battleford', 'Estevan', 'Weyburn', 'Lloydminster'],
+                'NS': ['Halifax', 'Sydney', 'Dartmouth', 'Truro', 'New Glasgow', 'Glace Bay', 'Kentville', 'Amherst', 'Yarmouth', 'Bridgewater'],
+                'NB': ['Moncton', 'Saint John', 'Fredericton', 'Dieppe', 'Riverview', 'Edmundston', 'Miramichi', 'Bathurst', 'Campbellton', 'Caraquet'],
+                'NL': ['St. Johns', 'Mount Pearl', 'Corner Brook', 'Conception Bay South', 'Paradise', 'Grand Falls-Windsor', 'Happy Valley-Goose Bay', 'Gander', 'Labrador City', 'Stephenville'],
+                'PE': ['Charlottetown', 'Summerside', 'Stratford', 'Cornwall', 'Montague', 'Kensington', 'Souris', 'Alberton', 'Georgetown', 'Tignish'],
+                'NT': ['Yellowknife', 'Hay River', 'Inuvik', 'Fort Smith', 'Behchokò', 'Iqaluit', 'Norman Wells', 'Fort Simpson', 'Tuktoyaktuk', 'Aklavik'],
+                'NU': ['Iqaluit', 'Rankin Inlet', 'Arviat', 'Baker Lake', 'Igloolik', 'Pangnirtung', 'Pond Inlet', 'Kugluktuk', 'Cape Dorset', 'Gjoa Haven'],
+                'YT': ['Whitehorse', 'Dawson City', 'Watson Lake', 'Haines Junction', 'Mayo', 'Faro', 'Carmacks', 'Pelly Crossing', 'Teslin', 'Old Crow']
+            };
+            
+            const provinceCities = cities[province] || [];
+            return provinceCities.filter(city => 
+                city.toLowerCase().includes(query)
+            ).slice(0, 5);
+        }
+
+        function showCitySuggestions(suggestions) {
+            const suggestionsContainer = document.getElementById('citySuggestions');
+            
+            if (suggestions.length === 0) {
+                hideCitySuggestions();
+                return;
+            }
+            
+            const suggestionsHtml = suggestions.map(city => 
+                `<div class="suggestion-item" onclick="selectCity('${city}')">${city}</div>`
+            ).join('');
+            
+            suggestionsContainer.innerHTML = suggestionsHtml;
+            suggestionsContainer.style.display = 'block';
+        }
+
+        function selectCity(city) {
+            const cityInput = document.getElementById('city');
+            cityInput.value = city;
+            hideCitySuggestions();
+            updateShippingCalculation();
+            
+            // Show special message for Montreal
+            if (city.toLowerCase() === 'montreal') {
+                showMontrealFreeShippingMessage();
+            }
+        }
+
+        function hideCitySuggestions() {
+            setTimeout(() => {
+                const suggestionsContainer = document.getElementById('citySuggestions');
+                if (suggestionsContainer) {
+                    suggestionsContainer.style.display = 'none';
+                }
+            }, 200);
+        }
+
+        function formatPostalCode(event) {
+            let value = event.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            
+            if (value.length >= 3) {
+                value = value.substring(0, 3) + ' ' + value.substring(3, 6);
+            }
+            
+            event.target.value = value;
+        }
+
+        function updateShippingCalculation() {
+            const city = document.getElementById('city').value.toLowerCase();
+            const province = document.getElementById('province').value;
+            const country = document.getElementById('country').value;
+            
+            if (!city || !province || !country) {
+                hideShippingCost();
+                return;
+            }
+            
+            let shippingCost = 25; // Default Canada shipping
+            let shippingNote = 'Standard delivery: 1-2 weeks';
+            
+            if (city.includes('montreal') || city.includes('montréal')) {
+                shippingCost = 0;
+                shippingNote = 'FREE delivery: 1-2 weeks';
+                showMontrealFreeShippingMessage();
+            }
+            
+            showShippingCost(shippingCost, shippingNote);
+            updateCheckoutShipping(shippingCost);
+        }
+
+        function showShippingCost(cost, note) {
+            const display = document.getElementById('shippingCostDisplay');
+            const valueElement = document.getElementById('shippingCostValue');
+            const noteElement = document.getElementById('shippingCostNote');
+            
+            if (display && valueElement && noteElement) {
+                valueElement.textContent = cost === 0 ? 'FREE' : `$${cost.toFixed(2)}`;
+                valueElement.className = cost === 0 ? 'shipping-cost-value free-shipping' : 'shipping-cost-value';
+                noteElement.textContent = note;
+                display.style.display = 'block';
+            }
+        }
+
+        function hideShippingCost() {
+            const display = document.getElementById('shippingCostDisplay');
+            if (display) {
+                display.style.display = 'none';
+            }
+        }
+
+        function showMontrealFreeShippingMessage() {
+            // Create and show a temporary notification
+            const notification = document.createElement('div');
+            notification.className = 'montreal-free-shipping-notification';
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <i class="fas fa-gift"></i>
+                    <strong>Great news!</strong> You qualify for FREE shipping to Montreal!
+                    <span class="savings">You saved $25!</span>
+                </div>
+            `;
+            
+            // Add to form
+            const cityGroup = document.getElementById('city').closest('.form-group');
+            if (cityGroup) {
+                cityGroup.appendChild(notification);
+                
+                // Remove after 5 seconds
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 5000);
+            }
+        }
+
+        function updateCheckoutShipping(cost) {
+            checkoutData.shippingCost = cost;
+            const shippingElement = document.getElementById('checkoutShipping');
+            if (shippingElement) {
+                if (cost === 0) {
+                    shippingElement.textContent = 'FREE';
+                    shippingElement.classList.add('free-shipping');
+                } else {
+                    shippingElement.textContent = `$${cost.toFixed(2)}`;
+                    shippingElement.classList.remove('free-shipping');
+                }
+            }
+            updateCheckoutTotal();
         }
 
         function openCheckout() {

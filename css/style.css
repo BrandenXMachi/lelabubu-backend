@@ -1667,3 +1667,221 @@ body.checkout-active {
     max-width: 700px;
     margin: 0 auto;
 }
+
+/* Enhanced Checkout Features */
+.address-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.suggestion-item {
+    padding: 12px 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.suggestion-item:hover {
+    background-color: rgba(75, 26, 140, 0.05);
+    color: var(--primary-color);
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.form-group {
+    position: relative;
+}
+
+.shipping-cost-display {
+    background: linear-gradient(to right, rgba(75, 26, 140, 0.05), rgba(106, 58, 165, 0.05));
+    border: 1px solid rgba(75, 26, 140, 0.2);
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.shipping-cost-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.shipping-cost-label {
+    font-weight: 600;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.shipping-cost-value {
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--primary-color);
+}
+
+.shipping-cost-value.free-shipping {
+    color: var(--success-color);
+    font-size: 1.5rem;
+}
+
+.shipping-cost-note {
+    color: #666;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.montreal-free-shipping-notification {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to right, #d4edda, #c3e6cb);
+    border: 1px solid #c3e6cb;
+    border-radius: 6px;
+    padding: 15px;
+    margin-top: 10px;
+    z-index: 1000;
+    animation: slideDown 0.3s ease, fadeOut 0.5s ease 4.5s forwards;
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    color: #155724;
+    font-size: 0.9rem;
+}
+
+.notification-content i {
+    color: #28a745;
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+.savings {
+    background-color: #28a745;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-left: 10px;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.delivery-info {
+    text-align: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.delivery-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.delivery-note i {
+    color: var(--primary-color);
+    margin-right: 8px;
+}
+
+/* Enhanced form styling for Canada-only checkout */
+.form-control:disabled {
+    background-color: #f8f9fa;
+    border-color: #e9ecef;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+.form-text {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.form-text i {
+    margin-right: 5px;
+    color: var(--info-color);
+}
+
+/* Enhanced checkout summary for Canada-only */
+.summary-row .free-shipping {
+    color: var(--success-color);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* Mobile responsiveness for new features */
+@media (max-width: 768px) {
+    .shipping-cost-display {
+        padding: 15px;
+        margin-top: 15px;
+    }
+    
+    .shipping-cost-info {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .shipping-cost-label {
+        font-size: 1rem;
+    }
+    
+    .shipping-cost-value {
+        font-size: 1.2rem;
+    }
+    
+    .montreal-free-shipping-notification {
+        padding: 12px;
+    }
+    
+    .notification-content {
+        font-size: 0.85rem;
+    }
+    
+    .address-suggestions {
+        max-height: 150px;
+    }
+    
+    .suggestion-item {
+        padding: 10px 12px;
+    }
+}
