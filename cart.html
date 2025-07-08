@@ -741,37 +741,133 @@
         }
 
         function getAddressSuggestions(query, city, province) {
-            // Sample address suggestions - in production, use Google Places API or similar
-            const commonStreets = [
-                'Main Street', 'First Avenue', 'Second Avenue', 'Third Avenue', 'King Street', 
-                'Queen Street', 'Church Street', 'Park Avenue', 'Oak Street', 'Maple Street',
-                'Pine Street', 'Cedar Street', 'Elm Street', 'Victoria Street', 'Wellington Street'
-            ];
+            // Get street database based on city
+            const streets = getStreetsForCity(city, province);
             
             const suggestions = [];
             const queryLower = query.toLowerCase();
             
             // Generate realistic address suggestions
-            commonStreets.forEach(street => {
+            streets.forEach(street => {
                 if (street.toLowerCase().includes(queryLower) || queryLower.includes(street.toLowerCase().split(' ')[0])) {
                     // Generate some house numbers
-                    for (let i = 1; i <= 3; i++) {
+                    for (let i = 1; i <= 2; i++) {
                         const houseNumber = Math.floor(Math.random() * 9999) + 1;
                         suggestions.push(`${houseNumber} ${street}, ${city}, ${province}`);
                     }
                 }
             });
             
-            // If query looks like it starts with a number, suggest that number with common streets
+            // If query looks like it starts with a number, suggest that number with matching streets
             const numberMatch = query.match(/^\d+/);
             if (numberMatch && suggestions.length < 5) {
                 const number = numberMatch[0];
-                commonStreets.slice(0, 5 - suggestions.length).forEach(street => {
-                    suggestions.push(`${number} ${street}, ${city}, ${province}`);
+                const remainingSlots = 5 - suggestions.length;
+                streets.slice(0, remainingSlots).forEach(street => {
+                    if (street.toLowerCase().includes(queryLower.replace(/^\d+\s*/, ''))) {
+                        suggestions.push(`${number} ${street}, ${city}, ${province}`);
+                    }
                 });
             }
             
             return suggestions.slice(0, 5);
+        }
+
+        function getStreetsForCity(city, province) {
+            const cityLower = city.toLowerCase();
+            
+            // Montreal streets database
+            if (cityLower.includes('montreal') || cityLower.includes('montréal')) {
+                return [
+                    // Major streets and boulevards
+                    'Boulevard Saint-Laurent', 'Rue Sainte-Catherine', 'Rue Saint-Denis', 'Avenue du Parc',
+                    'Boulevard René-Lévesque', 'Rue Sherbrooke', 'Avenue des Pins', 'Rue Saint-Jacques',
+                    'Boulevard de Maisonneuve', 'Rue Notre-Dame', 'Rue Saint-Paul', 'Avenue McGill College',
+                    'Rue Peel', 'Rue Guy', 'Rue Crescent', 'Rue Bishop', 'Rue Mackay', 'Rue Drummond',
+                    'Avenue Atwater', 'Rue Saint-Antoine', 'Boulevard Décarie', 'Chemin de la Côte-des-Neiges',
+                    'Avenue Papineau', 'Rue Berri', 'Rue Saint-Hubert', 'Avenue Christophe-Colomb',
+                    'Boulevard Pie-IX', 'Avenue Viau', 'Rue Hochelaga', 'Rue Ontario', 'Rue Rachel',
+                    'Avenue du Mont-Royal', 'Rue Laurier', 'Avenue Bernard', 'Rue Fairmount',
+                    'Boulevard Saint-Joseph', 'Rue Beaubien', 'Rue Rosemont', 'Boulevard Rosemont',
+                    'Rue Masson', 'Rue Fleury', 'Boulevard Henri-Bourassa', 'Rue Jarry',
+                    
+                    // Downtown and Old Montreal
+                    'Rue de la Commune', 'Rue Saint-Sulpice', 'Rue Saint-Vincent', 'Place Jacques-Cartier',
+                    'Rue de la Gauchetière', 'Rue University', 'Rue Aylmer', 'Rue Metcalfe',
+                    'Rue Stanley', 'Rue Mountain', 'Rue Mansfield', 'Avenue Union', 'Rue de Bleury',
+                    'Rue Clark', 'Rue Jeanne-Mance', 'Rue Laval', 'Rue Saint-Dominique',
+                    'Rue de Bullion', 'Rue Coloniale', 'Rue Henri-Julien', 'Rue Drolet',
+                    'Rue Saint-André', 'Rue Amherst', 'Rue Wolfe', 'Rue Montcalm', 'Rue Cartier',
+                    
+                    // Plateau Mont-Royal
+                    'Rue Saint-Urbain', 'Rue Esplanade', 'Rue Hutchison', 'Rue Waverly',
+                    'Avenue Duluth', 'Rue Marie-Anne', 'Rue Napoleon', 'Rue Villeneuve',
+                    'Rue Duluth', 'Rue Prince-Arthur', 'Rue Roy', 'Rue Cherrier', 'Rue Robin',
+                    'Avenue des Érables', 'Avenue de l\'Épée', 'Rue Mentana', 'Rue de Lanaudière',
+                    'Rue Bordeaux', 'Rue de la Roche', 'Rue Marquette', 'Rue Garnier',
+                    'Rue Fabre', 'Rue Chambord', 'Rue Chabot', 'Rue Parthenais',
+                    
+                    // Mile End and Outremont
+                    'Avenue Van Horne', 'Rue Hutchison', 'Avenue Bloomfield', 'Rue Waverly',
+                    'Avenue Outremont', 'Avenue Elmwood', 'Avenue McCulloch', 'Chemin de la Côte-Sainte-Catherine',
+                    'Avenue Laurier Ouest', 'Rue Saint-Viateur', 'Avenue Fairmount Ouest',
+                    'Rue Bernard Ouest', 'Avenue Querbes', 'Avenue Stuart', 'Avenue Champagneur',
+                    'Avenue Durocher', 'Avenue Jeanne-d\'Arc', 'Avenue Wiseman', 'Avenue Rockland',
+                    
+                    // Verdun and Southwest
+                    'Boulevard LaSalle', 'Rue Wellington', 'Rue de Verdun', 'Avenue Woodland',
+                    'Rue Gordon', 'Rue Hickson', 'Rue Galt', 'Rue Bannantyne', 'Rue Charlevoix',
+                    'Rue Centre', 'Rue Notre-Dame Ouest', 'Rue Saint-Patrick', 'Rue Grand Trunk',
+                    'Rue Riverside', 'Rue Jolicoeur', 'Rue Monk', 'Rue Angers', 'Rue Allard',
+                    
+                    // Rosemont and East End
+                    'Boulevard Saint-Michel', 'Rue d\'Iberville', 'Avenue Papineau', 'Rue Frontenac',
+                    'Rue Fullum', 'Rue Adam', 'Rue Sainte-Catherine Est', 'Rue Lafontaine',
+                    'Avenue de Lorimier', 'Rue Dézéry', 'Rue Joliette', 'Rue Préfontaine',
+                    'Rue Nicolet', 'Rue Dickson', 'Rue Bourbonnière', 'Rue Lacordaire',
+                    'Boulevard Langelier', 'Rue Sherbrooke Est', 'Rue Hochelaga',
+                    
+                    // NDG and West End
+                    'Avenue de Monkland', 'Rue Sherbrooke Ouest', 'Avenue Girouard', 'Avenue Hampton',
+                    'Avenue Somerled', 'Avenue Grand Boulevard', 'Avenue Hingston', 'Avenue Coolbrook',
+                    'Avenue Melrose', 'Avenue Marcil', 'Avenue Vendôme', 'Boulevard Décarie',
+                    'Chemin Queen Mary', 'Avenue Fielding', 'Avenue Old Orchard', 'Avenue Benny',
+                    'Avenue de Maisonneuve Ouest', 'Rue Sainte-Catherine Ouest',
+                    
+                    // Ahuntsic and North End
+                    'Boulevard Gouin', 'Rue Fleury Ouest', 'Avenue Papineau', 'Rue Saint-Denis',
+                    'Boulevard Saint-Laurent', 'Rue Clark', 'Avenue de l\'Esplanade', 'Rue Berri',
+                    'Avenue Christophe-Colomb', 'Boulevard Pie-IX', 'Rue Saint-Hubert',
+                    'Avenue des Récollets', 'Rue Prieur', 'Rue Lajeunesse', 'Rue Saint-Dominique',
+                    'Rue de Castelnau', 'Rue Bélanger', 'Rue Jean-Talon', 'Rue Villeray',
+                    
+                    // Common street types for fallback
+                    'Rue Main', 'Avenue Première', 'Avenue Deuxième', 'Avenue Troisième',
+                    'Rue King', 'Rue Queen', 'Rue Church', 'Avenue du Parc', 'Rue Oak',
+                    'Rue Maple', 'Rue Pine', 'Rue Cedar', 'Rue Elm', 'Rue Victoria', 'Rue Wellington'
+                ];
+            }
+            
+            // For other Quebec cities
+            if (province === 'QC') {
+                return [
+                    'Rue Principale', 'Avenue Première', 'Boulevard Saint-Joseph', 'Rue Saint-Jean',
+                    'Rue Notre-Dame', 'Avenue du Parc', 'Rue King', 'Rue Queen', 'Rue Church',
+                    'Rue Sherbrooke', 'Boulevard René-Lévesque', 'Rue Saint-Laurent', 'Rue Sainte-Catherine',
+                    'Avenue des Pins', 'Rue Saint-Denis', 'Rue Saint-Hubert', 'Avenue Papineau',
+                    'Rue Berri', 'Rue Saint-André', 'Rue Amherst', 'Rue Wolfe', 'Rue Montcalm'
+                ];
+            }
+            
+            // For other Canadian cities - generic but realistic street names
+            return [
+                'Main Street', 'First Avenue', 'Second Avenue', 'Third Avenue', 'King Street',
+                'Queen Street', 'Church Street', 'Park Avenue', 'Oak Street', 'Maple Street',
+                'Pine Street', 'Cedar Street', 'Elm Street', 'Victoria Street', 'Wellington Street',
+                'Richmond Street', 'Adelaide Street', 'York Street', 'Bay Street', 'Yonge Street',
+                'Bloor Street', 'College Street', 'Dundas Street', 'Queen Street West', 'King Street West',
+                'Front Street', 'Harbour Street', 'Lake Shore Boulevard', 'Gardiner Expressway'
+            ];
         }
 
         function showAddressSuggestions(suggestions) {
