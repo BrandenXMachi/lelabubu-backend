@@ -567,6 +567,11 @@
             }
             if (city && city.value) {
                 selectCity(city.value);
+                // Explicitly enable address1 when city is pre-filled
+                if (address1) {
+                    address1.disabled = false;
+                    address1.placeholder = 'Enter your street address';
+                }
             }
             if (address1 && address1.value) {
                 // Enable address2 and postalCode if address1 has a value
