@@ -504,6 +504,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             initializeCheckout();
             loadRelatedProducts();
+            // Check for pre-filled values and enable fields accordingly
+            checkAndEnableFields();
         });
 
         function initializeCheckout() {
@@ -546,6 +548,33 @@
                     }
                 });
             }
+        }
+
+        // Function to check pre-filled values and enable dependent fields
+        function checkAndEnableFields() {
+            const country = document.getElementById('country');
+            const province = document.getElementById('province');
+            const city = document.getElementById('city');
+            const address1 = document.getElementById('address1');
+            const address2 = document.getElementById('address2');
+            const postalCode = document.getElementById('postalCode');
+
+            if (country && country.value) {
+                handleCountryChange({ target: country });
+            }
+            if (province && province.value) {
+                handleProvinceChange({ target: province });
+            }
+            if (city && city.value) {
+                selectCity(city.value);
+            }
+            if (address1 && address1.value) {
+                // Enable address2 and postalCode if address1 has a value
+                if (address2) address2.disabled = false;
+                if (postalCode) postalCode.disabled = false;
+            }
+            // Update shipping calculation if fields are pre-filled
+            updateShippingCalculation();
         }
 
         function initializeFormEnhancements() {
