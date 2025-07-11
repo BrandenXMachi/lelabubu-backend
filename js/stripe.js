@@ -404,16 +404,38 @@ function showCustomCheckoutModal(cartItems) {
                                         <input type="text" class="form-control" id="cardholderName" required placeholder="John Doe">
                                     </div>
                                     
-                                    <div class="mb-3">
-                                        <label class="form-label d-flex align-items-center">
-                                            <i class="fas fa-credit-card me-2"></i>
-                                            Card Information *
-                                        </label>
-                                        <div id="card-element" class="form-control payment-card-element">
-                                            <!-- Stripe Elements will create form elements here -->
+                                    <div class="row">
+                                        <div class="col-12 mb-3">
+                                            <label for="cardNumber" class="form-label d-flex align-items-center">
+                                                <i class="fas fa-credit-card me-2"></i>
+                                                Card Number *
+                                            </label>
+                                            <div id="card-number-element" class="form-control payment-card-element">
+                                                <!-- Stripe card number element -->
+                                            </div>
                                         </div>
-                                        <div id="card-errors" role="alert" class="text-danger mt-2"></div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="cardExpiry" class="form-label d-flex align-items-center">
+                                                <i class="fas fa-calendar me-2"></i>
+                                                Expiry Date *
+                                            </label>
+                                            <div id="card-expiry-element" class="form-control payment-card-element">
+                                                <!-- Stripe expiry element -->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="cardCvc" class="form-label d-flex align-items-center">
+                                                <i class="fas fa-lock me-2"></i>
+                                                CVC *
+                                            </label>
+                                            <div id="card-cvc-element" class="form-control payment-card-element">
+                                                <!-- Stripe CVC element -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="card-errors" role="alert" class="text-danger mt-2"></div>
                                     
                                     <div class="payment-security-info mt-3 p-2 bg-success bg-opacity-10 rounded">
                                         <small class="text-success d-flex align-items-center">
@@ -516,31 +538,50 @@ function setupStripeElements() {
     
     elements = stripe.elements();
     
-    const cardElement = elements.create('card', {
-        style: {
-            base: {
-                fontSize: '16px',
-                color: '#424770',
-                '::placeholder': {
-                    color: '#aab7c4',
-                },
+    const elementStyle = {
+        base: {
+            fontSize: '16px',
+            color: '#424770',
+            '::placeholder': {
+                color: '#aab7c4',
             },
         },
-    });
+    };
     
-    cardElement.mount('#card-element');
+    // Create separate elements for card number, expiry, and CVC
+    const cardNumber = elements.create('cardNumber', { style: elementStyle });
+    const cardExpiry = elements.create('cardExpiry', { style: elementStyle });
+    const cardCvc = elements.create('cardCvc', { style: elementStyle });
     
-    cardElement.on('change', function(event) {
+    // Mount elements to their respective containers
+    cardNumber.mount('#card-number-element');
+    cardExpiry.mount('#card-expiry-element');
+    cardCvc.mount('#card-cvc-element');
+    
+    // Handle real-time validation errors
+    function handleChange(event) {
         const displayError = document.getElementById('card-errors');
         if (event.error) {
             displayError.textContent = event.error.message;
         } else {
             displayError.textContent = '';
         }
-    });
+    }
     
-    // Store card element globally
-    card = cardElement;
+    // Add event listeners for all card elements
+    cardNumber.on('change', handleChange);
+    cardExpiry.on('change', handleChange);
+    cardCvc.on('change', handleChange);
+    
+    // Store card number element globally (primary element for payment method creation)
+    card = cardNumber;
+    
+    // Store all elements globally for access in payment processing
+    window.stripeCardElements = {
+        cardNumber: cardNumber,
+        cardExpiry: cardExpiry,
+        cardCvc: cardCvc
+    };
 }
 
 // Setup event listeners for checkout modal
