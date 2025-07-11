@@ -401,7 +401,7 @@ function showCustomCheckoutModal(cartItems) {
                                             <i class="fas fa-user me-2"></i>
                                             Name as seen on card *
                                         </label>
-                                        <input type="text" class="form-control" id="cardholderName" required placeholder="John Doe">
+                                        <input type="text" class="form-control" id="cardholderName" required placeholder="Emma Dilamma">
                                     </div>
                                     
                                     <div class="row">
