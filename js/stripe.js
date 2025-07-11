@@ -57,8 +57,8 @@ function handleCheckout(e) {
         return;
     }
     
-    // Process checkout with Stripe
-    processStripeCheckout(cart);
+    // Show custom checkout modal instead of redirecting to Stripe
+    showCustomCheckoutModal(cart);
 }
 
 // Legacy function for old checkout (kept for compatibility)
@@ -298,6 +298,432 @@ function addToCartAndCheckout(productData) {
     
     // Proceed to checkout
     processStripeCheckout(cart);
+}
+
+// Show custom checkout modal with address collection and dynamic shipping
+function showCustomCheckoutModal(cartItems) {
+    // Create modal HTML
+    const modalHTML = `
+        <div class="modal fade" id="customCheckoutModal" tabindex="-1" aria-labelledby="customCheckoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="customCheckoutModalLabel">Secure Checkout</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <h6 class="mb-3">Shipping Information</h6>
+                                <form id="checkoutForm">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="firstName" class="form-label">First Name *</label>
+                                            <input type="text" class="form-control" id="firstName" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="lastName" class="form-label">Last Name *</label>
+                                            <input type="text" class="form-control" id="lastName" required>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email Address *</label>
+                                        <input type="email" class="form-control" id="email" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="address1" class="form-label">Address Line 1 *</label>
+                                        <input type="text" class="form-control" id="address1" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="address2" class="form-label">Address Line 2</label>
+                                        <input type="text" class="form-control" id="address2">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="city" class="form-label">City *</label>
+                                            <input type="text" class="form-control" id="city" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="country" class="form-label">Country *</label>
+                                            <select class="form-control" id="country" required>
+                                                <option value="">Select Country</option>
+                                                <option value="CA">Canada</option>
+                                                <option value="US">United States</option>
+                                                <option value="GB">United Kingdom</option>
+                                                <option value="FR">France</option>
+                                                <option value="DE">Germany</option>
+                                                <option value="AU">Australia</option>
+                                                <option value="JP">Japan</option>
+                                                <option value="OTHER">Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3" id="provinceContainer" style="display: none;">
+                                            <label for="province" class="form-label">Province *</label>
+                                            <select class="form-control" id="province">
+                                                <option value="">Select Province</option>
+                                                <option value="AB">Alberta</option>
+                                                <option value="BC">British Columbia</option>
+                                                <option value="MB">Manitoba</option>
+                                                <option value="NB">New Brunswick</option>
+                                                <option value="NL">Newfoundland and Labrador</option>
+                                                <option value="NS">Nova Scotia</option>
+                                                <option value="ON">Ontario</option>
+                                                <option value="PE">Prince Edward Island</option>
+                                                <option value="QC">Quebec</option>
+                                                <option value="SK">Saskatchewan</option>
+                                                <option value="NT">Northwest Territories</option>
+                                                <option value="NU">Nunavut</option>
+                                                <option value="YT">Yukon</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="postalCode" class="form-label">Postal Code *</label>
+                                            <input type="text" class="form-control" id="postalCode" required>
+                                        </div>
+                                    </div>
+                                </form>
+                                
+                                <h6 class="mb-3 mt-4">Payment Information</h6>
+                                <div class="mb-3">
+                                    <label for="cardholderName" class="form-label">Name as seen on card *</label>
+                                    <input type="text" class="form-control" id="cardholderName" required>
+                                </div>
+                                <div id="card-element" class="form-control" style="height: 40px; padding: 10px;">
+                                    <!-- Stripe Elements will create form elements here -->
+                                </div>
+                                <div id="card-errors" role="alert" class="text-danger mt-2"></div>
+                            </div>
+                            <div class="col-md-5">
+                                <h6 class="mb-3">Order Summary</h6>
+                                <div id="orderSummary"></div>
+                                <div class="shipping-calculation mt-3 p-3 bg-light rounded" style="display: none;">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Shipping:</span>
+                                        <span id="shippingCost">Calculating...</span>
+                                    </div>
+                                    <div id="shippingMessage" class="text-success mt-2"></div>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between">
+                                    <strong>Total:</strong>
+                                    <strong id="finalTotal">$0.00</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="completePayment" disabled>Complete Payment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Remove existing modal if present
+    const existingModal = document.getElementById('customCheckoutModal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+    
+    // Add modal to page
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Initialize the modal
+    const modal = new bootstrap.Modal(document.getElementById('customCheckoutModal'));
+    
+    // Setup order summary
+    setupOrderSummary(cartItems);
+    
+    // Setup Stripe Elements
+    setupStripeElements();
+    
+    // Setup event listeners
+    setupCheckoutEventListeners(cartItems);
+    
+    // Show modal
+    modal.show();
+}
+
+// Setup order summary in checkout modal
+function setupOrderSummary(cartItems) {
+    const orderSummary = document.getElementById('orderSummary');
+    let subtotal = 0;
+    let summaryHTML = '';
+    
+    cartItems.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        subtotal += itemTotal;
+        
+        summaryHTML += `
+            <div class="d-flex justify-content-between mb-2">
+                <div>
+                    <div>${item.name}</div>
+                    <small class="text-muted">Qty: ${item.quantity}</small>
+                </div>
+                <div>$${itemTotal.toFixed(2)}</div>
+            </div>
+        `;
+    });
+    
+    summaryHTML += `
+        <hr>
+        <div class="d-flex justify-content-between">
+            <span>Subtotal:</span>
+            <span>$${subtotal.toFixed(2)}</span>
+        </div>
+    `;
+    
+    orderSummary.innerHTML = summaryHTML;
+    
+    // Update final total initially (without shipping)
+    document.getElementById('finalTotal').textContent = `$${subtotal.toFixed(2)}`;
+}
+
+// Setup Stripe Elements for card input
+function setupStripeElements() {
+    if (!stripe) return;
+    
+    elements = stripe.elements();
+    
+    const cardElement = elements.create('card', {
+        style: {
+            base: {
+                fontSize: '16px',
+                color: '#424770',
+                '::placeholder': {
+                    color: '#aab7c4',
+                },
+            },
+        },
+    });
+    
+    cardElement.mount('#card-element');
+    
+    cardElement.on('change', function(event) {
+        const displayError = document.getElementById('card-errors');
+        if (event.error) {
+            displayError.textContent = event.error.message;
+        } else {
+            displayError.textContent = '';
+        }
+    });
+    
+    // Store card element globally
+    card = cardElement;
+}
+
+// Setup event listeners for checkout modal
+function setupCheckoutEventListeners(cartItems) {
+    // Country change handler
+    document.getElementById('country').addEventListener('change', function() {
+        const provinceContainer = document.getElementById('provinceContainer');
+        const province = document.getElementById('province');
+        
+        if (this.value === 'CA') {
+            provinceContainer.style.display = 'block';
+            province.required = true;
+        } else {
+            provinceContainer.style.display = 'none';
+            province.required = false;
+        }
+        
+        // Calculate shipping when address changes
+        calculateShippingCost(cartItems);
+    });
+    
+    // City change handler
+    document.getElementById('city').addEventListener('input', function() {
+        calculateShippingCost(cartItems);
+    });
+    
+    // Province change handler
+    document.getElementById('province').addEventListener('change', function() {
+        calculateShippingCost(cartItems);
+    });
+    
+    // Complete payment button
+    document.getElementById('completePayment').addEventListener('click', function() {
+        processCustomCheckout(cartItems);
+    });
+    
+    // Form validation
+    const form = document.getElementById('checkoutForm');
+    const cardholderName = document.getElementById('cardholderName');
+    
+    function validateForm() {
+        const isFormValid = form.checkValidity() && cardholderName.value.trim() !== '';
+        document.getElementById('completePayment').disabled = !isFormValid;
+    }
+    
+    // Add validation listeners
+    form.addEventListener('input', validateForm);
+    cardholderName.addEventListener('input', validateForm);
+}
+
+// Calculate shipping cost based on address
+function calculateShippingCost(cartItems) {
+    const city = document.getElementById('city').value.toLowerCase().trim();
+    const country = document.getElementById('country').value;
+    const province = document.getElementById('province').value;
+    
+    if (!city || !country) {
+        return;
+    }
+    
+    const shippingCalculation = document.querySelector('.shipping-calculation');
+    const shippingCost = document.getElementById('shippingCost');
+    const shippingMessage = document.getElementById('shippingMessage');
+    const finalTotal = document.getElementById('finalTotal');
+    
+    // Calculate subtotal
+    const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+    let shipping = 0;
+    let message = '';
+    let deliveryTime = '';
+    
+    // Check if it's Montreal (free shipping)
+    if ((city === 'montreal' || city === 'montréal') && country === 'CA') {
+        shipping = 0;
+        message = '🎉 Free shipping to Montreal!';
+        deliveryTime = '1-2 weeks';
+    }
+    // Check if it's elsewhere in Canada ($25 shipping)
+    else if (country === 'CA') {
+        shipping = 25;
+        message = 'Canada shipping';
+        deliveryTime = '1-2 weeks';
+    }
+    // International shipping ($40)
+    else {
+        shipping = 40;
+        message = 'International shipping';
+        deliveryTime = '2-3 weeks';
+    }
+    
+    // Update display
+    shippingCalculation.style.display = 'block';
+    shippingCost.textContent = shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`;
+    shippingMessage.innerHTML = `${message}<br><small>Delivery: ${deliveryTime}</small>`;
+    shippingMessage.className = shipping === 0 ? 'text-success mt-2' : 'text-info mt-2';
+    
+    // Update final total
+    const total = subtotal + shipping;
+    finalTotal.textContent = `$${total.toFixed(2)}`;
+}
+
+// Process custom checkout
+async function processCustomCheckout(cartItems) {
+    if (!stripe || !card) {
+        alert('Payment system is not available. Please try again later.');
+        return;
+    }
+    
+    const completePaymentBtn = document.getElementById('completePayment');
+    completePaymentBtn.disabled = true;
+    completePaymentBtn.textContent = 'Processing...';
+    
+    try {
+        // Get form data
+        const formData = {
+            firstName: document.getElementById('firstName').value,
+            lastName: document.getElementById('lastName').value,
+            email: document.getElementById('email').value,
+            address: {
+                line1: document.getElementById('address1').value,
+                line2: document.getElementById('address2').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('province').value || '',
+                postal_code: document.getElementById('postalCode').value,
+                country: document.getElementById('country').value
+            },
+            cardholderName: document.getElementById('cardholderName').value
+        };
+        
+        // Calculate total
+        const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const city = formData.address.city.toLowerCase();
+        const country = formData.address.country;
+        
+        let shippingCost = 0;
+        if ((city === 'montreal' || city === 'montréal') && country === 'CA') {
+            shippingCost = 0;
+        } else if (country === 'CA') {
+            shippingCost = 25;
+        } else {
+            shippingCost = 40;
+        }
+        
+        const total = subtotal + shippingCost;
+        
+        // Create payment method
+        const {error, paymentMethod} = await stripe.createPaymentMethod({
+            type: 'card',
+            card: card,
+            billing_details: {
+                name: formData.cardholderName,
+                email: formData.email,
+                address: {
+                    line1: formData.address.line1,
+                    line2: formData.address.line2,
+                    city: formData.address.city,
+                    state: formData.address.state,
+                    postal_code: formData.address.postal_code,
+                    country: formData.address.country
+                }
+            }
+        });
+        
+        if (error) {
+            throw new Error(error.message);
+        }
+        
+        // Send payment to server
+        const response = await fetch('/create-checkout-session', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                items: cartItems,
+                customer: formData,
+                payment_method_id: paymentMethod.id
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.error) {
+            throw new Error(result.error);
+        }
+        
+        if (result.success) {
+            // Payment successful
+            alert('Payment successful! Thank you for your order.');
+            
+            // Clear cart
+            localStorage.removeItem('lelabubuCart');
+            
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('customCheckoutModal'));
+            modal.hide();
+            
+            // Redirect to success page
+            window.location.href = '/success.html';
+        } else {
+            throw new Error('Payment failed. Please try again.');
+        }
+        
+    } catch (error) {
+        console.error('Payment error:', error);
+        alert('Payment failed: ' + error.message);
+    } finally {
+        completePaymentBtn.disabled = false;
+        completePaymentBtn.textContent = 'Complete Payment';
+    }
 }
 
 // Export functions for global use
