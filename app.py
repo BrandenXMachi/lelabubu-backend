@@ -51,6 +51,44 @@ def index():
     # Serve the static index.html file from the root directory
     return send_from_directory('.', 'index.html')
 
+@app.route('/calculate-shipping', methods=['POST'])
+def calculate_shipping():
+    """Calculate shipping cost based on address"""
+    try:
+        data = request.json
+        address = data.get('address', {})
+        
+        city = address.get('city', '').lower()
+        state = address.get('state', '').lower()
+        country = address.get('country', '').lower()
+        
+        # Calculate shipping cost
+        shipping_cost = 0
+        delivery_days = "2-3 weeks"
+        
+        # Check if it's Montreal (free shipping)
+        if city in ['montreal', 'montréal'] and country in ['canada', 'ca']:
+            shipping_cost = 0
+            delivery_days = "1-2 weeks"
+        # Check if it's elsewhere in Canada ($25 shipping)
+        elif country in ['canada', 'ca']:
+            shipping_cost = 2500  # $25.00 in cents
+            delivery_days = "1-2 weeks"
+        # International shipping ($40)
+        else:
+            shipping_cost = 4000  # $40.00 in cents
+            delivery_days = "2-3 weeks"
+        
+        return jsonify({
+            'shipping_cost': shipping_cost,
+            'shipping_cost_display': f"${shipping_cost / 100:.2f}",
+            'delivery_estimate': delivery_days,
+            'free_shipping': shipping_cost == 0
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/create-checkout-session', methods=['POST'])
 def create_checkout_session():
     try:
@@ -140,7 +178,19 @@ def create_checkout_session():
                         'quantity': item['quantity'],
                     })
                 
-                # Shipping is now handled by Stripe's shipping options, no need to add as line item
+                # Add shipping as a line item (will be calculated automatically based on address)
+                # We'll add a placeholder shipping item that will be updated via webhook
+                line_items.append({
+                    'price_data': {
+                        'currency': 'cad',
+                        'product_data': {
+                            'name': 'Shipping (calculated based on address)',
+                            'description': 'Free for Montreal, $25 Canada, $40 International',
+                        },
+                        'unit_amount': 2500,  # Default to Canada shipping, will be adjusted
+                    },
+                    'quantity': 1,
+                })
                 
                 # Create Stripe checkout session with shipping address collection
                 checkout_session = stripe.checkout.Session.create(
@@ -154,68 +204,7 @@ def create_checkout_session():
                     shipping_address_collection={
                         'allowed_countries': ['CA', 'US', 'GB', 'FR', 'DE', 'AU', 'JP', 'KR', 'CN', 'MX', 'BR', 'IN', 'IT', 'ES', 'NL', 'SE', 'NO', 'DK', 'FI', 'BE', 'AT', 'CH', 'IE', 'PT', 'GR', 'PL', 'CZ', 'HU', 'RO', 'BG', 'HR', 'SI', 'SK', 'LT', 'LV', 'EE', 'LU', 'MT', 'CY'],
                     },
-                    shipping_options=[
-                        {
-                            'shipping_rate_data': {
-                                'type': 'fixed_amount',
-                                'fixed_amount': {
-                                    'amount': 0,
-                                    'currency': 'cad',
-                                },
-                                'display_name': 'Free Shipping (Montreal)',
-                                'delivery_estimate': {
-                                    'minimum': {
-                                        'unit': 'business_day',
-                                        'value': 1,
-                                    },
-                                    'maximum': {
-                                        'unit': 'business_day',
-                                        'value': 3,
-                                    },
-                                },
-                            },
-                        },
-                        {
-                            'shipping_rate_data': {
-                                'type': 'fixed_amount',
-                                'fixed_amount': {
-                                    'amount': 2500,  # $25.00 CAD
-                                    'currency': 'cad',
-                                },
-                                'display_name': 'Canada Shipping',
-                                'delivery_estimate': {
-                                    'minimum': {
-                                        'unit': 'business_day',
-                                        'value': 3,
-                                    },
-                                    'maximum': {
-                                        'unit': 'business_day',
-                                        'value': 7,
-                                    },
-                                },
-                            },
-                        },
-                        {
-                            'shipping_rate_data': {
-                                'type': 'fixed_amount',
-                                'fixed_amount': {
-                                    'amount': 4000,  # $40.00 CAD
-                                    'currency': 'cad',
-                                },
-                                'display_name': 'International Shipping',
-                                'delivery_estimate': {
-                                    'minimum': {
-                                        'unit': 'business_day',
-                                        'value': 7,
-                                    },
-                                    'maximum': {
-                                        'unit': 'business_day',
-                                        'value': 14,
-                                    },
-                                },
-                            },
-                        },
-                    ],
+                    automatic_tax={'enabled': False},
                 )
                 
                 # Return the session ID to the client
