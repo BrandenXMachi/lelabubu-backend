@@ -29,12 +29,36 @@ function initCheckoutButton() {
     
     if (checkoutBtn) {
         // Remove any existing event listeners to prevent conflicts
-        checkoutBtn.removeEventListener('click', handleOldCheckout);
+        checkoutBtn.removeEventListener('click', handleCheckout);
         
-        // Don't add event listener here - let the new modal system handle it
-        // The new checkout modal system in cart.html will handle the checkout process
-        console.log('Checkout button found - letting new modal system handle it');
+        // Add event listener for checkout
+        checkoutBtn.addEventListener('click', handleCheckout);
+        console.log('Checkout button initialized successfully');
     }
+}
+
+// Handle checkout button click
+function handleCheckout(e) {
+    e.preventDefault();
+    
+    // Get cart data
+    let cart = [];
+    try {
+        const savedCart = localStorage.getItem('lelabubuCart');
+        if (savedCart) {
+            cart = JSON.parse(savedCart);
+        }
+    } catch (error) {
+        console.error('Error loading cart:', error);
+    }
+    
+    if (!cart || cart.length === 0) {
+        alert('Your cart is empty. Please add some products before checkout.');
+        return;
+    }
+    
+    // Process checkout with Stripe
+    processStripeCheckout(cart);
 }
 
 // Legacy function for old checkout (kept for compatibility)
