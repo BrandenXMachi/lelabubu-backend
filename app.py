@@ -136,32 +136,111 @@ def create_checkout_session():
             
             if payment_method_id:
                 # Create a PaymentIntent for custom checkout
-                payment_intent = stripe.PaymentIntent.create(
-                    amount=amount,
-                    currency='cad',
-                    payment_method=payment_method_id,
-                    description=description,
-                    metadata=metadata,
-                    receipt_email=customer_info.get('email') if customer_info else None,
-                    shipping={
-                        'name': f"{customer_info.get('firstName', '')} {customer_info.get('lastName', '')}" if customer_info else '',
-                        'address': {
-                            'line1': customer_info.get('address', {}).get('line1', ''),
-                            'line2': customer_info.get('address', {}).get('line2', ''),
-                            'city': customer_info.get('address', {}).get('city', ''),
-                            'state': customer_info.get('address', {}).get('state', ''),
-                            'postal_code': customer_info.get('address', {}).get('postal_code', ''),
-                            'country': customer_info.get('address', {}).get('country', 'CA')
-                        }
-                    } if customer_info and customer_info.get('address') else None,
-                    confirm=True
-                )
-                
-                # Return the client secret to the client
-                return jsonify({
-                    'id': payment_intent.client_secret,
-                    'success': payment_intent.status == 'succeeded'
-                })
+                try:
+                    payment_intent = stripe.PaymentIntent.create(
+                        amount=amount,
+                        currency='cad',
+                        payment_method=payment_method_id,
+                        description=description,
+                        metadata=metadata,
+                        receipt_email=customer_info.get('email') if customer_info else None,
+                        shipping={
+                            'name': f"{customer_info.get('firstName', '')} {customer_info.get('lastName', '')}" if customer_info else '',
+                            'address': {
+                                'line1': customer_info.get('address', {}).get('line1', ''),
+                                'line2': customer_info.get('address', {}).get('line2', ''),
+                                'city': customer_info.get('address', {}).get('city', ''),
+                                'state': customer_info.get('address', {}).get('state', ''),
+                                'postal_code': customer_info.get('address', {}).get('postal_code', ''),
+                                'country': customer_info.get('address', {}).get('country', 'CA')
+                            }
+                        } if customer_info and customer_info.get('address') else None,
+                        confirm=True,
+                        return_url=YOUR_DOMAIN + '/success.html'
+                    )
+                    
+                    # If payment succeeded, send order notification email
+                    if payment_intent.status == 'succeeded':
+                        try:
+                            # Send order notification email to store owner
+                            items_text = '\n'.join([f"• {item['name']} x {item['quantity']} - ${float(item['price']):.2f} CAD" for item in cart_items])
+                            
+                            # Format shipping address
+                            address = customer_info.get('address', {})
+                            address_lines = []
+                            if address.get('line1'):
+                                address_lines.append(address['line1'])
+                            if address.get('line2'):
+                                address_lines.append(address['line2'])
+                            if address.get('city'):
+                                address_lines.append(address['city'])
+                            if address.get('state'):
+                                address_lines.append(address['state'])
+                            if address.get('postal_code'):
+                                address_lines.append(address['postal_code'])
+                            if address.get('country'):
+                                address_lines.append(address['country'])
+                            
+                            formatted_address = '\n'.join(address_lines) if address_lines else 'Not provided'
+                            
+                            msg = Message(
+                                subject=f"New Order #{payment_intent.id[:8]} - ${amount/100:.2f} CAD",
+                                sender=app.config['MAIL_DEFAULT_SENDER'],
+                                recipients=['contact@lelabubu.ca']
+                            )
+                            
+                            msg.body = f"""
+🎉 NEW ORDER RECEIVED - LeLabubu.ca
+
+ORDER DETAILS:
+Order ID: {payment_intent.id}
+Amount: ${amount/100:.2f} CAD
+Shipping: ${shipping_cost/100:.2f} CAD
+Payment Status: ✅ PAID
+
+CUSTOMER INFORMATION:
+Name: {customer_info.get('firstName', '')} {customer_info.get('lastName', '')}
+Email: {customer_info.get('email', '')}
+Cardholder: {customer_info.get('cardholderName', '')}
+
+SHIPPING INFORMATION:
+Ship to: {customer_info.get('firstName', '')} {customer_info.get('lastName', '')}
+Address:
+{formatted_address}
+
+ITEMS ORDERED:
+{items_text}
+
+---
+Login to your Stripe dashboard for full payment details:
+https://dashboard.stripe.com/payments/{payment_intent.id}
+
+This notification was sent automatically from LeLabubu.ca
+                            """
+                            
+                            mail.send(msg)
+                            print(f"Order notification email sent for payment {payment_intent.id}")
+                            
+                        except Exception as e:
+                            print(f"Failed to send order notification email: {str(e)}")
+                            # Don't fail the payment if email fails
+                    
+                    # Return success response
+                    return jsonify({
+                        'success': payment_intent.status == 'succeeded',
+                        'payment_intent_id': payment_intent.id,
+                        'status': payment_intent.status
+                    })
+                    
+                except stripe.error.CardError as e:
+                    # Card was declined
+                    return jsonify({'error': f'Your card was declined: {e.user_message}'}), 400
+                except stripe.error.StripeError as e:
+                    # Other Stripe error
+                    return jsonify({'error': f'Payment failed: {str(e)}'}), 400
+                except Exception as e:
+                    # General error
+                    return jsonify({'error': f'An error occurred: {str(e)}'}), 500
             else:
                 # Create line items for Stripe Checkout
                 line_items = []
