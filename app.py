@@ -140,20 +140,9 @@ def create_checkout_session():
                         'quantity': item['quantity'],
                     })
                 
-                # Add shipping as a line item if applicable
-                if shipping_cost > 0:
-                    line_items.append({
-                        'price_data': {
-                            'currency': 'cad',
-                            'product_data': {
-                                'name': 'Shipping',
-                            },
-                            'unit_amount': shipping_cost,
-                        },
-                        'quantity': 1,
-                    })
+                # Shipping is now handled by Stripe's shipping options, no need to add as line item
                 
-                # Create Stripe checkout session
+                # Create Stripe checkout session with shipping address collection
                 checkout_session = stripe.checkout.Session.create(
                     payment_method_types=['card'],
                     line_items=line_items,
@@ -161,7 +150,72 @@ def create_checkout_session():
                     success_url=YOUR_DOMAIN + '/success.html?session_id={CHECKOUT_SESSION_ID}',
                     cancel_url=YOUR_DOMAIN + '/cart.html',
                     metadata=metadata,
-                    client_reference_id=user_id
+                    client_reference_id=user_id,
+                    shipping_address_collection={
+                        'allowed_countries': ['CA', 'US', 'GB', 'FR', 'DE', 'AU', 'JP', 'KR', 'CN', 'MX', 'BR', 'IN', 'IT', 'ES', 'NL', 'SE', 'NO', 'DK', 'FI', 'BE', 'AT', 'CH', 'IE', 'PT', 'GR', 'PL', 'CZ', 'HU', 'RO', 'BG', 'HR', 'SI', 'SK', 'LT', 'LV', 'EE', 'LU', 'MT', 'CY'],
+                    },
+                    shipping_options=[
+                        {
+                            'shipping_rate_data': {
+                                'type': 'fixed_amount',
+                                'fixed_amount': {
+                                    'amount': 0,
+                                    'currency': 'cad',
+                                },
+                                'display_name': 'Free Shipping (Montreal)',
+                                'delivery_estimate': {
+                                    'minimum': {
+                                        'unit': 'business_day',
+                                        'value': 1,
+                                    },
+                                    'maximum': {
+                                        'unit': 'business_day',
+                                        'value': 3,
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            'shipping_rate_data': {
+                                'type': 'fixed_amount',
+                                'fixed_amount': {
+                                    'amount': 2500,  # $25.00 CAD
+                                    'currency': 'cad',
+                                },
+                                'display_name': 'Canada Shipping',
+                                'delivery_estimate': {
+                                    'minimum': {
+                                        'unit': 'business_day',
+                                        'value': 3,
+                                    },
+                                    'maximum': {
+                                        'unit': 'business_day',
+                                        'value': 7,
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            'shipping_rate_data': {
+                                'type': 'fixed_amount',
+                                'fixed_amount': {
+                                    'amount': 4000,  # $40.00 CAD
+                                    'currency': 'cad',
+                                },
+                                'display_name': 'International Shipping',
+                                'delivery_estimate': {
+                                    'minimum': {
+                                        'unit': 'business_day',
+                                        'value': 7,
+                                    },
+                                    'maximum': {
+                                        'unit': 'business_day',
+                                        'value': 14,
+                                    },
+                                },
+                            },
+                        },
+                    ],
                 )
                 
                 # Return the session ID to the client

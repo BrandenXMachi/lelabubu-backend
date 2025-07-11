@@ -346,29 +346,13 @@ function displayCartItems() {
     // Update cart items container
     cartItemsContainer.innerHTML = cartItemsHTML;
     
-    // Calculate shipping and total
-    // Note: This is a simplified calculation for display purposes
-    // The actual shipping cost will be calculated on the server based on the customer's address
-    let shipping = 0;
-    
-    // For display purposes, we'll show estimated shipping costs
-    // The actual cost will be determined during checkout based on the shipping address
-    if (subtotal < 100) {
-        // Show estimated shipping (will be updated during checkout)
-        shipping = 25; // Default to Canada shipping estimate
-    }
-    
-    const total = subtotal + shipping;
-    
-    // Update cart summary
+    // Update cart summary (shipping will be calculated at checkout)
     if (cartSummary) {
         const subtotalElement = cartSummary.querySelector('.cart-subtotal');
-        const shippingElement = cartSummary.querySelector('.cart-shipping');
         const totalElement = cartSummary.querySelector('.cart-total');
         
         if (subtotalElement) subtotalElement.textContent = formatPrice(subtotal);
-        if (shippingElement) shippingElement.textContent = shipping === 0 ? 'FREE' : formatPrice(shipping);
-        if (totalElement) totalElement.textContent = formatPrice(total);
+        if (totalElement) totalElement.textContent = formatPrice(subtotal); // Show subtotal as total since shipping is calculated at checkout
     }
     
     // Add event listeners for quantity updates and item removal
