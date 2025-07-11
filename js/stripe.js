@@ -330,22 +330,12 @@ function showCustomCheckoutModal(cartItems) {
                                         <label for="email" class="form-label">Email Address *</label>
                                         <input type="email" class="form-control" id="email" required>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="address1" class="form-label">Address Line 1 *</label>
-                                        <input type="text" class="form-control" id="address1" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="address2" class="form-label">Address Line 2</label>
-                                        <input type="text" class="form-control" id="address2">
-                                    </div>
+                                    
+                                    <!-- Address fields in correct order: Country, Province, City, Address, Postal Code -->
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
-                                            <label for="city" class="form-label">City *</label>
-                                            <input type="text" class="form-control" id="city" required>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
                                             <label for="country" class="form-label">Country *</label>
-                                            <select class="form-control" id="country" required>
+                                            <select class="form-select" id="country" required>
                                                 <option value="">Select Country</option>
                                                 <option value="CA">Canada</option>
                                                 <option value="US">United States</option>
@@ -357,11 +347,9 @@ function showCustomCheckoutModal(cartItems) {
                                                 <option value="OTHER">Other</option>
                                             </select>
                                         </div>
-                                    </div>
-                                    <div class="row">
                                         <div class="col-md-6 mb-3" id="provinceContainer" style="display: none;">
                                             <label for="province" class="form-label">Province *</label>
-                                            <select class="form-control" id="province">
+                                            <select class="form-select" id="province">
                                                 <option value="">Select Province</option>
                                                 <option value="AB">Alberta</option>
                                                 <option value="BC">British Columbia</option>
@@ -378,22 +366,62 @@ function showCustomCheckoutModal(cartItems) {
                                                 <option value="YT">Yukon</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="postalCode" class="form-label">Postal Code *</label>
-                                            <input type="text" class="form-control" id="postalCode" required>
-                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="city" class="form-label">City *</label>
+                                        <input type="text" class="form-control" id="city" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="address1" class="form-label">Address Line 1 *</label>
+                                        <input type="text" class="form-control" id="address1" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="address2" class="form-label">Address Line 2</label>
+                                        <input type="text" class="form-control" id="address2">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="postalCode" class="form-label">Postal Code *</label>
+                                        <input type="text" class="form-control" id="postalCode" required maxlength="7" placeholder="A1A 1A1">
                                     </div>
                                 </form>
                                 
-                                <h6 class="mb-3 mt-4">Payment Information</h6>
-                                <div class="mb-3">
-                                    <label for="cardholderName" class="form-label">Name as seen on card *</label>
-                                    <input type="text" class="form-control" id="cardholderName" required>
+                                <!-- Enhanced Payment Information Section -->
+                                <div class="payment-section mt-4">
+                                    <div class="payment-header mb-3 p-3 bg-light rounded">
+                                        <h6 class="mb-0 d-flex align-items-center">
+                                            <i class="fas fa-credit-card me-2 text-primary"></i>
+                                            Payment Information
+                                            <i class="fas fa-lock ms-2 text-success" title="Secure Payment"></i>
+                                        </h6>
+                                        <small class="text-muted">Your payment information is encrypted and secure</small>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="cardholderName" class="form-label d-flex align-items-center">
+                                            <i class="fas fa-user me-2"></i>
+                                            Name as seen on card *
+                                        </label>
+                                        <input type="text" class="form-control" id="cardholderName" required placeholder="John Doe">
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label d-flex align-items-center">
+                                            <i class="fas fa-credit-card me-2"></i>
+                                            Card Information *
+                                        </label>
+                                        <div id="card-element" class="form-control payment-card-element">
+                                            <!-- Stripe Elements will create form elements here -->
+                                        </div>
+                                        <div id="card-errors" role="alert" class="text-danger mt-2"></div>
+                                    </div>
+                                    
+                                    <div class="payment-security-info mt-3 p-2 bg-success bg-opacity-10 rounded">
+                                        <small class="text-success d-flex align-items-center">
+                                            <i class="fas fa-shield-alt me-2"></i>
+                                            Secured by Stripe • SSL Encrypted • PCI Compliant
+                                        </small>
+                                    </div>
                                 </div>
-                                <div id="card-element" class="form-control" style="height: 40px; padding: 10px;">
-                                    <!-- Stripe Elements will create form elements here -->
-                                </div>
-                                <div id="card-errors" role="alert" class="text-danger mt-2"></div>
                             </div>
                             <div class="col-md-5">
                                 <h6 class="mb-3">Order Summary</h6>
@@ -561,6 +589,70 @@ function setupCheckoutEventListeners(cartItems) {
     // Add validation listeners
     form.addEventListener('input', validateForm);
     cardholderName.addEventListener('input', validateForm);
+    
+    // Postal code formatting for Canadian postal codes
+    document.getElementById('postalCode').addEventListener('input', function(e) {
+        let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        
+        // Format Canadian postal code (A1A 1A1)
+        if (value.length > 3) {
+            value = value.substring(0, 3) + ' ' + value.substring(3, 6);
+        }
+        
+        e.target.value = value;
+        
+        // Trigger shipping calculation if we have enough info
+        if (value.length >= 6) {
+            calculateShippingCost(cartItems);
+        }
+    });
+    
+    // Add custom styles for the payment section
+    if (!document.querySelector('style[data-payment-styles]')) {
+        const paymentStyles = document.createElement('style');
+        paymentStyles.setAttribute('data-payment-styles', 'true');
+        paymentStyles.textContent = `
+            .payment-card-element {
+                height: 50px !important;
+                padding: 12px !important;
+                border: 1px solid #ced4da;
+                border-radius: 0.375rem;
+                transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            }
+            
+            .payment-card-element:focus-within {
+                border-color: #86b7fe;
+                box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+            }
+            
+            .payment-header {
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                border-left: 4px solid #007bff;
+            }
+            
+            .payment-security-info {
+                border-left: 3px solid #198754;
+            }
+            
+            .form-label i {
+                color: #6c757d;
+                width: 16px;
+            }
+            
+            .shipping-calculation {
+                border-left: 3px solid #0dcaf0;
+            }
+            
+            .text-success i {
+                color: #198754 !important;
+            }
+            
+            .text-primary i {
+                color: #0d6efd !important;
+            }
+        `;
+        document.head.appendChild(paymentStyles);
+    }
 }
 
 // Calculate shipping cost based on address
