@@ -260,10 +260,6 @@ const translations = {
         "en": "Free shipping in Montreal • $25 Canada • $40 International",
         "fr": "Livraison gratuite à Montréal • 25$ Canada • 40$ International"
     },
-    "return_policy": {
-        "en": "30-day return policy",
-        "fr": "Politique de retour de 30 jours"
-    },
     "description": {
         "en": "Description",
         "fr": "Description"
@@ -569,8 +565,8 @@ const translations = {
         "fr": "Quelle est votre politique de retour?"
     },
     "faq_a5": {
-        "en": "We offer a 30-day return policy for all unopened items in their original packaging. If you receive a damaged or defective item, please contact us within 7 days of receipt, and we'll arrange for a replacement or refund. Please note that limited edition items may have different return conditions. For full details, please visit our Return Policy page.",
-        "fr": "Nous offrons une politique de retour de 30 jours pour tous les articles non ouverts dans leur emballage d'origine. Si vous recevez un article endommagé ou défectueux, veuillez nous contacter dans les 7 jours suivant la réception, et nous organiserons un remplacement ou un remboursement. Veuillez noter que les articles en édition limitée peuvent avoir des conditions de retour différentes. Pour plus de détails, veuillez consulter notre page Politique de retour."
+        "en": "If you receive a damaged or defective item, please contact us within 7 days of receipt, and we'll arrange for a replacement or refund. Please note that limited edition items may have different conditions. For full details, please contact our customer service team.",
+        "fr": "Si vous recevez un article endommagé ou défectueux, veuillez nous contacter dans les 7 jours suivant la réception, et nous organiserons un remplacement ou un remboursement. Veuillez noter que les articles en édition limitée peuvent avoir des conditions différentes. Pour plus de détails, veuillez contacter notre équipe de service client."
     },
     "cta_title": {
         "en": "Ready to Start Your Collection?",
