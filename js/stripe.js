@@ -373,7 +373,9 @@ function showCustomCheckoutModal(cartItems) {
                                     </div>
                                     <div class="mb-3">
                                         <label for="address1" class="form-label">Address Line 1 *</label>
-                                        <input type="text" class="form-control" id="address1" required>
+                                        <input type="text" class="form-control" id="autocomplete" placeholder="Start typing your address..." required>
+                                        <input type="hidden" id="selected-address">
+                                        <input type="hidden" class="form-control" id="address1">
                                     </div>
                                     <div class="mb-3">
                                         <label for="address2" class="form-label">Address Line 2</label>
@@ -492,6 +494,14 @@ function showCustomCheckoutModal(cartItems) {
     
     // Setup event listeners
     setupCheckoutEventListeners(cartItems);
+    
+    // Initialize Google Places autocomplete after modal is shown
+    modal._element.addEventListener('shown.bs.modal', function() {
+        // Initialize Google Places autocomplete if available
+        if (typeof initAutocomplete === 'function') {
+            setTimeout(initAutocomplete, 100); // Small delay to ensure DOM is ready
+        }
+    });
     
     // Show modal
     modal.show();
