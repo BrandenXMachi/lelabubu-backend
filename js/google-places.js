@@ -6,24 +6,64 @@ let addressComponents = {};
 
 // Initialize Google Places Autocomplete
 function initAutocomplete() {
-    const input = document.getElementById('autocomplete');
+    // Try multiple possible input IDs
+    const possibleIds = ['autocomplete', 'address1', 'addressLine1'];
+    let input = null;
+    
+    for (const id of possibleIds) {
+        input = document.getElementById(id);
+        if (input) {
+            console.log(`Found autocomplete input with ID: ${id}`);
+            break;
+        }
+    }
     
     if (!input) {
-        console.warn('Autocomplete input not found');
+        console.warn('Autocomplete input not found. Tried IDs:', possibleIds);
         return;
     }
 
-    // Create autocomplete object, restricting the search predictions to Canada
-    autocomplete = new google.maps.places.Autocomplete(input, {
-        componentRestrictions: { country: 'ca' }, // Restrict to Canada
-        fields: ['address_components', 'formatted_address', 'geometry', 'name'],
-        types: ['address'] // Only show address suggestions
-    });
+    try {
+        // Use the new PlaceAutocompleteElement if available, fallback to old Autocomplete
+        if (google.maps.places.PlaceAutocompleteElement) {
+            console.log('Using new PlaceAutocompleteElement');
+            
+            // Create the new autocomplete element
+            const autocompleteElement = new google.maps.places.PlaceAutocompleteElement({
+                componentRestrictions: { country: 'ca' },
+                fields: ['address_components', 'formatted_address', 'geometry', 'name'],
+                types: ['address']
+            });
+            
+            // Replace the input with the autocomplete element
+            input.parentNode.replaceChild(autocompleteElement, input);
+            
+            // Add listener for place selection
+            autocompleteElement.addEventListener('gmp-placeselect', (event) => {
+                const place = event.place;
+                onPlaceChangedNew(place);
+            });
+            
+            autocomplete = autocompleteElement;
+        } else {
+            console.log('Using legacy Autocomplete');
+            
+            // Create autocomplete object, restricting the search predictions to Canada
+            autocomplete = new google.maps.places.Autocomplete(input, {
+                componentRestrictions: { country: 'ca' }, // Restrict to Canada
+                fields: ['address_components', 'formatted_address', 'geometry', 'name'],
+                types: ['address'] // Only show address suggestions
+            });
 
-    // Add listener for when a place is selected
-    autocomplete.addListener('place_changed', onPlaceChanged);
-    
-    console.log('Google Places Autocomplete initialized for Canada');
+            // Add listener for when a place is selected
+            autocomplete.addListener('place_changed', onPlaceChanged);
+        }
+        
+        console.log('Google Places Autocomplete initialized for Canada');
+    } catch (error) {
+        console.error('Error initializing Google Places:', error);
+        console.log('Falling back to regular input field');
+    }
 }
 
 // Handle place selection
@@ -131,6 +171,82 @@ function fillAddressFields(address) {
     });
 
     console.log('Address fields auto-filled:', fields);
+}
+
+// Handle place selection for new PlaceAutocompleteElement
+function onPlaceChangedNew(place) {
+    if (!place.geometry) {
+        console.log("No details available for selected place");
+        return;
+    }
+
+    // Reset address components
+    addressComponents = {
+        street_number: '',
+        route: '',
+        locality: '',
+        administrative_area_level_1: '',
+        postal_code: '',
+        country: ''
+    };
+
+    // Parse address components
+    for (let i = 0; i < place.address_components.length; i++) {
+        const addressType = place.address_components[i].types[0];
+        
+        switch (addressType) {
+            case 'street_number':
+                addressComponents.street_number = place.address_components[i].long_name;
+                break;
+            case 'route':
+                addressComponents.route = place.address_components[i].long_name;
+                break;
+            case 'locality':
+                addressComponents.locality = place.address_components[i].long_name;
+                break;
+            case 'administrative_area_level_1':
+                addressComponents.administrative_area_level_1 = place.address_components[i].short_name;
+                break;
+            case 'postal_code':
+                addressComponents.postal_code = place.address_components[i].long_name;
+                break;
+            case 'country':
+                addressComponents.country = place.address_components[i].short_name;
+                break;
+        }
+    }
+
+    // Create full address
+    const fullAddress = {
+        formatted_address: place.formatted_address,
+        street_address: `${addressComponents.street_number} ${addressComponents.route}`.trim(),
+        city: addressComponents.locality,
+        province: addressComponents.administrative_area_level_1,
+        postal_code: addressComponents.postal_code,
+        country: addressComponents.country,
+        coordinates: {
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng()
+        }
+    };
+
+    // Log the full address to console
+    console.log('Selected Address (New API):', fullAddress);
+
+    // Store in hidden input (if it exists)
+    const hiddenInput = document.getElementById('selected-address');
+    if (hiddenInput) {
+        hiddenInput.value = JSON.stringify(fullAddress);
+    }
+
+    // Auto-fill form fields if they exist
+    fillAddressFields(fullAddress);
+    
+    // Trigger custom event for other parts of the application
+    const addressSelectedEvent = new CustomEvent('addressSelected', {
+        detail: fullAddress
+    });
+    document.dispatchEvent(addressSelectedEvent);
 }
 
 // Initialize when Google Maps API is loaded
