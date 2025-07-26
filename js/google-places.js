@@ -28,23 +28,29 @@ function initAutocomplete() {
         if (google.maps.places.PlaceAutocompleteElement) {
             console.log('Using new PlaceAutocompleteElement');
             
-            // Create the new autocomplete element
-            const autocompleteElement = new google.maps.places.PlaceAutocompleteElement({
-                componentRestrictions: { country: 'ca' },
-                fields: ['address_components', 'formatted_address', 'geometry', 'name'],
-                types: ['address']
-            });
-            
-            // Replace the input with the autocomplete element
-            input.parentNode.replaceChild(autocompleteElement, input);
-            
-            // Add listener for place selection
-            autocompleteElement.addEventListener('gmp-placeselect', (event) => {
-                const place = event.place;
-                onPlaceChangedNew(place);
-            });
-            
-            autocomplete = autocompleteElement;
+            try {
+                // Create the new autocomplete element with correct configuration
+                const autocompleteElement = new google.maps.places.PlaceAutocompleteElement();
+                
+                // Set country restriction to Canada
+                autocompleteElement.componentRestrictions = { country: 'ca' };
+                
+                // Replace the input with the autocomplete element
+                input.parentNode.replaceChild(autocompleteElement, input);
+                
+                // Add listener for place selection
+                autocompleteElement.addEventListener('gmp-placeselect', (event) => {
+                    const place = event.place;
+                    onPlaceChangedNew(place);
+                });
+                
+                autocomplete = autocompleteElement;
+                console.log('New PlaceAutocompleteElement initialized successfully');
+            } catch (newApiError) {
+                console.log('New API failed, falling back to legacy:', newApiError);
+                // Fall back to legacy API
+                initLegacyAutocomplete(input);
+            }
         } else {
             console.log('Using legacy Autocomplete');
             
@@ -247,6 +253,23 @@ function onPlaceChangedNew(place) {
         detail: fullAddress
     });
     document.dispatchEvent(addressSelectedEvent);
+}
+
+// Initialize legacy autocomplete (fallback function)
+function initLegacyAutocomplete(input) {
+    console.log('Initializing legacy Autocomplete API');
+    
+    // Create autocomplete object, restricting the search predictions to Canada
+    autocomplete = new google.maps.places.Autocomplete(input, {
+        componentRestrictions: { country: 'ca' }, // Restrict to Canada
+        fields: ['address_components', 'formatted_address', 'geometry', 'name'],
+        types: ['address'] // Only show address suggestions
+    });
+
+    // Add listener for when a place is selected
+    autocomplete.addListener('place_changed', onPlaceChanged);
+    
+    console.log('Legacy Autocomplete initialized successfully');
 }
 
 // Initialize when Google Maps API is loaded
