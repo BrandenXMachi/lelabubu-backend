@@ -6,8 +6,8 @@ let elements;
 let card;
 
 try {
-    stripe = Stripe('pk_test_51Rerp84RpqeAczydMUzeLHi8R8iK3K3ghT1OYPoEUoGCKoCaJ3nZAes4CgjpePcJKriFt317fjVxq7vdnosjBPEW00YaPDWkGK');
-    console.log('Stripe initialized successfully');
+    stripe = Stripe('pk_live_51RerovGA2nd66MJcvgzUEOzkTjpZf0ok3uuM1HQjmauoNHi6O90EJSjnpTZu6wRlfTeqyjqfUuCELGdz7BJTD5Ep00YVowW7gx');
+    console.log('Stripe initialized successfully - LIVE MODE');
 } catch (error) {
     console.error('Stripe initialization failed:', error);
 }
