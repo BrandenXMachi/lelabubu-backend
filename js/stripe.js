@@ -372,10 +372,10 @@ function showCustomCheckoutModal(cartItems) {
                                         <input type="text" class="form-control" id="city" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="address1" class="form-label">Address Line 1 *</label>
+                                        <label for="autocomplete" class="form-label">Address Line 1 *</label>
                                         <input type="text" class="form-control" id="autocomplete" placeholder="Start typing your address..." required>
                                         <input type="hidden" id="selected-address">
-                                        <input type="hidden" class="form-control" id="address1">
+                                        <input type="hidden" id="address1">
                                     </div>
                                     <div class="mb-3">
                                         <label for="address2" class="form-label">Address Line 2</label>

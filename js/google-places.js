@@ -176,6 +176,28 @@ function fillAddressFields(address) {
         }
     });
 
+    // Also update the autocomplete field with the full address
+    const autocompleteField = document.getElementById('autocomplete');
+    if (autocompleteField && address.street_address) {
+        autocompleteField.value = address.street_address;
+        
+        // Update the hidden address1 field as well
+        const address1Field = document.getElementById('address1');
+        if (address1Field) {
+            address1Field.value = address.street_address;
+        }
+    }
+
+    // Update country dropdown if it exists
+    const countryField = document.getElementById('country');
+    if (countryField && address.country) {
+        countryField.value = address.country;
+        
+        // Trigger change event to show province field if Canada
+        const changeEvent = new Event('change', { bubbles: true });
+        countryField.dispatchEvent(changeEvent);
+    }
+
     console.log('Address fields auto-filled:', fields);
 }
 
