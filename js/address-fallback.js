@@ -195,15 +195,11 @@ function hideCityError() {
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
-    // Wait to see if Google Places loads successfully
+    // Force fallback system since Google Places is temporarily disabled
+    console.log('Google Places temporarily disabled, using fallback system');
     setTimeout(() => {
-        if (typeof google === 'undefined' || !google.maps || !google.maps.places) {
-            console.log('Google Places API not available, using fallback system');
-            initAddressFallback();
-        } else {
-            console.log('Google Places API available, fallback not needed');
-        }
-    }, 3000);
+        initAddressFallback();
+    }, 1000);
 });
 
 // Also initialize when checkout modal is shown
