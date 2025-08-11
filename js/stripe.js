@@ -377,8 +377,8 @@ function showCustomCheckoutModal(cartItems) {
                                             <input type="text" class="form-control" id="address1" placeholder="123 Main Street" required>
                                         </div>
                                         <div class="col-md-4 mb-3">
-                                            <label for="apartment" class="form-label">Apartment # <small class="text-muted">(optional)</small></label>
-                                            <input type="text" class="form-control" id="apartment" placeholder="Apt 4B">
+                                            <label for="apartment" class="form-label">Apt: #</label>
+                                            <input type="text" class="form-control" id="apartment" placeholder="4B">
                                         </div>
                                     </div>
                                     <div class="mb-3">
