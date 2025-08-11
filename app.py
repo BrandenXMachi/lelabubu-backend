@@ -271,7 +271,8 @@ This notification was sent automatically from LeLabubu.ca
                     'quantity': 1,
                 })
                 
-                # Create Stripe checkout session with shipping address collection
+                # Create Stripe checkout session WITHOUT shipping address collection
+                # Address collection is now handled by our custom checkout modal
                 checkout_session = stripe.checkout.Session.create(
                     payment_method_types=['card'],
                     line_items=line_items,
@@ -280,9 +281,7 @@ This notification was sent automatically from LeLabubu.ca
                     cancel_url=YOUR_DOMAIN + '/cart.html',
                     metadata=metadata,
                     client_reference_id=user_id,
-                    shipping_address_collection={
-                        'allowed_countries': ['CA', 'US', 'GB', 'FR', 'DE', 'AU', 'JP', 'KR', 'CN', 'MX', 'BR', 'IN', 'IT', 'ES', 'NL', 'SE', 'NO', 'DK', 'FI', 'BE', 'AT', 'CH', 'IE', 'PT', 'GR', 'PL', 'CZ', 'HU', 'RO', 'BG', 'HR', 'SI', 'SK', 'LT', 'LV', 'EE', 'LU', 'MT', 'CY'],
-                    },
+                    # Removed shipping_address_collection to use our custom form instead
                     automatic_tax={'enabled': False},
                 )
                 
@@ -301,13 +300,15 @@ This notification was sent automatically from LeLabubu.ca
                 'quantity': 1,
             }]
             
-            # Create Stripe checkout session
+            # Create Stripe checkout session WITHOUT shipping address collection
+            # Address collection is now handled by our custom checkout modal
             checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card'],
                 line_items=line_items,
                 mode='payment',
                 success_url=YOUR_DOMAIN + '/success.html',
                 cancel_url=YOUR_DOMAIN + '/cart.html',
+                # Removed shipping_address_collection to use our custom form instead
             )
             
             # Redirect to Stripe Checkout

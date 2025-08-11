@@ -1885,3 +1885,123 @@ body.checkout-active {
         padding: 10px 12px;
     }
 }
+
+/* Google Places Autocomplete Dropdown Styling */
+.pac-container {
+    z-index: 99999 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    border: 1px solid #e0e0e0 !important;
+    font-family: inherit !important;
+    display: block !important;
+    position: fixed !important;
+    background: white !important;
+    min-width: 300px !important;
+    max-width: 400px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.pac-item {
+    padding: 12px 16px !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    cursor: pointer !important;
+    font-size: 14px !important;
+    background: white !important;
+    color: #333 !important;
+    display: block !important;
+}
+
+.pac-item:hover {
+    background-color: #f8f9fa !important;
+    color: #333 !important;
+}
+
+.pac-item-selected {
+    background-color: #e3f2fd !important;
+    color: #333 !important;
+}
+
+.pac-matched {
+    font-weight: 600 !important;
+    color: #1976d2 !important;
+}
+
+/* Force visibility for Google Places dropdown */
+.pac-container:after {
+    content: '' !important;
+    display: block !important;
+    clear: both !important;
+}
+
+/* Ensure dropdown appears above modal content */
+.modal .pac-container {
+    z-index: 99999 !important;
+    position: fixed !important;
+}
+
+/* Bootstrap modal z-index override for Google Places */
+.modal-backdrop {
+    z-index: 1040 !important;
+}
+
+.modal {
+    z-index: 1050 !important;
+}
+
+.modal-dialog {
+    z-index: 1051 !important;
+}
+
+/* Force Google Places dropdown to appear */
+.pac-container {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+/* Make sure the input field triggers dropdown properly */
+#autocomplete:focus + .pac-container,
+#autocomplete:active + .pac-container,
+.pac-container[style*="display: none"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Additional styling to ensure dropdown visibility */
+.pac-container:empty {
+    display: none !important;
+}
+
+.pac-container:not(:empty) {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Google Places New PlaceAutocompleteElement Styling */
+gmp-placeautocomplete {
+    width: 100% !important;
+    padding: 12px 15px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 6px !important;
+    font-size: 0.95rem !important;
+    transition: all 0.3s ease !important;
+    font-family: inherit !important;
+}
+
+gmp-placeautocomplete:focus-within {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px rgba(75, 26, 140, 0.1) !important;
+}
+
+gmp-placeautocomplete input {
+    width: 100% !important;
+    border: none !important;
+    outline: none !important;
+    font-family: inherit !important;
+    font-size: 0.95rem !important;
+    background: transparent !important;
+}

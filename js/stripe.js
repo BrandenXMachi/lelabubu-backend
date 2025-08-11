@@ -371,15 +371,15 @@ function showCustomCheckoutModal(cartItems) {
                                         <label for="city" class="form-label">City *</label>
                                         <input type="text" class="form-control" id="city" required>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="autocomplete" class="form-label">Address Line 1 *</label>
-                                        <input type="text" class="form-control" id="autocomplete" placeholder="Start typing your address..." required>
-                                        <input type="hidden" id="selected-address">
-                                        <input type="hidden" id="address1">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="address2" class="form-label">Address Line 2</label>
-                                        <input type="text" class="form-control" id="address2">
+                                    <div class="row">
+                                        <div class="col-md-8 mb-3">
+                                            <label for="address1" class="form-label">Address *</label>
+                                            <input type="text" class="form-control" id="address1" placeholder="123 Main Street" required>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="apartment" class="form-label">Apartment # <small class="text-muted">(optional)</small></label>
+                                            <input type="text" class="form-control" id="apartment" placeholder="Apt 4B">
+                                        </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="postalCode" class="form-label">Postal Code *</label>
@@ -495,13 +495,6 @@ function showCustomCheckoutModal(cartItems) {
     // Setup event listeners
     setupCheckoutEventListeners(cartItems);
     
-    // Initialize Google Places autocomplete after modal is shown
-    modal._element.addEventListener('shown.bs.modal', function() {
-        // Initialize Google Places autocomplete if available
-        if (typeof initAutocomplete === 'function') {
-            setTimeout(initAutocomplete, 100); // Small delay to ensure DOM is ready
-        }
-    });
     
     // Show modal
     modal.show();
@@ -771,13 +764,17 @@ async function processCustomCheckout(cartItems) {
     
     try {
         // Get form data
+        const apartment = document.getElementById('apartment').value;
+        const addressLine1 = document.getElementById('address1').value;
+        const fullAddress = apartment ? `${addressLine1}, ${apartment}` : addressLine1;
+        
         const formData = {
             firstName: document.getElementById('firstName').value,
             lastName: document.getElementById('lastName').value,
             email: document.getElementById('email').value,
             address: {
-                line1: document.getElementById('address1').value,
-                line2: document.getElementById('address2').value,
+                line1: fullAddress,
+                line2: '',
                 city: document.getElementById('city').value,
                 state: document.getElementById('province').value || '',
                 postal_code: document.getElementById('postalCode').value,
