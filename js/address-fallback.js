@@ -195,28 +195,22 @@ function hideCityError() {
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
-    // Wait a bit to ensure other scripts have loaded
+    // Always initialize fallback system since Google Places is disabled
+    console.log('Initializing address fallback system (Google Places disabled)');
     setTimeout(() => {
-        // Only initialize fallback if Google Places isn't working
-        if (typeof google === 'undefined' || !google.maps || !google.maps.places) {
-            console.log('Google Places API not available, using fallback system');
-            initAddressFallback();
-        } else {
-            console.log('Google Places API available, fallback not needed');
-        }
-    }, 2000);
+        initAddressFallback();
+    }, 1000);
 });
 
 // Also initialize when checkout modal is shown
 document.addEventListener('DOMContentLoaded', function() {
-    // Listen for modal events
-    const checkoutModal = document.getElementById('customCheckoutModal');
+    // Listen for modal events - try both possible modal IDs
+    const checkoutModal = document.getElementById('checkoutModal') || document.getElementById('customCheckoutModal');
     if (checkoutModal) {
         checkoutModal.addEventListener('shown.bs.modal', function() {
+            console.log('Checkout modal opened, ensuring fallback system is active');
             setTimeout(() => {
-                if (typeof google === 'undefined' || !google.maps || !google.maps.places) {
-                    initAddressFallback();
-                }
+                initAddressFallback();
             }, 500);
         });
     }
