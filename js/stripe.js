@@ -348,7 +348,7 @@ function showCustomCheckoutModal(cartItems) {
                                             </select>
                                         </div>
                                         <div class="col-md-6 mb-3" id="provinceContainer" style="display: none;">
-                                            <label for="province" class="form-label">Province *</label>
+                                            <label for="province" class="form-label">Province</label>
                                             <select class="form-select" id="province">
                                                 <option value="">Select Province</option>
                                                 <option value="AB">Alberta</option>
@@ -593,13 +593,16 @@ function setupCheckoutEventListeners(cartItems) {
     document.getElementById('country').addEventListener('change', function() {
         const provinceContainer = document.getElementById('provinceContainer');
         const province = document.getElementById('province');
+        const provinceLabel = provinceContainer.querySelector('label');
         
         if (this.value === 'CA') {
             provinceContainer.style.display = 'block';
             province.required = true;
+            provinceLabel.innerHTML = 'Province *';
         } else {
             provinceContainer.style.display = 'none';
             province.required = false;
+            province.value = ''; // Clear selection when hiding
         }
         
         // Calculate shipping when address changes
