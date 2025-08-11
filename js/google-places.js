@@ -24,46 +24,9 @@ function initAutocomplete() {
     }
 
     try {
-        // Use the new PlaceAutocompleteElement if available, fallback to old Autocomplete
-        if (google.maps.places.PlaceAutocompleteElement) {
-            console.log('Using new PlaceAutocompleteElement');
-            
-            try {
-                // Create the new autocomplete element with correct configuration
-                const autocompleteElement = new google.maps.places.PlaceAutocompleteElement();
-                
-                // Set country restriction to Canada
-                autocompleteElement.componentRestrictions = { country: 'ca' };
-                
-                // Replace the input with the autocomplete element
-                input.parentNode.replaceChild(autocompleteElement, input);
-                
-                // Add listener for place selection
-                autocompleteElement.addEventListener('gmp-placeselect', (event) => {
-                    const place = event.place;
-                    onPlaceChangedNew(place);
-                });
-                
-                autocomplete = autocompleteElement;
-                console.log('New PlaceAutocompleteElement initialized successfully');
-            } catch (newApiError) {
-                console.log('New API failed, falling back to legacy:', newApiError);
-                // Fall back to legacy API
-                initLegacyAutocomplete(input);
-            }
-        } else {
-            console.log('Using legacy Autocomplete');
-            
-            // Create autocomplete object, restricting the search predictions to Canada
-            autocomplete = new google.maps.places.Autocomplete(input, {
-                componentRestrictions: { country: 'ca' }, // Restrict to Canada
-                fields: ['address_components', 'formatted_address', 'geometry', 'name'],
-                types: ['address'] // Only show address suggestions
-            });
-
-            // Add listener for when a place is selected
-            autocomplete.addListener('place_changed', onPlaceChanged);
-        }
+        // Always use legacy Autocomplete for now since it's more reliable
+        console.log('Using legacy Autocomplete API');
+        initLegacyAutocomplete(input);
         
         console.log('Google Places Autocomplete initialized for Canada');
     } catch (error) {
