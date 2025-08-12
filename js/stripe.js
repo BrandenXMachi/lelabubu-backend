@@ -492,12 +492,13 @@ function showCustomCheckoutModal(cartItems) {
     // Setup Stripe Elements
     setupStripeElements();
     
-    // Setup event listeners
-    setupCheckoutEventListeners(cartItems);
-    
-    
     // Show modal
     modal.show();
+    
+    // Setup event listeners after modal is shown
+    document.getElementById('customCheckoutModal').addEventListener('shown.bs.modal', function () {
+        setupCheckoutEventListeners(cartItems);
+    });
 }
 
 // Setup order summary in checkout modal
@@ -587,72 +588,106 @@ function setupStripeElements() {
     };
 }
 
+// Global flag to prevent multiple event listener setups
+let checkoutEventListenersSetup = false;
+
 // Setup event listeners for checkout modal
 function setupCheckoutEventListeners(cartItems) {
+    console.log('Setting up checkout event listeners'); // Debug log
+    
+    // Get modal elements
+    const countrySelect = document.getElementById('country');
+    const provinceContainer = document.getElementById('provinceContainer');
+    const provinceSelect = document.getElementById('province');
+    const cityInput = document.getElementById('city');
+    const postalCodeInput = document.getElementById('postalCode');
+    const form = document.getElementById('checkoutForm');
+    const cardholderName = document.getElementById('cardholderName');
+    const completePaymentBtn = document.getElementById('completePayment');
+    
+    if (!countrySelect) {
+        console.error('Country select element not found');
+        return;
+    }
+    
     // Country change handler
-    document.getElementById('country').addEventListener('change', function() {
-        const provinceContainer = document.getElementById('provinceContainer');
-        const province = document.getElementById('province');
+    countrySelect.addEventListener('change', function() {
+        console.log('Country changed to:', this.value); // Debug log
         const provinceLabel = provinceContainer.querySelector('label');
         
         if (this.value === 'CA') {
+            console.log('Showing province container'); // Debug log
             provinceContainer.style.display = 'block';
-            province.required = true;
-            provinceLabel.innerHTML = 'Province *';
+            provinceSelect.required = true;
+            if (provinceLabel) {
+                provinceLabel.innerHTML = 'Province *';
+            }
         } else {
+            console.log('Hiding province container'); // Debug log
             provinceContainer.style.display = 'none';
-            province.required = false;
-            province.value = ''; // Clear selection when hiding
+            provinceSelect.required = false;
+            provinceSelect.value = ''; // Clear selection when hiding
         }
         
         // Calculate shipping when address changes
         calculateShippingCost(cartItems);
     });
     
-    // City change handler
-    document.getElementById('city').addEventListener('input', function() {
-        calculateShippingCost(cartItems);
-    });
-    
     // Province change handler
-    document.getElementById('province').addEventListener('change', function() {
-        calculateShippingCost(cartItems);
-    });
+    if (provinceSelect) {
+        provinceSelect.addEventListener('change', function() {
+            calculateShippingCost(cartItems);
+        });
+    }
     
-    // Complete payment button
-    document.getElementById('completePayment').addEventListener('click', function() {
-        processCustomCheckout(cartItems);
-    });
+    // City change handler
+    if (cityInput) {
+        cityInput.addEventListener('input', function() {
+            calculateShippingCost(cartItems);
+        });
+    }
+    
+    // Postal code formatting for Canadian postal codes
+    if (postalCodeInput) {
+        postalCodeInput.addEventListener('input', function(e) {
+            let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            
+            // Format Canadian postal code (A1A 1A1)
+            if (value.length > 3) {
+                value = value.substring(0, 3) + ' ' + value.substring(3, 6);
+            }
+            
+            e.target.value = value;
+            
+            // Trigger shipping calculation if we have enough info
+            if (value.length >= 6) {
+                calculateShippingCost(cartItems);
+            }
+        });
+    }
     
     // Form validation
-    const form = document.getElementById('checkoutForm');
-    const cardholderName = document.getElementById('cardholderName');
-    
     function validateForm() {
-        const isFormValid = form.checkValidity() && cardholderName.value.trim() !== '';
-        document.getElementById('completePayment').disabled = !isFormValid;
+        if (form && cardholderName && completePaymentBtn) {
+            const isFormValid = form.checkValidity() && cardholderName.value.trim() !== '';
+            completePaymentBtn.disabled = !isFormValid;
+        }
     }
     
     // Add validation listeners
-    form.addEventListener('input', validateForm);
-    cardholderName.addEventListener('input', validateForm);
+    if (form) {
+        form.addEventListener('input', validateForm);
+    }
+    if (cardholderName) {
+        cardholderName.addEventListener('input', validateForm);
+    }
     
-    // Postal code formatting for Canadian postal codes
-    document.getElementById('postalCode').addEventListener('input', function(e) {
-        let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-        
-        // Format Canadian postal code (A1A 1A1)
-        if (value.length > 3) {
-            value = value.substring(0, 3) + ' ' + value.substring(3, 6);
-        }
-        
-        e.target.value = value;
-        
-        // Trigger shipping calculation if we have enough info
-        if (value.length >= 6) {
-            calculateShippingCost(cartItems);
-        }
-    });
+    // Complete payment button
+    if (completePaymentBtn) {
+        completePaymentBtn.addEventListener('click', function() {
+            processCustomCheckout(cartItems);
+        });
+    }
     
     // Add custom styles for the payment section
     if (!document.querySelector('style[data-payment-styles]')) {
@@ -700,6 +735,8 @@ function setupCheckoutEventListeners(cartItems) {
         `;
         document.head.appendChild(paymentStyles);
     }
+    
+    console.log('Checkout event listeners setup complete'); // Debug log
 }
 
 // Calculate shipping cost based on address
