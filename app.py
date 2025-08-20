@@ -109,21 +109,29 @@ def create_checkout_session():
     try:
         # Check if the request is a form submission or JSON
         if request.is_json:
-            # Handle JSON request (from cart.html) - Only use Stripe Checkout
+            # Handle JSON request from new modern checkout system
             data = request.json
             cart_items = data.get('items', [])
+            customer_info = data.get('customer', {})
+            delivery_fee = data.get('deliveryFee', 0)
             
             if not cart_items:
                 return jsonify({'error': 'No items in cart'}), 400
             
             # Create metadata with order details
             user_id = session.get('user_id')
+            customer_address = customer_info.get('address', {})
+            
             metadata = {
                 'user_id': user_id,
-                'items': ', '.join([f"{item['name']} x {item['quantity']}" for item in cart_items])
+                'items': ', '.join([f"{item['name']} x {item['quantity']}" for item in cart_items]),
+                'customer_name': f"{customer_info.get('firstName', '')} {customer_info.get('lastName', '')}".strip(),
+                'customer_email': customer_info.get('email', ''),
+                'delivery_fee': str(delivery_fee),
+                'shipping_city': customer_address.get('city', ''),
+                'shipping_country': customer_address.get('country', '')
             }
             
-            # Always use Stripe Checkout (no custom checkout modal)
             # Create line items for Stripe Checkout
             line_items = []
             for item in cart_items:
@@ -132,78 +140,45 @@ def create_checkout_session():
                         'currency': 'cad',
                         'product_data': {
                             'name': item['name'],
-                            'images': [item['image']] if 'image' in item else [],
+                            'images': [item['image']] if item.get('image') else [],
                         },
                         'unit_amount': int(float(item['price']) * 100),  # Convert to cents
                     },
                     'quantity': item['quantity'],
                 })
             
-            # Create shipping rate options for Stripe
-            shipping_options = [
-                {
-                    'shipping_rate_data': {
-                        'type': 'fixed_amount',
-                        'fixed_amount': {
-                            'amount': 0,
-                            'currency': 'cad',
+            # Add delivery fee as a separate line item if applicable
+            if delivery_fee > 0:
+                # Determine delivery type based on fee
+                if delivery_fee == 25:
+                    delivery_name = "Canada Delivery (1-2 weeks)"
+                elif delivery_fee == 40:
+                    delivery_name = "International Delivery (2-3 weeks)"
+                else:
+                    delivery_name = f"Delivery Fee"
+                
+                line_items.append({
+                    'price_data': {
+                        'currency': 'cad',
+                        'product_data': {
+                            'name': delivery_name,
                         },
-                        'display_name': 'Free Shipping - Montreal Only',
-                        'delivery_estimate': {
-                            'minimum': {
-                                'unit': 'week',
-                                'value': 1,
-                            },
-                            'maximum': {
-                                'unit': 'week',
-                                'value': 2,
-                            },
-                        },
+                        'unit_amount': int(delivery_fee * 100),  # Convert to cents
                     },
-                },
-                {
-                    'shipping_rate_data': {
-                        'type': 'fixed_amount',
-                        'fixed_amount': {
-                            'amount': 2500,  # $25.00 CAD
-                            'currency': 'cad',
-                        },
-                        'display_name': 'Standard Shipping - Canada',
-                        'delivery_estimate': {
-                            'minimum': {
-                                'unit': 'week',
-                                'value': 1,
-                            },
-                            'maximum': {
-                                'unit': 'week',
-                                'value': 2,
-                            },
-                        },
-                    },
-                },
-                {
-                    'shipping_rate_data': {
-                        'type': 'fixed_amount',
-                        'fixed_amount': {
-                            'amount': 4000,  # $40.00 CAD
-                            'currency': 'cad',
-                        },
-                        'display_name': 'International Shipping',
-                        'delivery_estimate': {
-                            'minimum': {
-                                'unit': 'week',
-                                'value': 2,
-                            },
-                            'maximum': {
-                                'unit': 'week',
-                                'value': 3,
-                            },
-                        },
-                    },
-                },
-            ]
+                    'quantity': 1,
+                })
             
-            # Create Stripe checkout session WITH shipping address collection and shipping options
+            # Pre-fill customer information if provided
+            customer_data = {}
+            if customer_info.get('email'):
+                customer_data['customer_email'] = customer_info['email']
+            
+            # Pre-fill shipping address if provided
+            shipping_address_collection = {
+                'allowed_countries': ['CA', 'US', 'GB', 'FR', 'DE', 'AU', 'JP', 'CN']
+            }
+            
+            # Create Stripe checkout session
             checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card'],
                 line_items=line_items,
@@ -212,107 +187,16 @@ def create_checkout_session():
                 cancel_url=YOUR_DOMAIN + '/cart.html',
                 metadata=metadata,
                 client_reference_id=user_id,
-                shipping_address_collection={
-                    'allowed_countries': ['CA', 'US', 'GB', 'FR', 'DE', 'AU', 'JP']
-                },
-                shipping_options=shipping_options,
+                shipping_address_collection=shipping_address_collection,
                 automatic_tax={'enabled': False},
+                **customer_data
             )
             
             # Return the session ID to the client
             return jsonify({'id': checkout_session.id})
         else:
-            # Handle form submission (from index.html)
-            line_items = [{
-                'price_data': {
-                    'currency': 'cad',
-                    'unit_amount': 2000,  # $20.00
-                    'product_data': {
-                        'name': 'Lelabubu Item',
-                    },
-                },
-                'quantity': 1,
-            }]
-            
-            # Create shipping rate options for single item purchase
-            shipping_options = [
-                {
-                    'shipping_rate_data': {
-                        'type': 'fixed_amount',
-                        'fixed_amount': {
-                            'amount': 0,
-                            'currency': 'cad',
-                        },
-                        'display_name': 'Free Shipping - Montreal Only',
-                        'delivery_estimate': {
-                            'minimum': {
-                                'unit': 'week',
-                                'value': 1,
-                            },
-                            'maximum': {
-                                'unit': 'week',
-                                'value': 2,
-                            },
-                        },
-                    },
-                },
-                {
-                    'shipping_rate_data': {
-                        'type': 'fixed_amount',
-                        'fixed_amount': {
-                            'amount': 2500,  # $25.00 CAD
-                            'currency': 'cad',
-                        },
-                        'display_name': 'Standard Shipping - Canada',
-                        'delivery_estimate': {
-                            'minimum': {
-                                'unit': 'week',
-                                'value': 1,
-                            },
-                            'maximum': {
-                                'unit': 'week',
-                                'value': 2,
-                            },
-                        },
-                    },
-                },
-                {
-                    'shipping_rate_data': {
-                        'type': 'fixed_amount',
-                        'fixed_amount': {
-                            'amount': 4000,  # $40.00 CAD
-                            'currency': 'cad',
-                        },
-                        'display_name': 'International Shipping',
-                        'delivery_estimate': {
-                            'minimum': {
-                                'unit': 'week',
-                                'value': 2,
-                            },
-                            'maximum': {
-                                'unit': 'week',
-                                'value': 3,
-                            },
-                        },
-                    },
-                },
-            ]
-            
-            # Create Stripe checkout session WITH shipping address collection and shipping options
-            checkout_session = stripe.checkout.Session.create(
-                payment_method_types=['card'],
-                line_items=line_items,
-                mode='payment',
-                success_url=YOUR_DOMAIN + '/success.html',
-                cancel_url=YOUR_DOMAIN + '/cart.html',
-                shipping_address_collection={
-                    'allowed_countries': ['CA', 'US', 'GB', 'FR', 'DE', 'AU', 'JP']
-                },
-                shipping_options=shipping_options
-            )
-            
-            # Redirect to Stripe Checkout
-            return redirect(checkout_session.url, code=303)
+            # Only accept JSON requests for the modern checkout system
+            return jsonify({'error': 'This endpoint only accepts JSON requests from the modern checkout system'}), 400
     except Exception as e:
         if request.is_json:
             return jsonify({'error': str(e)}), 500
