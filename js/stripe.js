@@ -57,33 +57,10 @@ function handleCheckout(e) {
         return;
     }
     
-    // Show custom checkout modal instead of redirecting to Stripe
-    showCustomCheckoutModal(cart);
-}
-
-// Legacy function for old checkout (kept for compatibility)
-function handleOldCheckout(e) {
-    e.preventDefault();
-    
-    // Get cart data
-    let cart = [];
-    try {
-        const savedCart = localStorage.getItem('lelabubuCart');
-        if (savedCart) {
-            cart = JSON.parse(savedCart);
-        }
-    } catch (error) {
-        console.error('Error loading cart:', error);
-    }
-    
-    if (!cart || cart.length === 0) {
-        alert('Your cart is empty. Please add some products before checkout.');
-        return;
-    }
-    
-    // Process checkout with Stripe
+    // Process checkout with Stripe (redirect to Stripe's secure checkout)
     processStripeCheckout(cart);
 }
+
 
 // Initialize buy now buttons on product pages
 function initBuyNowButtons() {
@@ -300,8 +277,11 @@ function addToCartAndCheckout(productData) {
     processStripeCheckout(cart);
 }
 
-// Show custom checkout modal with address collection and dynamic shipping
-function showCustomCheckoutModal(cartItems) {
+// REMOVED: Custom checkout modal - using Stripe's secure hosted checkout instead
+// The showCustomCheckoutModal function and all related functions have been removed
+// to ensure only the secure Stripe-hosted checkout is used
+
+/*
     // Create modal HTML
     const modalHTML = `
         <div class="modal fade" id="customCheckoutModal" tabindex="-1" aria-labelledby="customCheckoutModalLabel" aria-hidden="true">
@@ -615,7 +595,7 @@ function setupCheckoutEventListeners(cartItems) {
         console.log('Country changed to:', this.value); // Debug log
         const provinceLabel = provinceContainer.querySelector('label');
         
-        if (this.value === 'CA') {
+        if (this.value === 'CA' || this.value === 'Canada') {
             console.log('Showing province container'); // Debug log
             provinceContainer.style.display = 'block';
             provinceSelect.required = true;
@@ -910,5 +890,7 @@ async function processCustomCheckout(cartItems) {
 window.buyProduct = buyProduct;
 window.addToCartAndCheckout = addToCartAndCheckout;
 window.processStripeCheckout = processStripeCheckout;
+
+*/
 
 console.log('Stripe integration loaded successfully');

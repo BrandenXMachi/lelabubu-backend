@@ -94,38 +94,12 @@ def create_checkout_session():
     try:
         # Check if the request is a form submission or JSON
         if request.is_json:
-            # Handle JSON request (from cart.html or custom checkout)
+            # Handle JSON request (from cart.html) - Only use Stripe Checkout
             data = request.json
             cart_items = data.get('items', [])
-            customer_info = data.get('customer', {})
-            payment_method_id = data.get('payment_method_id', None)
             
             if not cart_items:
                 return jsonify({'error': 'No items in cart'}), 400
-            
-            # Calculate amount
-            amount = sum(int(float(item['price']) * 100) * item['quantity'] for item in cart_items)
-            
-            # Add shipping cost based on location
-            shipping_cost = 0
-            if customer_info and customer_info.get('address', {}):
-                city = customer_info.get('address', {}).get('city', '').lower()
-                country = customer_info.get('address', {}).get('country', '').lower()
-                
-                # Free shipping in Montreal
-                if city in ['montreal', 'montréal']:
-                    shipping_cost = 0
-                # $25 shipping elsewhere in Canada
-                elif country in ['canada', 'ca']:
-                    shipping_cost = 2500  # $25.00 in cents
-                # $40 shipping outside Canada
-                else:
-                    shipping_cost = 4000  # $40.00 in cents
-            
-            amount += shipping_cost
-            
-            # Create a description of the purchase
-            description = f"Purchase from LeLabubu.ca - {len(cart_items)} item(s)"
             
             # Create metadata with order details
             user_id = session.get('user_id')
@@ -134,159 +108,53 @@ def create_checkout_session():
                 'items': ', '.join([f"{item['name']} x {item['quantity']}" for item in cart_items])
             }
             
-            if payment_method_id:
-                # Create a PaymentIntent for custom checkout
-                try:
-                    payment_intent = stripe.PaymentIntent.create(
-                        amount=amount,
-                        currency='cad',
-                        payment_method=payment_method_id,
-                        description=description,
-                        metadata=metadata,
-                        receipt_email=customer_info.get('email') if customer_info else None,
-                        shipping={
-                            'name': f"{customer_info.get('firstName', '')} {customer_info.get('lastName', '')}" if customer_info else '',
-                            'address': {
-                                'line1': customer_info.get('address', {}).get('line1', ''),
-                                'line2': customer_info.get('address', {}).get('line2', ''),
-                                'city': customer_info.get('address', {}).get('city', ''),
-                                'state': customer_info.get('address', {}).get('state', ''),
-                                'postal_code': customer_info.get('address', {}).get('postal_code', ''),
-                                'country': customer_info.get('address', {}).get('country', 'CA')
-                            }
-                        } if customer_info and customer_info.get('address') else None,
-                        confirm=True,
-                        return_url=YOUR_DOMAIN + '/success.html'
-                    )
-                    
-                    # If payment succeeded, send order notification email
-                    if payment_intent.status == 'succeeded':
-                        try:
-                            # Send order notification email to store owner
-                            items_text = '\n'.join([f"• {item['name']} x {item['quantity']} - ${float(item['price']):.2f} CAD" for item in cart_items])
-                            
-                            # Format shipping address
-                            address = customer_info.get('address', {})
-                            address_lines = []
-                            if address.get('line1'):
-                                address_lines.append(address['line1'])
-                            if address.get('line2'):
-                                address_lines.append(address['line2'])
-                            if address.get('city'):
-                                address_lines.append(address['city'])
-                            if address.get('state'):
-                                address_lines.append(address['state'])
-                            if address.get('postal_code'):
-                                address_lines.append(address['postal_code'])
-                            if address.get('country'):
-                                address_lines.append(address['country'])
-                            
-                            formatted_address = '\n'.join(address_lines) if address_lines else 'Not provided'
-                            
-                            msg = Message(
-                                subject=f"New Order #{payment_intent.id[:8]} - ${amount/100:.2f} CAD",
-                                sender=app.config['MAIL_DEFAULT_SENDER'],
-                                recipients=['contact@lelabubu.ca']
-                            )
-                            
-                            msg.body = f"""
-🎉 NEW ORDER RECEIVED - LeLabubu.ca
-
-ORDER DETAILS:
-Order ID: {payment_intent.id}
-Amount: ${amount/100:.2f} CAD
-Shipping: ${shipping_cost/100:.2f} CAD
-Payment Status: ✅ PAID
-
-CUSTOMER INFORMATION:
-Name: {customer_info.get('firstName', '')} {customer_info.get('lastName', '')}
-Email: {customer_info.get('email', '')}
-Cardholder: {customer_info.get('cardholderName', '')}
-
-SHIPPING INFORMATION:
-Ship to: {customer_info.get('firstName', '')} {customer_info.get('lastName', '')}
-Address:
-{formatted_address}
-
-ITEMS ORDERED:
-{items_text}
-
----
-Login to your Stripe dashboard for full payment details:
-https://dashboard.stripe.com/payments/{payment_intent.id}
-
-This notification was sent automatically from LeLabubu.ca
-                            """
-                            
-                            mail.send(msg)
-                            print(f"Order notification email sent for payment {payment_intent.id}")
-                            
-                        except Exception as e:
-                            print(f"Failed to send order notification email: {str(e)}")
-                            # Don't fail the payment if email fails
-                    
-                    # Return success response
-                    return jsonify({
-                        'success': payment_intent.status == 'succeeded',
-                        'payment_intent_id': payment_intent.id,
-                        'status': payment_intent.status
-                    })
-                    
-                except stripe.error.CardError as e:
-                    # Card was declined
-                    return jsonify({'error': f'Your card was declined: {e.user_message}'}), 400
-                except stripe.error.StripeError as e:
-                    # Other Stripe error
-                    return jsonify({'error': f'Payment failed: {str(e)}'}), 400
-                except Exception as e:
-                    # General error
-                    return jsonify({'error': f'An error occurred: {str(e)}'}), 500
-            else:
-                # Create line items for Stripe Checkout
-                line_items = []
-                for item in cart_items:
-                    line_items.append({
-                        'price_data': {
-                            'currency': 'cad',
-                            'product_data': {
-                                'name': item['name'],
-                                'images': [item['image']] if 'image' in item else [],
-                            },
-                            'unit_amount': int(float(item['price']) * 100),  # Convert to cents
-                        },
-                        'quantity': item['quantity'],
-                    })
-                
-                # Add shipping as a line item (will be calculated automatically based on address)
-                # We'll add a placeholder shipping item that will be updated via webhook
+            # Always use Stripe Checkout (no custom checkout modal)
+            # Create line items for Stripe Checkout
+            line_items = []
+            for item in cart_items:
                 line_items.append({
                     'price_data': {
                         'currency': 'cad',
                         'product_data': {
-                            'name': 'Shipping (calculated based on address)',
-                            'description': 'Free for Montreal, $25 Canada, $40 International',
+                            'name': item['name'],
+                            'images': [item['image']] if 'image' in item else [],
                         },
-                        'unit_amount': 2500,  # Default to Canada shipping, will be adjusted
+                        'unit_amount': int(float(item['price']) * 100),  # Convert to cents
                     },
-                    'quantity': 1,
+                    'quantity': item['quantity'],
                 })
-                
-                # Create Stripe checkout session WITHOUT shipping address collection
-                # Address collection is now handled by our custom checkout modal
-                checkout_session = stripe.checkout.Session.create(
-                    payment_method_types=['card'],
-                    line_items=line_items,
-                    mode='payment',
-                    success_url=YOUR_DOMAIN + '/success.html?session_id={CHECKOUT_SESSION_ID}',
-                    cancel_url=YOUR_DOMAIN + '/cart.html',
-                    metadata=metadata,
-                    client_reference_id=user_id,
-                    # Removed shipping_address_collection to use our custom form instead
-                    automatic_tax={'enabled': False},
-                )
-                
-                # Return the session ID to the client
-                return jsonify({'id': checkout_session.id})
+            
+            # Add shipping as a line item (will be calculated automatically based on address)
+            # We'll add a placeholder shipping item that will be updated via webhook
+            line_items.append({
+                'price_data': {
+                    'currency': 'cad',
+                    'product_data': {
+                        'name': 'Shipping (calculated based on address)',
+                        'description': 'Free for Montreal, $25 Canada, $40 International',
+                    },
+                    'unit_amount': 2500,  # Default to Canada shipping, will be adjusted
+                },
+                'quantity': 1,
+            })
+            
+            # Create Stripe checkout session WITH shipping address collection
+            checkout_session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=line_items,
+                mode='payment',
+                success_url=YOUR_DOMAIN + '/success.html?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url=YOUR_DOMAIN + '/cart.html',
+                metadata=metadata,
+                client_reference_id=user_id,
+                shipping_address_collection={
+                    'allowed_countries': ['CA', 'US', 'GB', 'FR', 'DE', 'AU', 'JP']
+                },
+                automatic_tax={'enabled': False},
+            )
+            
+            # Return the session ID to the client
+            return jsonify({'id': checkout_session.id})
         else:
             # Handle form submission (from index.html)
             line_items = [{
@@ -300,15 +168,16 @@ This notification was sent automatically from LeLabubu.ca
                 'quantity': 1,
             }]
             
-            # Create Stripe checkout session WITHOUT shipping address collection
-            # Address collection is now handled by our custom checkout modal
+            # Create Stripe checkout session WITH shipping address collection
             checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card'],
                 line_items=line_items,
                 mode='payment',
                 success_url=YOUR_DOMAIN + '/success.html',
                 cancel_url=YOUR_DOMAIN + '/cart.html',
-                # Removed shipping_address_collection to use our custom form instead
+                shipping_address_collection={
+                    'allowed_countries': ['CA', 'US', 'GB', 'FR', 'DE', 'AU', 'JP']
+                }
             )
             
             # Redirect to Stripe Checkout
