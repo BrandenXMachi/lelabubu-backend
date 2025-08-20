@@ -211,10 +211,29 @@
                                                         <option value="OTHER">Other</option>
                                                     </select>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
-                                                    <label for="city" class="form-label">City *</label>
-                                                    <input type="text" class="form-control" id="city" required>
+                                                <div class="col-md-6 mb-3" id="provinceField" style="display: none;">
+                                                    <label for="province" class="form-label">Province *</label>
+                                                    <select class="form-select" id="province">
+                                                        <option value="">Select Province</option>
+                                                        <option value="AB">Alberta</option>
+                                                        <option value="BC">British Columbia</option>
+                                                        <option value="MB">Manitoba</option>
+                                                        <option value="NB">New Brunswick</option>
+                                                        <option value="NL">Newfoundland and Labrador</option>
+                                                        <option value="NS">Nova Scotia</option>
+                                                        <option value="ON">Ontario</option>
+                                                        <option value="PE">Prince Edward Island</option>
+                                                        <option value="QC">Quebec</option>
+                                                        <option value="SK">Saskatchewan</option>
+                                                        <option value="NT">Northwest Territories</option>
+                                                        <option value="NU">Nunavut</option>
+                                                        <option value="YT">Yukon</option>
+                                                    </select>
                                                 </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="city" class="form-label">City *</label>
+                                                <input type="text" class="form-control" id="city" required>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-8 mb-3">
@@ -283,6 +302,39 @@
         document.addEventListener('DOMContentLoaded', function() {
             if (typeof displayCartItems === 'function') {
                 displayCartItems();
+            }
+            
+            // Handle province dropdown for Canada selection in checkout modal
+            const countrySelect = document.getElementById('country');
+            const provinceField = document.getElementById('provinceField');
+            const provinceSelect = document.getElementById('province');
+            
+            if (countrySelect && provinceField && provinceSelect) {
+                // Add event listener for country change
+                countrySelect.addEventListener('change', function() {
+                    if (this.value === 'CA') {
+                        // Show province field for Canada
+                        provinceField.style.display = 'block';
+                        provinceSelect.required = true;
+                    } else {
+                        // Hide province field for other countries
+                        provinceField.style.display = 'none';
+                        provinceSelect.required = false;
+                        provinceSelect.value = ''; // Clear selection
+                    }
+                });
+                
+                // Also handle modal open to reset state
+                const checkoutModal = document.getElementById('checkoutModal');
+                if (checkoutModal) {
+                    checkoutModal.addEventListener('show.bs.modal', function() {
+                        // Reset country and province on modal open
+                        countrySelect.value = '';
+                        provinceField.style.display = 'none';
+                        provinceSelect.required = false;
+                        provinceSelect.value = '';
+                    });
+                }
             }
         });
     </script>
