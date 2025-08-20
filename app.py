@@ -66,6 +66,41 @@ def index():
     # Serve the static index.html file from the root directory
     return send_from_directory('.', 'index.html')
 
+@app.route('/debug-stripe-config')
+def debug_stripe_config():
+    """Debug endpoint to check Stripe configuration"""
+    stripe_key = os.getenv('STRIPE_SECRET_KEY', 'NOT_SET')
+    
+    if stripe_key == 'NOT_SET':
+        return jsonify({
+            'error': 'STRIPE_SECRET_KEY not set',
+            'status': 'error'
+        })
+    
+    # Only show first 7 characters for security
+    key_preview = stripe_key[:7] if len(stripe_key) > 7 else stripe_key
+    
+    if stripe_key.startswith('sk_test_'):
+        mode = 'TEST'
+        status = 'error'
+        message = 'Backend is using TEST key - this will cause session mismatch!'
+    elif stripe_key.startswith('sk_live_'):
+        mode = 'LIVE'
+        status = 'success'
+        message = 'Backend is correctly using LIVE key'
+    else:
+        mode = 'UNKNOWN'
+        status = 'error'
+        message = 'Unrecognized key format'
+    
+    return jsonify({
+        'key_preview': key_preview,
+        'mode': mode,
+        'status': status,
+        'message': message,
+        'frontend_key': 'pk_live_51RerovGA2nd66MJc... (LIVE MODE)'
+    })
+
 @app.route('/calculate-shipping', methods=['POST'])
 def calculate_shipping():
     """Calculate shipping cost based on address"""
