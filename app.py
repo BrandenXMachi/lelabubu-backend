@@ -39,6 +39,21 @@ class Comment(db.Model):
     content = db.Column(db.Text, nullable=False)
 
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
+
+# Debug: Print Stripe key info (first few characters only for security)
+stripe_key = os.getenv('STRIPE_SECRET_KEY', 'NOT_SET')
+if stripe_key != 'NOT_SET':
+    key_prefix = stripe_key[:7] if len(stripe_key) > 7 else stripe_key
+    print(f"Stripe key configured: {key_prefix}...")
+    if stripe_key.startswith('sk_test_'):
+        print("WARNING: Using TEST Stripe key in production!")
+    elif stripe_key.startswith('sk_live_'):
+        print("Using LIVE Stripe key - correct for production")
+    else:
+        print("WARNING: Stripe key format not recognized!")
+else:
+    print("ERROR: STRIPE_SECRET_KEY environment variable not set!")
+
 # Determine domain based on environment
 import os
 if os.getenv('FLASK_ENV') == 'production':
