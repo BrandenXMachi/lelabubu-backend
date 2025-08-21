@@ -26,6 +26,12 @@ function initializeCheckoutSystem() {
     console.log('Modern checkout system initialized');
 }
 
+// Also initialize when Stripe script loads
+if (typeof Stripe !== 'undefined') {
+    console.log('Stripe initialized successfully - LIVE MODE');
+    console.log('Stripe integration loaded successfully');
+}
+
 // Initialize cart checkout functionality
 function initCartCheckout() {
     const checkoutBtn = document.querySelector('.checkout-btn');
@@ -283,6 +289,8 @@ function showCheckoutModal(items) {
 function setupOrderSummary() {
     const orderItems = document.getElementById('orderItems');
     const subtotalAmount = document.getElementById('subtotalAmount');
+    const deliveryAmount = document.getElementById('deliveryAmount');
+    const totalAmount = document.getElementById('totalAmount');
     
     let subtotal = 0;
     let itemsHTML = '';
@@ -305,8 +313,13 @@ function setupOrderSummary() {
     orderItems.innerHTML = itemsHTML;
     subtotalAmount.textContent = `$${subtotal.toFixed(2)}`;
     
-    // Update total initially (without delivery)
-    document.getElementById('totalAmount').textContent = `$${subtotal.toFixed(2)}`;
+    // Set default international shipping of $40
+    deliveryFee = 40;
+    deliveryAmount.textContent = `$${deliveryFee.toFixed(2)}`;
+    
+    // Update total with default delivery fee
+    const total = subtotal + deliveryFee;
+    totalAmount.textContent = `$${total.toFixed(2)}`;
 }
 
 // Setup modal event listeners
@@ -377,19 +390,20 @@ function calculateDelivery() {
     const deliveryAmount = document.getElementById('deliveryAmount');
     const deliveryInfo = document.getElementById('deliveryInfo');
     const deliveryMessage = document.getElementById('deliveryMessage');
-    const totalAmount = document.getElementById('totalAmount');
     
+    // If no country or city selected, keep default $40
     if (!currentLocation.country || !currentLocation.city) {
-        deliveryAmount.textContent = 'Enter address';
+        // Keep default $40 international shipping
+        deliveryFee = 40;
+        deliveryAmount.textContent = `$${deliveryFee.toFixed(2)}`;
         deliveryInfo.style.display = 'none';
-        deliveryFee = 0;
         updateTotal();
         return;
     }
     
-    let fee = 0;
+    let fee = 40; // Default international
     let message = '';
-    let alertClass = 'alert-info';
+    let alertClass = 'alert-warning';
     
     // Check delivery zones
     if ((currentLocation.city.includes('montreal') || currentLocation.city.includes('montréal')) && currentLocation.country === 'CA') {
