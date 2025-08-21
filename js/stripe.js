@@ -391,9 +391,8 @@ function calculateDelivery() {
     const deliveryInfo = document.getElementById('deliveryInfo');
     const deliveryMessage = document.getElementById('deliveryMessage');
     
-    // If no country or city selected, keep default $40
-    if (!currentLocation.country || !currentLocation.city) {
-        // Keep default $40 international shipping
+    // If no country selected, keep default $40
+    if (!currentLocation.country) {
         deliveryFee = 40;
         deliveryAmount.textContent = `$${deliveryFee.toFixed(2)}`;
         deliveryInfo.style.display = 'none';
@@ -406,15 +405,20 @@ function calculateDelivery() {
     let alertClass = 'alert-warning';
     
     // Check delivery zones
-    if ((currentLocation.city.includes('montreal') || currentLocation.city.includes('montréal')) && currentLocation.country === 'CA') {
-        fee = 0;
-        message = '🎉 Free delivery to Montreal! Estimated delivery: 1-2 weeks';
-        alertClass = 'alert-success';
-    } else if (currentLocation.country === 'CA') {
-        fee = 25;
-        message = `📦 Canada delivery: $${fee}. Estimated delivery: 1-2 weeks`;
-        alertClass = 'alert-info';
+    if (currentLocation.country === 'CA') {
+        // Check if Montreal is specified
+        if (currentLocation.city && (currentLocation.city.includes('montreal') || currentLocation.city.includes('montréal'))) {
+            fee = 0;
+            message = '🎉 Free delivery to Montreal! Estimated delivery: 1-2 weeks';
+            alertClass = 'alert-success';
+        } else {
+            // General Canada shipping
+            fee = 25;
+            message = `📦 Canada delivery: $${fee}. Estimated delivery: 1-2 weeks`;
+            alertClass = 'alert-info';
+        }
     } else {
+        // International shipping
         fee = 40;
         message = `🌍 International delivery: $${fee}. Estimated delivery: 2-3 weeks`;
         alertClass = 'alert-warning';
