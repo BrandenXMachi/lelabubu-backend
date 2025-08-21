@@ -246,6 +246,7 @@ def success():
 def cancel():
     return render_template('cancel.html')
 
+@app.route('/webhook', methods=['POST'])
 @app.route('/stripe-webhook', methods=['POST'])
 def stripe_webhook():
     payload = request.get_data(as_text=True)
