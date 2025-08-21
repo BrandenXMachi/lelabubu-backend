@@ -101,6 +101,25 @@ def debug_stripe_config():
         'frontend_key': 'pk_live_51RerovGA2nd66MJc... (LIVE MODE)'
     })
 
+@app.route('/debug-email-config')
+def debug_email_config():
+    """Debug endpoint to check email configuration"""
+    mail_server = app.config.get('MAIL_SERVER')
+    mail_port = app.config.get('MAIL_PORT')
+    mail_username = app.config.get('MAIL_USERNAME')
+    mail_password = os.getenv('MAIL_PASSWORD')
+    webhook_secret = os.getenv('STRIPE_ENDPOINT_SECRET')
+    
+    return jsonify({
+        'mail_server': mail_server,
+        'mail_port': mail_port,
+        'mail_username': mail_username,
+        'mail_password_configured': 'Yes' if mail_password else 'No',
+        'webhook_secret_configured': 'Yes' if webhook_secret else 'No',
+        'webhook_secret_preview': webhook_secret[:10] + '...' if webhook_secret else 'Not set',
+        'status': 'Ready for email notifications' if mail_password and webhook_secret else 'Missing configuration'
+    })
+
 @app.route('/calculate-shipping', methods=['POST'])
 def calculate_shipping():
     """Calculate shipping cost based on address"""
